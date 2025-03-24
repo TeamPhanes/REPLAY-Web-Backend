@@ -1,3 +1,8 @@
+# Read Me First
+The following was discovered as part of building this project:
+
+* The original package name 'REPLAY-Web-Backend.dev' is invalid and this project uses 'REPLAY_Web_Backend.dev' instead.
+
 # Getting Started
 
 ### Reference Documentation

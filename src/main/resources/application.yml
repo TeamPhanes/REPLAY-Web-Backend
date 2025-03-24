@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: Dev
+
+# ?????? ??
+  datasource:
+    url:
+# JPA ??
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+# ?? ??
+  cache:
+    type: redis
+
+# ?? ??
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    org.hibernate.SQL: debug
+    root: info
+    org.springframework.web: info
+
+# ????? ??
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+server:
+  port: 8080
