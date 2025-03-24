@@ -7,19 +7,19 @@ spring:
     encoding:
       force-response: true
 
-  # ?????? ??
+  # 데이터베이스 설정
   datasource:
     url:
-# JPA ??
+# JPA 설정
   jpa:
     hibernate:
       ddl-auto: update
 
-# ?? ??
+# JPA 설정
   cache:
     type: redis
 
-# ?? ??
+# 로깅 설정
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
@@ -28,7 +28,7 @@ logging:
     root: info
     org.springframework.web: info
 
-# ????? ??
+# 액추에이터 설정
 management:
   endpoints:
     web:
