@@ -2,7 +2,12 @@ spring:
   application:
     name: Dev
 
-# ?????? ??
+  server:
+   servlet:
+    encoding:
+      force-response: true
+
+  # ?????? ??
   datasource:
     url:
 # JPA ??
