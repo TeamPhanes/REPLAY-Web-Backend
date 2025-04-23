@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.user.client.UserClient;
 import phanes.replay.user.dto.UserDTO;
+import phanes.replay.user.dto.UserPatchDTO;
 import phanes.replay.user.dto.UserResponse;
 import phanes.replay.user.mapper.UserMapper;
 
@@ -24,6 +25,10 @@ public class UserService {
     public void UpdateUser(String accessToken, MultipartFile image, String nickname, String comment) {
         // TODO s3 image upload
         String imageUrl = null;
-        userClient.patchUserInfo(accessToken, imageUrl, nickname, comment);
+        userClient.patchUserInfo(accessToken, UserPatchDTO.builder()
+                .image(imageUrl)
+                .comment(comment)
+                .nickname(nickname)
+                .build());
     }
 }
