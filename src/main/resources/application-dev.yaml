@@ -8,17 +8,24 @@ spring:
     # 데이터베이스 설정
     datasource:
         driver-class-name: org.mariadb.jdbc.Driver
-        url: ENC[AES256_GCM,data:gr3a/eKiO+5RxBh3RlYnvD7IIq1K8wGNuO9nctkLLvxZs+JaQMBxUsSC2vyZSj4ohYg=,iv:G2iBHfl4m1ZGOtJqJqyXpklHxqN/aJQYML88N73I3dE=,tag:h6A6tzdSRDvcwx0wIkPJlw==,type:str]
-        username: ENC[AES256_GCM,data:eAKdnlWn,iv:1HlR3qve0h7tzCVT1MsmuAywW1OtScuUtQRX7vG+2bs=,tag:K3NheFRFT9W8z/+2bz6siw==,type:str]
-        password: ENC[AES256_GCM,data:ug7AvKoLs8Qs0qs=,iv:5GXhW8TYT/XyuY7vNb/QEr3YTV8ccnh2z2wAZxBlpYU=,tag:gT2z0ixhall1ME/2PO8swg==,type:str]
+        url: jdbc:mariadb://mariadb.phanescloud.com:3306/replay
+        username: phanes
+        password: phanescloud
     # JPA 설정
     jpa:
         hibernate:
-            ddl-auto: update
-    data:
-        redis:
-            host: ENC[AES256_GCM,data:Gek8cRKDy586WGgbTw2LoSWkP9V+,iv:9p3nB55+UqPBnPjljCVEEJwLvkK8CZg14vAzDkQadrc=,tag:Ev/gzyNSaELenNnNBcdZZA==,type:str]
-            password: ENC[AES256_GCM,data:E6rhfsvtX/G7GBw=,iv:HLBCFgcnzzdGMtaBWOuP17T8e1kqZjW2LPY6BTQyudA=,tag:a5vRddqzbb34Ht2z77kayg==,type:str]
+            ddl-auto: none
+        properties:
+            # 운영환경에서는 꺼야함
+            hibernate:
+                show_sql: true
+                format_sql: true
+                use_sql_comments: true
+
+#    data:
+#        redis:
+#            host: redis.phanescloud.com
+#            password: phanescloud
 # 로깅 설정
 logging:
     pattern:
@@ -27,48 +34,25 @@ logging:
         org.hibernate.SQL: debug
         root: info
         org.springframework.web: info
+        org.springframework.security: debug
+        org.hibernate.type.descriptor.sql.BasicBinder: trace
+        org.hibernate.tool.hbm2ddl: debug
 # 액추에이터 설정
 management:
     endpoints:
         web:
             exposure:
-                include: health,metrics,prometheus
+                include: health,metrics,prometheus,info
     metrics:
         tags:
             application: ${spring.application.name}
         distribution:
             percentiles-histogram:
                 http.server.requests: true
+    info:
+        git:
+            mode: simple
+        java:
+            enabled: true
 server:
     port: 8080
-sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    hc_vault: []
-    age: []
-    lastmodified: "2025-03-24T08:36:22Z"
-    mac: ENC[AES256_GCM,data:MfdjX2gBNnRZINab3Sw97ntGrtRUIRrrZYAghTSSGmZLDbjBm2pX1Vj34Hv0JuIu2Gg3OMGz7epQens5wiWf22Knpgng5mX3G7v20Gce02KWbUfrTUHI62B2JJgftstlX7oViGgzcMf+Eb/FpYvSkSJSITiDqAtWEE4+pyEH2vI=,iv:aXnwJ/hiRqsboIuSYPXidkUYbqZcS/oxpZPTxXS+JJA=,tag:2eXiE4FnI2iTiZArEn5HzQ==,type:str]
-    pgp:
-        - created_at: "2025-03-24T08:36:22Z"
-          enc: |-
-            -----BEGIN PGP MESSAGE-----
-
-            hQIMA0pEQ+ak5/eRARAAq8QJGv7bht60YlYcoNcuzlEpU5c4un0LAYNns1OQKydh
-            xIOvp6TtEum0t/EaDDnr68IdwSgwREZlCfd7s8LJXwis7tqCgjuLGiEbxQa4A3YF
-            rPXGN4JXiibrCwVsm3t2NEvQat1cBmoE2My9z4F3IihoV+WeLIlT6sW57YAN/8yQ
-            k+WQsoqYW77Yf2C0IGqQ0jxxLwAVIPtSAbnCFUO3NEFUBE9FserqiC12Sgl2T3rH
-            e+LvHavgt5FEg5N1kiAqCIfAhH0ErgtzwzspBaCKMIifl+bKSeeVSNJsoiUzofir
-            9CHksUYQFoQI/MXBHLX43UKTgCi2pj5z6FehVA3tVhVU4gpX1IcIaq+5MEZ1pN1+
-            lS2NP2jIjjRXpOlHF9rf/GvxJCIJwb7pyAnrhydl6S1hiZCosI6WqwTsRYVPgwbl
-            wVV5w2syuw2sblGwMXA6ojI7Qid8xywPcnTOLbRinIDehr135Bu3Xhy8alJPhmpU
-            KxoCMCJ1TlNvty8AdbbgpMvJrYVK2NVYfSmIBv+XZC2Hc1ypMF6WlCp3cH66KKnS
-            4tK4R6pONZ7FrocN/ej+UG9Shkjumt6Wn+7DxbEI5YA7jBr4ALgBupPxaJea6Ypt
-            2ray6Ya81ROUz8bof9ey3gmplz3tQ8tcSGCUxOKBLiObu0iprVniyazAlthjRxPS
-            XgHn8RUfBHVllLwk18jsci9H385txGTuttAZl3gFmEn9I4CwBdzEwd97tzAKWCwV
-            GynKPV7w0YLLQCm8KzLOCiv4Ie7ThFX7hSNXxMFdo1vx60Vapd1Pjk8TYXsdml0=
-            =1KB5
-            -----END PGP MESSAGE-----
-          fp: B57822CEBBF7C27C196DB7D3D9DF0BD2C91CBE98
-    encrypted_regex: ^(url|username|password|id|secret|uri|host)$
-    version: 3.9.3
