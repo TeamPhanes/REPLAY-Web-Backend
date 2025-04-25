@@ -1,0 +1,41 @@
+package phanes.replay.gathering.controller;
+
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class GatheringCreateRequest {
+    private String name;
+
+    private String content;
+
+    private Long roomescapeId;
+
+    private String price;
+
+    private LocalDateTime datetime;
+
+    @Future(message = "모집 시작 날짜는 현재 이후여야 합니다.")
+    private LocalDateTime registrationStart;
+
+    @Future(message = "마감 날짜는 현재 이후여야 합니다.")
+    private LocalDateTime registrationEnd;
+
+    @Min(value = 2, message = "모집 인원은 최소 2명 이상이어야 합니다.")
+    private int capacity;
+
+}
