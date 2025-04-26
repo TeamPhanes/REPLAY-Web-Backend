@@ -8,9 +8,9 @@ spring:
     # 데이터베이스 설정
     datasource:
         driver-class-name: org.mariadb.jdbc.Driver
-        url: ENC[AES256_GCM,data:17v0qBt4nAeGm3hREnlGRS7kHgiX8Mo6ESHt8cxYJk1Z4luGJAfgnzg7p6TZpw8tvBI=,iv:URw7USeaO5N3ME4q122phmRx8DbZRzjd0zkQdZLuWTs=,tag:jMC5cb8d6i5ZNX4tsNQ9Jw==,type:str]
-        username: ENC[AES256_GCM,data:mBGzom7B,iv:992178kCqDeqiadfUH3e+CSulofAequ60czUIq9QrLc=,tag:B2uuZUTJc1Pvw2RpTOTFSw==,type:str]
-        password: ENC[AES256_GCM,data:IS7GxWGg85q/g9s=,iv:hSEAVfPRxC9HgVU+1lyPOKxJPVUyGO3T8IARr9AgBZU=,tag:Pe63EGSYqXvKCckRrNjBVQ==,type:str]
+        url: ENC[AES256_GCM,data:zf4V/OEB2bW4Lnli9ZgQK82WKR1l3uf4aLIs+11mxusPe3FD/gpMVSvrR1YvLq+DuZI=,iv:qe13xMMaeT6I4IPBMcuZBaaD27U7Pr7fmE6bLRVw/Nw=,tag:pCUnicV2EfOhopMHATe0Ww==,type:str]
+        username: ENC[AES256_GCM,data:U/0l9VFG,iv:Oe3/ajFoewHaPWzqkN8sS/43uWvYkzyq9wmQLf8OC7Y=,tag:QR8YSfRooO8ae46Ti0EsEg==,type:str]
+        password: ENC[AES256_GCM,data:C5QSuc4AEn7Zv1Q=,iv:o2fJYBBloLctHsOzhOps7EQ28Y1QUs/W5spkm1Ly9n0=,tag:/+OUpRBBjIbCr0ym0CgCiA==,type:str]
     # JPA 설정
     jpa:
         hibernate:
@@ -61,28 +61,28 @@ sops:
     azure_kv: []
     hc_vault: []
     age: []
-    lastmodified: "2025-04-26T01:44:22Z"
-    mac: ENC[AES256_GCM,data:rmIWamEz5ozwxWNysNLpRUmGguqLsm0Sx+iE8tjmHdFBjqLjwriVaT+Cr/NEFPc28/FobzjzaTZlqJj7n8GErX1HpFOjHrDlzphddexV7EKZA/vbA1ndgao+AfrgkgdE9gf6eelIwdE0EBC3OZRaEA2mKhZDKr3Jkn6/DQ3T8T8=,iv:zqSgsanH7UVKsbvm1Q+HMeK7KU7f1dCS09U8lNnQdNc=,tag:DSgthDhEBSv8pN04tmZeLw==,type:str]
+    lastmodified: "2025-04-26T15:02:30Z"
+    mac: ENC[AES256_GCM,data:K1krlWl6Cj69FFpjc4gD9UxheVausHm+po/ynCkgLL0hJq39jS+j2gbsvOXH71d33LJq+A/D9S3EL5wEC+mkPHeMwgLB0Cc8oyA3Zw8/Z1xSku9QNtBvaUxsJ/NAh8li8YGogysCvugk+zD1WiEBxVPoWVcIyAMHSKBk94blFxQ=,iv:p9gKN+CBGCTHAv8XYBZ7EDKual/dCMQ3zfGGFSZ6F7M=,tag:wyQ8aFDYIoUnSI5Bsyb0XQ==,type:str]
     pgp:
-        - created_at: "2025-04-26T01:44:22Z"
+        - created_at: "2025-04-26T15:02:30Z"
           enc: |-
             -----BEGIN PGP MESSAGE-----
 
-            hQIMA0pEQ+ak5/eRAQ/9EYK41YbQ+rY9MQM0myptx0f1l3wxf4abYbJR6V6j7r/K
-            cWphqN4lL7LpZ8NUm1dVhL3p3vHeh8pAseN4ktFzclLhun/hqrfI0iUzjrBHnHiX
-            iTKmlTKHf8mW3DXXWLqWkgGsKqwHkrD6uhrrWzEmwKjV4BLVBQ3lfzgsN2DkKrXG
-            AZPs6GD9f9vlHIuN3JMtAXhI5lfu5Cd2Fj68ClZuASSS8vF1uRxmEWxjQ0m5t7sL
-            emQ0FSPfgOKgAoDhhTtk9KxRhPUPe+/qQGMFjfP9+NgO4vSu8BJnaZjYk7eyT2qZ
-            5dHMjn9qrdwosVjCm2FHpYbjJS7ONZ0iPlYLBSCKspVQyJtpjiRZZzRnjEXs+bTf
-            Dr3+84yJrkTnrxEqP9ItBjoYY1D8H+gAn+dBOoDgPDjlxCMa9KJAwNykisIG0B2p
-            wkHyvBn+1iD2C9rvdRulN9nqgnuxv1P2yFs/jOVSJP/b5WiSyJNuhz1bA7pQ60qw
-            yHIaZFZGWc6bwUuEeclzSNPjfnPwjg97rYotqvIqVlEVTdrRZG0V0UkX4ZQXV2xS
-            3tP6EuaQTPZQ+H08tWyzWAnk9fHbEp5PodBhsF0N/9ROznoFvc9Kx0GAbqRvKOGH
-            EBZiV4+/nsL+lYb8g0mqrAyh/kTq22Zt4kqnMuvWxMrTUpGLleqAMCx75jfQuxrU
-            aAEJAhDld/1QnatO7UzRxUpSMucIWbdPrcbii2tGZLjEL+53duK9E5SfhWhw62e0
-            As9zNUir8s4jkhtrhrfF9t0uM5Ej6HjeiT3yLA8LSdjHNggZ9ZRyuFiSXsN9qFm+
-            tIsLdcFdnPU/
-            =5jcf
+            hQIMA0pEQ+ak5/eRAQ/9G7GBDhZee+T5oMz0OBAt7V1CsVFg9usP3Ezzqi2aTMD2
+            s/Lkv6RksHzySxVBsVtXmdImtmq8PJgSZv5gaKKkdCCH0xY52iJC89bkokie5AGT
+            cbE5MmQkv7G6pD4Fusz6/qwxPqDHZ6VGkb83dSs1fOzjXjbjQDBjNBeZCdpVbdCv
+            aSTV8mtRMjQ2oCu7XHZQIDQYHL58kwL0jK1t21Pk/5xBxnhHZFfID35fwWA6s+LG
+            T2tVHaxRMwaMqFy1uIl6cfIjiOm2BCK5py7D1Je5I8vX1L/FDKBmP6TG00XBhpum
+            xHJkrm7tvBl1lM3M+ZC4Rfg/lErQATaALcxn1juTT8WWmUXh73SOO+DGwfyaTht8
+            b8KNobtHt4mMGMfSRm20PoaYmxDXPPx5xtW7UBwCp3aB8pNkej1FYJsdlf8ZZtYY
+            RWIivAG0oEZFAFEqx6igNhf+Zf/fhE5/1Ixg1tj9ECgES+3y0SAY49EIkZ7DICnF
+            vJMpGlq43KJraVjmA45WtNDSky84Tw/Y6UwggfjUDvzUACZr5uRlImq8E0rfkswK
+            6jQYYwFiN2S6Bch6H2unO701NmemO9ZfwPXshyrlDLb1RUxI+0O38OrRrE/Q5Hke
+            TOYPP6X6zamu5ULX/urvqf05wKEUvQwTV+YAG0ZOYQG5y/9fGkiYcEFAzFFG/p/U
+            aAEJAhD4/pkyb61PibK3uFq5EsOhEHYjHBtt7piBEWfwSgwEc7femr93swIWOv3B
+            imhls6BUv8oy6Hz6QMqbauxIzJBKX3K1BwIgKQygwwllA8YVmJDw4rAoF/DAMWV5
+            I0xNAVt/3xXC
+            =HuXt
             -----END PGP MESSAGE-----
           fp: B57822CEBBF7C27C196DB7D3D9DF0BD2C91CBE98
     encrypted_regex: ^(url|username|password|id|secret|uri|host)$

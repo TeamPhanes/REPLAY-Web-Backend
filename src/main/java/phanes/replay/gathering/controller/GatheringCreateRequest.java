@@ -23,11 +23,11 @@ public class GatheringCreateRequest {
 
     private String content;
 
-    private Long roomescapeId;
+    private Long roomEscapeId;
 
     private String price;
 
-    private LocalDateTime datetime;
+    private LocalDateTime dateTime;
 
     @Future(message = "모집 시작 날짜는 현재 이후여야 합니다.")
     private LocalDateTime registrationStart;
