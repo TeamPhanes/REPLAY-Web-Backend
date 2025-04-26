@@ -13,7 +13,7 @@ public class GatheringMapper {
         return Gathering.create(
                 roomEscape,
                 request.getName(),
-                request.getDatetime(),
+                request.getDateTime(),
                 request.getRegistrationStart(),
                 request.getRegistrationEnd(),
                 request.getCapacity()

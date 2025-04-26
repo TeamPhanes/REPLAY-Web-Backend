@@ -47,7 +47,7 @@ public class GatheringServiceImpl implements GatheringService {
         if(user == null) {
             throw new RuntimeException("유저 없음");
         }
-        RoomEscape roomEscape = roomEscapeRepository.findById(request.getRoomescapeId()).orElseThrow(() -> new IllegalArgumentException("room escape not found"));
+        RoomEscape roomEscape = roomEscapeRepository.findById(request.getRoomEscapeId()).orElseThrow(() -> new IllegalArgumentException("room escape not found"));
 
         // 엔티티 생성
         Gathering gathering = gatheringMapper.requestToEntity(request, roomEscape);
