@@ -8,9 +8,9 @@ spring:
     # 데이터베이스 설정
     datasource:
         driver-class-name: org.mariadb.jdbc.Driver
-        url: jdbc:mariadb://mariadb.phanescloud.com:3306/replay
-        username: phanes
-        password: phanescloud
+        url: ENC[AES256_GCM,data:17v0qBt4nAeGm3hREnlGRS7kHgiX8Mo6ESHt8cxYJk1Z4luGJAfgnzg7p6TZpw8tvBI=,iv:URw7USeaO5N3ME4q122phmRx8DbZRzjd0zkQdZLuWTs=,tag:jMC5cb8d6i5ZNX4tsNQ9Jw==,type:str]
+        username: ENC[AES256_GCM,data:mBGzom7B,iv:992178kCqDeqiadfUH3e+CSulofAequ60czUIq9QrLc=,tag:B2uuZUTJc1Pvw2RpTOTFSw==,type:str]
+        password: ENC[AES256_GCM,data:IS7GxWGg85q/g9s=,iv:hSEAVfPRxC9HgVU+1lyPOKxJPVUyGO3T8IARr9AgBZU=,tag:Pe63EGSYqXvKCckRrNjBVQ==,type:str]
     # JPA 설정
     jpa:
         hibernate:
@@ -21,7 +21,6 @@ spring:
                 show_sql: true
                 format_sql: true
                 use_sql_comments: true
-
 #    data:
 #        redis:
 #            host: redis.phanescloud.com
@@ -56,3 +55,35 @@ management:
             enabled: true
 server:
     port: 8080
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2025-04-26T01:44:22Z"
+    mac: ENC[AES256_GCM,data:rmIWamEz5ozwxWNysNLpRUmGguqLsm0Sx+iE8tjmHdFBjqLjwriVaT+Cr/NEFPc28/FobzjzaTZlqJj7n8GErX1HpFOjHrDlzphddexV7EKZA/vbA1ndgao+AfrgkgdE9gf6eelIwdE0EBC3OZRaEA2mKhZDKr3Jkn6/DQ3T8T8=,iv:zqSgsanH7UVKsbvm1Q+HMeK7KU7f1dCS09U8lNnQdNc=,tag:DSgthDhEBSv8pN04tmZeLw==,type:str]
+    pgp:
+        - created_at: "2025-04-26T01:44:22Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA0pEQ+ak5/eRAQ/9EYK41YbQ+rY9MQM0myptx0f1l3wxf4abYbJR6V6j7r/K
+            cWphqN4lL7LpZ8NUm1dVhL3p3vHeh8pAseN4ktFzclLhun/hqrfI0iUzjrBHnHiX
+            iTKmlTKHf8mW3DXXWLqWkgGsKqwHkrD6uhrrWzEmwKjV4BLVBQ3lfzgsN2DkKrXG
+            AZPs6GD9f9vlHIuN3JMtAXhI5lfu5Cd2Fj68ClZuASSS8vF1uRxmEWxjQ0m5t7sL
+            emQ0FSPfgOKgAoDhhTtk9KxRhPUPe+/qQGMFjfP9+NgO4vSu8BJnaZjYk7eyT2qZ
+            5dHMjn9qrdwosVjCm2FHpYbjJS7ONZ0iPlYLBSCKspVQyJtpjiRZZzRnjEXs+bTf
+            Dr3+84yJrkTnrxEqP9ItBjoYY1D8H+gAn+dBOoDgPDjlxCMa9KJAwNykisIG0B2p
+            wkHyvBn+1iD2C9rvdRulN9nqgnuxv1P2yFs/jOVSJP/b5WiSyJNuhz1bA7pQ60qw
+            yHIaZFZGWc6bwUuEeclzSNPjfnPwjg97rYotqvIqVlEVTdrRZG0V0UkX4ZQXV2xS
+            3tP6EuaQTPZQ+H08tWyzWAnk9fHbEp5PodBhsF0N/9ROznoFvc9Kx0GAbqRvKOGH
+            EBZiV4+/nsL+lYb8g0mqrAyh/kTq22Zt4kqnMuvWxMrTUpGLleqAMCx75jfQuxrU
+            aAEJAhDld/1QnatO7UzRxUpSMucIWbdPrcbii2tGZLjEL+53duK9E5SfhWhw62e0
+            As9zNUir8s4jkhtrhrfF9t0uM5Ej6HjeiT3yLA8LSdjHNggZ9ZRyuFiSXsN9qFm+
+            tIsLdcFdnPU/
+            =5jcf
+            -----END PGP MESSAGE-----
+          fp: B57822CEBBF7C27C196DB7D3D9DF0BD2C91CBE98
+    encrypted_regex: ^(url|username|password|id|secret|uri|host)$
+    version: 3.9.3
