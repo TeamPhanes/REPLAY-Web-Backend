@@ -4,18 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.user.domain.enums.SocialType;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
-
-    private String image;
-    private String nickname;
-    private String email;
+public class SocialProfile {
+    private String socialId;
+    private String profileImage;
+    private SocialType socialType;
     private String gender;
-    private String comment;
-    private Boolean genderMark;
-    private Boolean emailMark;
+    private String email;
 }

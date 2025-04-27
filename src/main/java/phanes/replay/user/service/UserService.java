@@ -2,33 +2,18 @@ package phanes.replay.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import phanes.replay.user.client.UserClient;
 import phanes.replay.user.dto.UserDTO;
-import phanes.replay.user.dto.UserPatchDTO;
-import phanes.replay.user.dto.UserResponse;
 import phanes.replay.user.mapper.UserMapper;
+import phanes.replay.user.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserClient userClient;
+    private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserDTO getUser(String accessToken) {
-        UserResponse userInfo = userClient.getUserInfo(accessToken);
-        // TODO get roomescape and gathering info
-        return userMapper.userToUserDTO(userInfo);
-    }
-
-    public void UpdateUser(String accessToken, MultipartFile image, String nickname, String comment) {
-        // TODO s3 image upload
-        String imageUrl = null;
-        userClient.patchUserInfo(accessToken, UserPatchDTO.builder()
-                .image(imageUrl)
-                .comment(comment)
-                .nickname(nickname)
-                .build());
+    public UserDTO getUser(Long userId) {
+        return userMapper.UserToUserDTO(userRepository.findById(userId).orElseThrow());
     }
 }

@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPatchDTO {
-    private String image;
-    private String nickname;
-    private String comment;
+public class NaverProfileResponse {
+    private String resultcode;
+    private String message;
+    private NaverProfile response;
 }
