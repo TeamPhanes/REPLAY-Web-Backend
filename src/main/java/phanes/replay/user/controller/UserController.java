@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -49,8 +50,8 @@ public class UserController {
     }
 
     @ValidateSocialType
-    @GetMapping("/{socialType}/callback")
-    public void socialLoginCallback(@PathVariable("socialType") String socialType, @RequestParam("code") String code, @RequestParam("state") String state, HttpServletResponse response) throws IOException {
+    @GetMapping(value = "/{socialType}/callback", produces = MediaType.TEXT_HTML_VALUE)
+    public String socialLoginCallback(@PathVariable("socialType") String socialType, @RequestParam("code") String code, @RequestParam("state") String state, HttpServletResponse response) throws IOException {
         Boolean isValid = redisTemplate.opsForValue().getAndDelete(state);
         if (Boolean.FALSE.equals(isValid)) {
             throw new StateNotFoundException("state not found");
@@ -63,7 +64,19 @@ public class UserController {
         ResponseCookie cookie = CookieUtils.createHttpOnlyCookie("refreshToken", token.getRefreshToken(), Duration.ofDays(7), domainProperties.getCookie());
         response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken());
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-        response.sendRedirect(domainProperties.getFrontend());
+        return String.format("""
+                <html>
+                <body>
+                <script>
+                  window.opener.postMessage({
+                    type: 'token',
+                    accessToken: '%s',
+                  }, '%s');
+                  window.close();
+                </script>
+                </body>
+                </html>
+                """, token.getAccessToken(), domainProperties.getFrontend());
     }
 
     @PostMapping("/refresh")
