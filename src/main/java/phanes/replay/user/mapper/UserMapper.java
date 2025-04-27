@@ -10,5 +10,5 @@ public interface UserMapper {
 
     @Mapping(source = "profileComment", target = "comment")
     @Mapping(source = "profileImage", target = "image")
-    UserDTO UserToUserDTO(User user);
+    UserDTO UserToUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalRoomEscape, Long successCount, Long failCount);
 }
