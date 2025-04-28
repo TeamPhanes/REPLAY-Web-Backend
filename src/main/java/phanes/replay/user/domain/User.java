@@ -27,4 +27,9 @@ public class User {
     private SocialType socialType;
     private Boolean genderMark;
     private Boolean emailMark;
+
+    public void updateUserInfo(String profileImage, String nickname, String profileComment) {
+        this.nickname = nickname;
+        this.profileComment = profileComment;
+    }
 }

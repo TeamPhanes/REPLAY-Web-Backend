@@ -8,7 +8,7 @@ import phanes.replay.user.dto.UserDTO;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(source = "profileComment", target = "comment")
-    @Mapping(source = "profileImage", target = "image")
-    UserDTO UserToUserDTO(User user);
+    @Mapping(source = "user.profileComment", target = "comment")
+    @Mapping(source = "user.profileImage", target = "image")
+    UserDTO UserToUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalRoomEscape, Long successCount, Long failCount);
 }
