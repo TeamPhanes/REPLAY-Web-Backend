@@ -68,7 +68,6 @@ public class OAuth2Controller {
                     type: 'token',
                     accessToken: '%s',
                   }, '%s');
-                  window.close();
                 </script>
                 </body>
                 </html>
