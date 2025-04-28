@@ -44,7 +44,7 @@ public class UserService {
     public void updateUser(Long userId, MultipartFile image, String nickname, String comment) {
         String imageUrl;
         try {
-            imageUrl = s3Service.uploadImage("replay", "images/" + UUID.randomUUID()+".png", image);
+            imageUrl = s3Service.uploadImage("replay", "images/" + UUID.randomUUID() + ".png", image);
         } catch (IOException e) {
             throw new ImageUploadFailException("image upload fail");
         }
