@@ -15,7 +15,8 @@ import phanes.replay.config.properties.*;
 		JwtProperties.class,
 		NaverProperties.class,
 		GoogleProperties.class,
-		KakaoProperties.class
+		KakaoProperties.class,
+		S3Properties.class
 })
 public class ReplayApplication {
 
