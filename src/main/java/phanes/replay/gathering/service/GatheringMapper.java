@@ -1,7 +1,7 @@
 package phanes.replay.gathering.service;
 
 import org.springframework.stereotype.Component;
-import phanes.replay.gathering.controller.GatheringCreateRequest;
+import phanes.replay.gathering.dto.GatheringCreateRequest;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.Gathering_Content;
 import phanes.replay.roomescape.domain.RoomEscape;

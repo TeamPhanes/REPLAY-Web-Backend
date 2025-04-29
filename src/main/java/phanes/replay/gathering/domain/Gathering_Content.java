@@ -3,7 +3,6 @@ package phanes.replay.gathering.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
-import phanes.replay.gathering.controller.GatheringCreateRequest;
 
 @Entity
 @Getter
