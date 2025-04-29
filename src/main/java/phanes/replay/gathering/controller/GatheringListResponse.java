@@ -7,8 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import phanes.replay.roomescape.domain.GenresDTO;
-import phanes.replay.roomescape.domain.Level;
+import phanes.replay.theme.domain.enums.Level;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class GatheringListResponse {
 
     private String listImage; // 목록 이미지
 
-    private List<GenresDTO> genres = new ArrayList<>(); // 장르
+    private List<String> genres = new ArrayList<>(); // 장르
 
     private Integer playtime; // 플레이 타임
 

@@ -1,4 +1,4 @@
-package phanes.replay.roomescape.domain;
+package phanes.replay.theme.domain.enums;
 
 public enum Level {
     EASY, NORMAL, HARD
