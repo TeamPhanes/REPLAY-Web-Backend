@@ -6,7 +6,7 @@ import phanes.replay.user.domain.User;
 
 @Getter
 @Entity
-@Table(name = "roomescape_like")
+@Table(name = "roomEscape_like")
 public class RE_Like {
 
     @Id
@@ -14,7 +14,7 @@ public class RE_Like {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomescape_id")
+    @JoinColumn(name = "roomEscape_id")
     private RoomEscape roomEscape;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "roomescape")
+@Table(name = "roomEscape")
 public class RoomEscape {
 
     @Id

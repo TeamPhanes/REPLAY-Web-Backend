@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "roomescape_content")
+@Table(name = "roomEscape_content")
 public class RE_Content {
 
     @Id
@@ -13,7 +13,7 @@ public class RE_Content {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomescape_id")
+    @JoinColumn(name = "roomEscape_id")
     private RoomEscape roomEscape;
 
     @Column
