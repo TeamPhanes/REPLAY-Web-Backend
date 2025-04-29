@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.gathering.dto.GatheringListRequest;
 import phanes.replay.gathering.dto.GatheringListResponse;
+import phanes.replay.gathering.controller.GatheringCreateRequest;
+import phanes.replay.gathering.controller.GatheringListRequest;
+import phanes.replay.gathering.controller.GatheringListResponse;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.Gathering_Content;
 import phanes.replay.gathering.domain.Gathering_Member;
@@ -18,9 +21,10 @@ import phanes.replay.gathering.repository.GatheringRepository;
 import phanes.replay.gathering.dto.GatheringCreateRequest;
 import phanes.replay.gathering.repository.Gathering_ContentRepository;
 import phanes.replay.gathering.repository.Gathering_MemberRepository;
-import phanes.replay.roomescape.domain.GenresDTO;
-import phanes.replay.roomescape.domain.RoomEscape;
-import phanes.replay.roomescape.repository.RoomEscapeRepository;
+import phanes.replay.theme.domain.Genre;
+import phanes.replay.theme.domain.Theme;
+import phanes.replay.theme.repository.GenreRepository;
+import phanes.replay.theme.repository.ThemeRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.repository.UserRepository;
 
@@ -36,8 +40,9 @@ public class GatheringServiceImpl implements GatheringService {
     private final GatheringRepository gatheringRepository;
     private final Gathering_ContentRepository gathering_contentRepository;
     private final Gathering_MemberRepository gathering_memberRepository;
+    private final GenreRepository genreRepository;
     private final UserRepository userRepository;
-    private final RoomEscapeRepository roomEscapeRepository;
+    private final ThemeRepository themeRepository;
     private final GatheringMapper gatheringMapper;
 
 
@@ -50,14 +55,14 @@ public class GatheringServiceImpl implements GatheringService {
     @Override
     public void createGathering(GatheringCreateRequest request, Long userId) {
         // 엔티티 조회
-        User user = userRepository.findById(userId).orElseThrow(()->new EntityNotFoundException("User Not Found"));
-        if(user == null) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User Not Found"));
+        if (user == null) {
             throw new RuntimeException("유저 없음");
         }
-        RoomEscape roomEscape = roomEscapeRepository.findById(request.getRoomEscapeId()).orElseThrow(() -> new IllegalArgumentException("room escape not found"));
+        Theme theme = themeRepository.findById(request.getRoomEscapeId()).orElseThrow(() -> new IllegalArgumentException("room escape not found"));
 
         // 엔티티 생성
-        Gathering gathering = gatheringMapper.requestToEntity(request, roomEscape);
+        Gathering gathering = gatheringMapper.requestToEntity(request, theme);
         Gathering savedGathering = gatheringRepository.save(gathering);
 
         // 콘텐츠 생성
@@ -74,8 +79,8 @@ public class GatheringServiceImpl implements GatheringService {
         Sort sort;
         if ("registrationEnd".equals(request.getSortBy())) {
             sort = Sort.by(Sort.Direction.ASC, "registrationEnd");
-        }else if ("participantCount".equals(request.getSortBy())) {
-                sort = Sort.by(Sort.Direction.DESC, "participantCount");
+        } else if ("participantCount".equals(request.getSortBy())) {
+            sort = Sort.by(Sort.Direction.DESC, "participantCount");
         } else {
             sort = Sort.by(Sort.Direction.DESC, "dateTime");
         }
@@ -90,8 +95,8 @@ public class GatheringServiceImpl implements GatheringService {
         Page<Gathering> gatherings;
 
         // 단일 조건 검색
-        if (onlyOneParameterProvided(request)){
-            if(request.getKeyword() != null && !request.getKeyword().isEmpty()){
+        if (onlyOneParameterProvided(request)) {
+            if (request.getKeyword() != null && !request.getKeyword().isEmpty()) {
                 // 키워드 검색
                 List<Gathering> results = gatheringRepository.findByNameContainingOrRoomEscapeNameContaining(
                         request.getKeyword(), request.getKeyword(), pageable);
@@ -140,12 +145,14 @@ public class GatheringServiceImpl implements GatheringService {
         if (request.getGenre() != null && !request.getGenre().isEmpty()) paramCount++;
         return paramCount == 1;
     }
+
     // 엔티티 리스트를 응답 DTO 리스트로 변환하는 메서드
     private List<GatheringListResponse> convertToResponseList(List<Gathering> gatherings) {
         return gatherings.stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }
+
     // 개별 엔티티를 응답 DTO로 변환하는 메서드
     private GatheringListResponse convertToResponse(Gathering gathering) {
         GatheringListResponse response = new GatheringListResponse();
@@ -154,23 +161,21 @@ public class GatheringServiceImpl implements GatheringService {
         response.setName(gathering.getName());
 
         // RoomEscape 정보 설정
-        RoomEscape roomEscape = gathering.getRoomEscape();
-        if (roomEscape != null) {
-            response.setRoomEscapeName(roomEscape.getName());
-            response.setAddress(roomEscape.getAddress());
-            response.setSpot(roomEscape.getSpot());
+        Theme theme = gathering.getTheme();
+        if (theme != null) {
+            response.setRoomEscapeName(theme.getName());
+            response.setAddress(theme.getAddress());
+            response.setSpot(theme.getSpot());
 
-            if (roomEscape.getLevel() != null) {
-                response.setLevel(roomEscape.getLevel());
+            if (theme.getLevel() != null) {
+                response.setLevel(theme.getLevel());
             }
 
-            response.setPlaytime(roomEscape.getPlaytime());
+            response.setPlaytime(theme.getPlaytime());
 
             // 장르 정보 설정
-            List<GenresDTO> genres = roomEscape.getGenres().stream()
-                    .map(genre -> new GenresDTO(genre.getName()))
-                    .collect(Collectors.toList());
-            response.setGenres(genres);
+            List<Genre> genres = genreRepository.findByThemeId(theme.getId());
+            response.setGenres(genres.stream().map(Genre::getName).collect(Collectors.toList()));
         }
 
         response.setListImage(gathering.getListImage());

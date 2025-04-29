@@ -7,10 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.gathering.domain.Role;
-import phanes.replay.gathering.repository.Gathering_MemberRepository;
+import phanes.replay.gathering.service.GatheringMemberService;
 import phanes.replay.image.service.S3Service;
-import phanes.replay.review.repository.ReviewRepository;
-import phanes.replay.roomescape.repository.RoomEscapeParticipateRepository;
+import phanes.replay.review.ReviewService;
+import phanes.replay.theme.service.ParticipatingThemeService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.UserDTO;
 import phanes.replay.user.mapper.UserMapper;
@@ -24,19 +24,19 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final Gathering_MemberRepository gatheringMemberRepository;
-    private final RoomEscapeParticipateRepository roomEscapeParticipateRepository;
-    private final ReviewRepository reviewRepository;
+    private final GatheringMemberService gatheringMemberService;
+    private final ParticipatingThemeService participatingThemeService;
+    private final ReviewService reviewService;
     private final S3Service s3Service;
     private final UserMapper userMapper;
 
     public UserDTO getUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
-        Long totalGathering = gatheringMemberRepository.countByUserId(userId);
-        Long totalMakeGathering = gatheringMemberRepository.countByUserIdAndRoleEquals(userId, Role.HOST);
-        Long totalRoomEscape = roomEscapeParticipateRepository.countByUserId(userId);
-        Long successCount = reviewRepository.countBySuccess(true);
-        Long failCount = reviewRepository.countBySuccess(false);
+        Long totalGathering = gatheringMemberService.getTotalGatheringCount(userId);
+        Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(userId, Role.HOST);
+        Long totalRoomEscape = participatingThemeService.getTotalRoomEscapeCount(userId);
+        Long successCount = reviewService.getCountBySuccess(true);
+        Long failCount = reviewService.getCountBySuccess(false);
         return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalRoomEscape, successCount, failCount);
     }
 

@@ -14,7 +14,6 @@ public class Gathering_Content {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gatherings_id")
     private Gathering gathering;
 
     @Column

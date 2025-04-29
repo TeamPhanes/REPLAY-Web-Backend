@@ -4,14 +4,14 @@ import org.springframework.stereotype.Component;
 import phanes.replay.gathering.dto.GatheringCreateRequest;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.Gathering_Content;
-import phanes.replay.roomescape.domain.RoomEscape;
+import phanes.replay.theme.domain.Theme;
 
 @Component
 public class GatheringMapper {
 
-    public Gathering requestToEntity(GatheringCreateRequest request, RoomEscape roomEscape) {
+    public Gathering requestToEntity(GatheringCreateRequest request, Theme theme) {
         return Gathering.create(
-                roomEscape,
+                theme,
                 request.getName(),
                 request.getDateTime(),
                 request.getRegistrationStart(),
