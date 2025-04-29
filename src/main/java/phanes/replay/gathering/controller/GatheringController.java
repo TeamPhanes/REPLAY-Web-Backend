@@ -3,11 +3,17 @@ package phanes.replay.gathering.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.gathering.domain.Gathering;
+import phanes.replay.gathering.dto.GatheringCreateRequest;
+import phanes.replay.gathering.dto.GatheringListRequest;
+import phanes.replay.gathering.dto.GatheringListResponse;
+import phanes.replay.gathering.dto.GatheringResponseDto;
 import phanes.replay.gathering.service.GatheringServiceImpl;
 
 import java.util.HashMap;
@@ -21,6 +27,12 @@ import java.util.List;
 public class GatheringController {
 
     private final GatheringServiceImpl gatheringService;
+
+    @GetMapping("/list")
+    public Page<GatheringResponseDto> getGatheringList(Pageable pageable) {
+        return gatheringService.getGatheringList(pageable);
+    }
+
     @PostMapping
     public ResponseEntity<?> creatGathering(
             @RequestBody @Valid GatheringCreateRequest request,
