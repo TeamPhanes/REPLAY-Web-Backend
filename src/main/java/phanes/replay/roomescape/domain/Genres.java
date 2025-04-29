@@ -16,7 +16,7 @@ public class Genres {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomescape_id")
+    @JoinColumn(name = "roomEscape_id")
     private RoomEscape roomEscape;
 
 
