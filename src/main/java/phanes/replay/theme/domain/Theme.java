@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.theme.domain.enums.Level;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -33,4 +35,6 @@ public class Theme {
     @Column(length = 5)
     private String city; // 시구군
     private String image;
+    @OneToMany(mappedBy = "theme")
+    List<Genre> genres;
 }

@@ -22,7 +22,6 @@ public class Gathering extends BaseTimeEntity{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomescape_id")
     private Theme theme;
 
     @Column(nullable = false, length = 20)

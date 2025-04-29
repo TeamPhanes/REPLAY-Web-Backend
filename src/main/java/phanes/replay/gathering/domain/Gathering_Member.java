@@ -16,11 +16,9 @@ public class Gathering_Member {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gatherings_id")
     private Gathering gathering;
 
     @Enumerated(EnumType.STRING)
