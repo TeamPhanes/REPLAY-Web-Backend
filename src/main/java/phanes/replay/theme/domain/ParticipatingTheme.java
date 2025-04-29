@@ -1,4 +1,4 @@
-package phanes.replay.roomescape.domain;
+package phanes.replay.theme.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import phanes.replay.user.domain.User;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomEscapeParticipate {
+public class ParticipatingTheme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +20,5 @@ public class RoomEscapeParticipate {
     @ManyToOne
     private User user;
     @ManyToOne
-    private RoomEscape roomEscape;
+    private Theme theme;
 }

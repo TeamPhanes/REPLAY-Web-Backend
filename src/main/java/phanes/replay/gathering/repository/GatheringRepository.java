@@ -27,14 +27,14 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
 
 
     // 키워드로 검색 (모임 이름 또는 방탈출 이름에 키워드가 포함된 경우)
-    @Query("select g from Gathering g join g.roomEscape r where g.name like %:keyword% OR r.name like %:roomKeyword%")
+    @Query("select g from Gathering g join g.theme r where g.name like %:keyword% OR r.name like %:roomKeyword%")
     List<Gathering> findByNameContainingOrRoomEscapeNameContaining(
             @Param("keyword")String keyword,
             @Param("roomKeyword")String roomKeyword,
             Pageable pageable);
 
     // 지역으로 검색
-    @Query("select g from Gathering g join g.roomEscape r WHERE r.address LIKE %:location%")
+    @Query("select g from Gathering g join g.theme r WHERE r.address LIKE %:location%")
     List<Gathering> findByLocation(@Param("location")String location, Pageable pageable);
 
     // 날짜로 검색 (해당 날짜에 열리는 모임)
@@ -45,11 +45,11 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
             Pageable pageable);
 
     // 장르로 검색
-    @Query("select g from Gathering g join g.roomEscape r join r.genres gen where gen.name = :genre")
+    @Query("select g from Gathering g join g.theme r join r.genres gen where gen.name = :genre")
     List<Gathering> findByGenre(@Param("genre")String genre, Pageable pageable);
 
     // 다중필터
-    @Query("SELECT g FROM Gathering g JOIN g.roomEscape r LEFT JOIN r.genres gen " +
+    @Query("SELECT g FROM Gathering g JOIN g.theme r LEFT JOIN r.genres gen " +
             "WHERE (:keyword IS NULL OR g.name LIKE %:keyword% OR r.name LIKE %:keyword%) " +
             "AND (:location IS NULL OR r.address LIKE %:location%) " +
             "AND (:date IS NULL OR DATE(g.dateTime) = DATE(:date)) " +

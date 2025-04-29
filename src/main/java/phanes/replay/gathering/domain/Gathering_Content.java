@@ -3,7 +3,6 @@ package phanes.replay.gathering.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
-import phanes.replay.gathering.controller.GatheringCreateRequest;
 
 @Entity
 @Getter
@@ -15,7 +14,6 @@ public class Gathering_Content {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gatherings_id")
     private Gathering gathering;
 
     @Column

@@ -2,7 +2,7 @@ package phanes.replay.gathering.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import phanes.replay.roomescape.domain.RoomEscape;
+import phanes.replay.theme.domain.Theme;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,8 +22,7 @@ public class Gathering extends BaseTimeEntity{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomescape_id")
-    private RoomEscape roomEscape;
+    private Theme theme;
 
     @Column(nullable = false, length = 20)
     private String name; // 모임 제목
@@ -44,14 +43,14 @@ public class Gathering extends BaseTimeEntity{
     private String listImage; // 목록 이미지
 
     public static Gathering create(
-            RoomEscape roomEscape,
+            Theme theme,
             String name,
             LocalDateTime dateTime,
             LocalDateTime registrationStart,
             LocalDateTime registrationEnd,
             Integer capacity){
         Gathering gathering = new Gathering();
-        gathering.roomEscape = roomEscape;
+        gathering.theme = theme;
         gathering.name = name;
         gathering.dateTime = dateTime;
         gathering.registrationStart = registrationStart;

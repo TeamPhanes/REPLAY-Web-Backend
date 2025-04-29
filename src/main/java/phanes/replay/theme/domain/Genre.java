@@ -1,23 +1,17 @@
-package phanes.replay.roomescape.domain;
+package phanes.replay.theme.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "re_genre")
-public class Genres {
+public class Genre {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(length = 8)
     private String name;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "roomescape_id")
-    private RoomEscape roomEscape;
-
-
+    private Theme theme;
 }

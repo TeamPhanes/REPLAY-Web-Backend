@@ -10,7 +10,7 @@ import phanes.replay.gathering.domain.Role;
 import phanes.replay.gathering.service.GatheringMemberService;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.ReviewService;
-import phanes.replay.roomescape.service.RoomEscapeParticipateService;
+import phanes.replay.theme.service.ParticipatingThemeService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.UserDTO;
 import phanes.replay.user.mapper.UserMapper;
@@ -25,7 +25,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final GatheringMemberService gatheringMemberService;
-    private final RoomEscapeParticipateService roomEscapeParticipateService;
+    private final ParticipatingThemeService participatingThemeService;
     private final ReviewService reviewService;
     private final S3Service s3Service;
     private final UserMapper userMapper;
@@ -34,7 +34,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow();
         Long totalGathering = gatheringMemberService.getTotalGatheringCount(userId);
         Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(userId, Role.HOST);
-        Long totalRoomEscape = roomEscapeParticipateService.getTotalRoomEscapeCount(userId);
+        Long totalRoomEscape = participatingThemeService.getTotalRoomEscapeCount(userId);
         Long successCount = reviewService.getCountBySuccess(true);
         Long failCount = reviewService.getCountBySuccess(false);
         return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalRoomEscape, successCount, failCount);

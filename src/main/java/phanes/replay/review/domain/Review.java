@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import phanes.replay.roomescape.domain.RoomEscape;
+import phanes.replay.theme.domain.Theme;
 import phanes.replay.user.domain.User;
 
 @Entity
@@ -28,5 +28,5 @@ public class Review {
     @ManyToOne
     private User user;
     @ManyToOne
-    private RoomEscape roomEscape;
+    private Theme theme;
 }
