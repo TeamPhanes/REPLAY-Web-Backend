@@ -3,7 +3,7 @@ package phanes.replay.gathering.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import phanes.replay.roomescape.domain.Level;
+import phanes.replay.theme.domain.enums.Level;
 
 import java.time.LocalDateTime;
 

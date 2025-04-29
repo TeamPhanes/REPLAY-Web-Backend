@@ -36,9 +36,9 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
             "FROM Gathering gathering " +
             "JOIN Gathering_Member gm ON gathering.id = gm.gathering.id " +
             "JOIN User user ON gm.user.id = user.id " +
-            "JOIN RoomEscape room ON gathering.roomEscape.id = room.id " +
+            "JOIN Theme room ON gathering.theme.id = room.id " +
             "JOIN Gathering_Content Gcontent ON gathering.id = Gcontent.gathering.id " +
-            "LEFT JOIN Genres genre ON genre.roomEscape.id = room.id " + // LEFT JOIN으로 변경
+            "LEFT JOIN Genre genre ON genre.theme.id = room.id " + // LEFT JOIN으로 변경
             "WHERE gm.role = 'HOST'")
     Page<GatheringResponseDto> findAllGatheringDto(Pageable pageable);
 
