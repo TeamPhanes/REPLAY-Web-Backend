@@ -19,6 +19,7 @@ public class RoomEscapeParticipate {
     private Long id;
     @ManyToOne
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roomEscape_id")
     private RoomEscape roomEscape;
 }
