@@ -1,4 +1,4 @@
-package phanes.replay.gathering.controller;
+package phanes.replay.gathering.dto;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
