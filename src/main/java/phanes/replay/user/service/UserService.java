@@ -34,10 +34,10 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow();
         Long totalGathering = gatheringMemberService.getTotalGatheringCount(userId);
         Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(userId, Role.HOST);
-        Long totalRoomEscape = participatingThemeService.getTotalRoomEscapeCount(userId);
+        Long totalTheme = participatingThemeService.getTotalThemeCount(userId);
         Long successCount = reviewService.getCountBySuccess(true);
         Long failCount = reviewService.getCountBySuccess(false);
-        return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalRoomEscape, successCount, failCount);
+        return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount);
     }
 
     @Transactional

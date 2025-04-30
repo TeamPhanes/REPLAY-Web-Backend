@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -22,9 +24,10 @@ public class UserDTO {
     private Boolean emailMark;
     private Long totalGathering;
     private Long totalMakeGathering;
-    private Long totalRoomEscape;
+    private Long totalTheme;
     private Long successCount;
     private Long failCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<String> representAchievement = new ArrayList<>();
 }
