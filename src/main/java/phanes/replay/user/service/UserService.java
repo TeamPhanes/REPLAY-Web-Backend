@@ -17,6 +17,7 @@ import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.UserRepository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -37,7 +38,7 @@ public class UserService {
         Long totalTheme = participatingThemeService.getTotalThemeCount(userId);
         Long successCount = reviewService.getCountBySuccess(true);
         Long failCount = reviewService.getCountBySuccess(false);
-        return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount);
+        return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
     @Transactional

@@ -28,5 +28,5 @@ public class UserDTO {
     private Long failCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<String> representAchievement = List.of("");
+    private List<String> representAchievement;
 }
