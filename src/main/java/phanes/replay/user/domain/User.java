@@ -18,6 +18,7 @@ public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     private String nickname;
     private String profileComment;
     private String profileImage;

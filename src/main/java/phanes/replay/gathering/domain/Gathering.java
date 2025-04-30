@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@Table(name = "gatherings")
 public class Gathering extends BaseTimeEntity{
 
     @Id
