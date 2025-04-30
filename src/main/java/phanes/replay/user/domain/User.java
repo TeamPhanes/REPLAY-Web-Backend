@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.gathering.domain.BaseTimeEntity;
 import phanes.replay.user.domain.enums.SocialType;
 
 @Entity
@@ -12,7 +13,7 @@ import phanes.replay.user.domain.enums.SocialType;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,7 @@ public class User {
     private Boolean emailMark;
 
     public void updateUserInfo(String profileImage, String nickname, String profileComment) {
+        this.profileImage = profileImage;
         this.nickname = nickname;
         this.profileComment = profileComment;
     }
