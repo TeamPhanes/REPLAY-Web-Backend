@@ -2,7 +2,7 @@ CREATE TYPE social_type_enum AS ENUM ('GOOGLE', 'KAKAO', 'NAVER');
 CREATE TYPE level_enum AS ENUM ('EASY', 'HARD', 'NORMAL');
 CREATE TYPE gathering_role_enum AS ENUM ('HOST', 'MEMBER');
 
-CREATE TABLE "user"
+CREATE TABLE users
 (
     id              BIGSERIAL PRIMARY KEY,
     email           VARCHAR(255),
@@ -36,7 +36,7 @@ CREATE TABLE theme_like
 (
     id       BIGSERIAL PRIMARY KEY,
     theme_id BIGINT REFERENCES theme (id),
-    user_id  BIGINT REFERENCES "user" (id)
+    user_id  BIGINT REFERENCES users (id)
 );
 
 CREATE TABLE theme_content
@@ -55,7 +55,7 @@ CREATE TABLE review
     score            INT,
     success          BOOLEAN,
     theme_id         BIGINT REFERENCES theme (id),
-    user_id          BIGINT REFERENCES "user" (id),
+    user_id          BIGINT REFERENCES users (id),
     number_of_player INT,
     level_review     VARCHAR(255),
     story_review     VARCHAR(255),
@@ -66,7 +66,7 @@ CREATE TABLE refresh_token
 (
     id          BIGSERIAL PRIMARY KEY,
     expire_date TIMESTAMP,
-    user_id     BIGINT REFERENCES "user" (id),
+    user_id     BIGINT REFERENCES users (id),
     token       VARCHAR(255)
 );
 
@@ -74,7 +74,7 @@ CREATE TABLE participating_theme
 (
     id       BIGSERIAL PRIMARY KEY,
     theme_id BIGINT REFERENCES theme (id),
-    user_id  BIGINT REFERENCES "user" (id)
+    user_id  BIGINT REFERENCES users (id)
 );
 
 CREATE TABLE genre
@@ -103,7 +103,7 @@ CREATE TABLE gathering_member
     id           BIGSERIAL PRIMARY KEY,
     role         gathering_role_enum,
     gathering_id BIGINT REFERENCES gathering (id),
-    user_id      BIGINT REFERENCES "user" (id)
+    user_id      BIGINT REFERENCES users (id)
 );
 
 CREATE TABLE gathering_content
@@ -120,7 +120,7 @@ CREATE TABLE gathering_comment
     content      VARCHAR(255),
     gathering_id BIGINT REFERENCES gathering (id),
     parent_id    BIGINT,
-    user_id      BIGINT REFERENCES "user" (id),
+    user_id      BIGINT REFERENCES users (id),
     created_at   TIMESTAMP,
     updated_at   TIMESTAMP
 );

@@ -1,4 +1,4 @@
-CREATE TABLE `user`
+CREATE TABLE users
 (
     id              IDENTITY PRIMARY KEY,
     email           VARCHAR(255),
@@ -34,7 +34,7 @@ CREATE TABLE theme_like
     theme_id BIGINT,
     user_id  BIGINT,
     FOREIGN KEY (theme_id) REFERENCES theme (id),
-    FOREIGN KEY (user_id) REFERENCES `user` (id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE theme_content
@@ -60,7 +60,7 @@ CREATE TABLE review
     story_review     VARCHAR(255),
     theme_review     VARCHAR(255),
     FOREIGN KEY (theme_id) REFERENCES theme (id),
-    FOREIGN KEY (user_id) REFERENCES `user` (id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE refresh_token
@@ -69,7 +69,7 @@ CREATE TABLE refresh_token
     expire_date TIMESTAMP,
     user_id     BIGINT,
     token       VARCHAR(255),
-    FOREIGN KEY (user_id) REFERENCES `user` (id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE participating_theme
@@ -78,7 +78,7 @@ CREATE TABLE participating_theme
     theme_id BIGINT,
     user_id  BIGINT,
     FOREIGN KEY (theme_id) REFERENCES theme (id),
-    FOREIGN KEY (user_id) REFERENCES `user` (id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE genre
@@ -111,7 +111,7 @@ CREATE TABLE gathering_member
     gathering_id BIGINT,
     user_id      BIGINT,
     FOREIGN KEY (gathering_id) REFERENCES gathering (id),
-    FOREIGN KEY (user_id) REFERENCES `user` (id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 CREATE TABLE gathering_content
@@ -133,5 +133,5 @@ CREATE TABLE gathering_comment
     created_at   TIMESTAMP,
     updated_at   TIMESTAMP,
     FOREIGN KEY (gathering_id) REFERENCES gathering (id),
-    FOREIGN KEY (user_id) REFERENCES `user` (id)
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
