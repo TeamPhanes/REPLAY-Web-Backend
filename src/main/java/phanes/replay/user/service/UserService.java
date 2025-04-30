@@ -41,7 +41,7 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(Long userId, MultipartFile image, String nickname, String comment) {
+    public void updateUser(Long userId, MultipartFile image, String nickname, String comment, Boolean emailMark, Boolean genderMark) {
         String imageUrl;
         try {
             imageUrl = s3Service.uploadImage("replay", "images/" + UUID.randomUUID() + ".png", image);
@@ -49,7 +49,7 @@ public class UserService {
             throw new ImageUploadFailException("image upload fail");
         }
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        user.updateUserInfo(imageUrl, nickname, comment);
+        user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
         userRepository.save(user);
     }
 }

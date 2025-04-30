@@ -29,9 +29,11 @@ public class User extends BaseTimeEntity {
     private Boolean genderMark;
     private Boolean emailMark;
 
-    public void updateUserInfo(String profileImage, String nickname, String profileComment) {
+    public void updateUserInfo(String profileImage, String nickname, String profileComment, Boolean emailMark, Boolean genderMark) {
         this.profileImage = profileImage;
         this.nickname = nickname;
         this.profileComment = profileComment;
+        this.emailMark = emailMark;
+        this.genderMark = genderMark;
     }
 }
