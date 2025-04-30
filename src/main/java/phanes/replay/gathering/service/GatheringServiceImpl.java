@@ -153,7 +153,7 @@ public class GatheringServiceImpl implements GatheringService {
         // RoomEscape 정보 설정
         Theme theme = gathering.getTheme();
         if (theme != null) {
-            response.setRoomEscapeName(theme.getName());
+            response.setThemeName(theme.getName());
             response.setAddress(theme.getAddress());
             response.setSpot(theme.getSpot());
 
