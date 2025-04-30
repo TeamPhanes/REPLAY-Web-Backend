@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -28,5 +29,5 @@ public class UserDTO {
     private Long failCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<String> representAchievement;
+    private List<String> representAchievement = new ArrayList<>();
 }
