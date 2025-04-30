@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PatchMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void updateMe(@AuthenticationPrincipal Long userId, @RequestPart MultipartFile image, @RequestPart String nickname, @RequestPart String comment) {
-        userService.updateUser(userId, image, nickname, comment);
+    public void updateMe(@AuthenticationPrincipal Long userId, @RequestPart MultipartFile image, @RequestPart String nickname, @RequestPart String comment, @RequestPart Boolean emailMark, @RequestPart Boolean genderMark) {
+        userService.updateUser(userId, image, nickname, comment, emailMark, genderMark);
     }
 }
