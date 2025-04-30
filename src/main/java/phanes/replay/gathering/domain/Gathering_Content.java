@@ -6,7 +6,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
-@Table(name = "gathering_content")
 public class Gathering_Content {
 
     @Id

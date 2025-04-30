@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Table(name = "gathering_comment")
 public class Gathering_Comment {
 
     @Id

@@ -7,7 +7,6 @@ import phanes.replay.user.domain.User;
 
 @Entity
 @Getter
-@Table(name = "gathering_member")
 @NoArgsConstructor
 public class Gathering_Member {
 
