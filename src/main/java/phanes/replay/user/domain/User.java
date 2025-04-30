@@ -11,6 +11,7 @@ import phanes.replay.user.domain.enums.SocialType;
 @Entity
 @Getter
 @Builder
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseTimeEntity {
