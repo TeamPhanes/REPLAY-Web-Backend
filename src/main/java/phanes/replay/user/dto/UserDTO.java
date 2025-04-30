@@ -22,7 +22,7 @@ public class UserDTO {
     private Boolean emailMark;
     private Long totalGathering;
     private Long totalMakeGathering;
-    private Long totalRoomEscape;
+    private Long totalTheme;
     private Long successCount;
     private Long failCount;
     private LocalDateTime createdAt;
