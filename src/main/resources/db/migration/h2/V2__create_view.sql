@@ -11,9 +11,9 @@ SELECT p.user_id,
        (SELECT GROUP_CONCAT(g.name SEPARATOR ',')
         FROM genre g
         WHERE t.id = g.theme_id)  AS genres,
-       (SELECT COALESCE(AVG(r2.score), 0)
+       CAST((SELECT COALESCE(AVG(r2.score), 0)
         FROM review r2
-        WHERE r2.theme_id = t.id) AS total_rating,
+        WHERE r2.theme_id = t.id) AS NUMERIC(10, 2)) AS total_rating,
        r.id                       AS review_id,
        (SELECT COUNT(*)
         FROM review r3
