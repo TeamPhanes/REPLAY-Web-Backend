@@ -1,17 +1,13 @@
-CREATE TYPE social_type_enum AS ENUM ('GOOGLE', 'KAKAO', 'NAVER');
-CREATE TYPE level_enum AS ENUM ('EASY', 'HARD', 'NORMAL');
-CREATE TYPE gathering_role_enum AS ENUM ('HOST', 'MEMBER');
-
 CREATE TABLE users
 (
     id              BIGSERIAL PRIMARY KEY,
-    email           VARCHAR(255),
+    email           VARCHAR(50),
     gender          VARCHAR(255),
-    nickname        VARCHAR(255) UNIQUE,
+    nickname        VARCHAR(32) UNIQUE,
     profile_comment VARCHAR(255),
     profile_image   VARCHAR(255),
-    social_id       VARCHAR(255),
-    social_type     social_type_enum,
+    social_id       VARCHAR(100),
+    social_type     VARCHAR(10),
     email_mark      BOOLEAN,
     gender_mark     BOOLEAN,
     created_at      TIMESTAMP,
@@ -29,7 +25,7 @@ CREATE TABLE theme
     cafe     VARCHAR(15),
     address  VARCHAR(100),
     playtime INT,
-    level    level_enum
+    level    VARCHAR(10)
 );
 
 CREATE TABLE theme_like
@@ -67,7 +63,7 @@ CREATE TABLE refresh_token
     id          BIGSERIAL PRIMARY KEY,
     expire_date TIMESTAMP,
     user_id     BIGINT REFERENCES users (id),
-    token       VARCHAR(255)
+    token       VARCHAR(40)
 );
 
 CREATE TABLE participating_theme
@@ -101,7 +97,7 @@ CREATE TABLE gathering
 CREATE TABLE gathering_member
 (
     id           BIGSERIAL PRIMARY KEY,
-    role         gathering_role_enum,
+    role         VARCHAR(10),
     gathering_id BIGINT REFERENCES gathering (id),
     user_id      BIGINT REFERENCES users (id)
 );
