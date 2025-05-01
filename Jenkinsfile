@@ -1,28 +1,21 @@
+def profileRules = [
+    'dev': 'dev',
+    'main': 'prod'
+]
+
 pipeline {
     agent {
         label 'phanes'
     }
     environment {
         REGISTRY = "harbor.phanescloud.com"
-        PROFILE = 'local'
     }
     stages {
-        stage('Set Profile') {
-            steps {
-                script {
-                    echo "Branch: ${env.GIT_BRANCH}"
-                    if (env.GIT_BRANCH == 'dev') {
-                        echo "dev in"
-                        env.PROFILE = 'dev'
-                    }
-                    echo "Selected Profile: ${env.PROFILE}"
-                }
-            }
-        }
         stage('Build') {
             steps {
+                def profile = env.CHANGE_ID ? 'local' : profileRules[env.GIT_BRANCH]
                 sh 'chmod +x gradlew'
-                sh "make build PROFILE=${env.PROFILE}"
+                sh "make build PROFILE=${profile}"
             }
         }
         stage('Image Build and Push') {
