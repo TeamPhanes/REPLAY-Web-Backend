@@ -12,6 +12,7 @@ pipeline {
                 script {
                     echo "Branch: ${env.GIT_BRANCH}"
                     if (env.GIT_BRANCH == 'dev') {
+                        echo "dev in"
                         env.PROFILE = 'dev'
                     }
                     echo "Selected Profile: ${env.PROFILE}"
