@@ -3,10 +3,14 @@ package phanes.replay.theme.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
 import org.hibernate.annotations.Immutable;
+
+import java.math.BigDecimal;
 
 @Entity
 @Immutable
+@Getter
 @Table(name = "participate_theme_summary")
 public class ParticipatingThemeView {
 
@@ -21,7 +25,7 @@ public class ParticipatingThemeView {
     private String level;
     private Integer playtime;
     private String genres;
-    private Double totalRating;
+    private BigDecimal totalRating;
     private Long reviewId;
     private Integer reviewCount;
     private Integer score;

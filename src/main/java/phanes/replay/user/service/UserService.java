@@ -59,7 +59,7 @@ public class UserService {
 
     public List<UserPlayThemeDTO> getMyPlayingTheme(Long userId) {
         List<ParticipatingThemeView> userPlayingThemeList = participatingThemeService.getUserPlayingThemeList(userId);
-        return userMapper.ParticipatingThemeViewToUserPlayThemeDTO(userPlayingThemeList);
+        return userPlayingThemeList.stream().map(userMapper::ParticipatingThemeViewToUserPlayThemeDTO).toList();
     }
 
     public void updateThemeReview(UserPlayThemeDTO theme) {

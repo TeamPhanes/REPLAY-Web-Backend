@@ -18,8 +18,8 @@ public interface UserMapper {
 
     @Mapping(source = "name", target = "themeName")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingThemeView.getGenres().split(\",\")))")
-    @Mapping(source = "averageRating", target = "totalRating")
+    @Mapping(source = "totalRating", target = "totalRating")
     @Mapping(source = "score", target = "myRating")
     @Mapping(source = "content", target = "reviewComment")
-    List<UserPlayThemeDTO> ParticipatingThemeViewToUserPlayThemeDTO(List<ParticipatingThemeView> participatingThemeView);
+    UserPlayThemeDTO ParticipatingThemeViewToUserPlayThemeDTO(ParticipatingThemeView participatingThemeView);
 }
