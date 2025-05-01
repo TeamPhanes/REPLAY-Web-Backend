@@ -13,9 +13,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                def profile = env.CHANGE_ID ? 'local' : profileRules[env.GIT_BRANCH]
+                env.PROFILE = env.CHANGE_ID ? 'local' : profileRules[env.GIT_BRANCH]
                 sh 'chmod +x gradlew'
-                sh "make build PROFILE=${profile}"
+                sh "make build PROFILE=${env.PROFILE}"
             }
         }
         stage('Image Build and Push') {
