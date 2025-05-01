@@ -1,6 +1,6 @@
 CREATE OR REPLACE VIEW participate_theme_summary AS
 SELECT p.user_id,
-       t.id                      AS themeId,
+       t.id                      AS theme_id,
        t.address,
        t.spot,
        t.cafe,
@@ -13,11 +13,11 @@ SELECT p.user_id,
         WHERE t.id = g.theme_id) AS genres,
        (SELECT COALESCE(AVG(r.score), 0)
         FROM review r
-        WHERE r.theme_id = t.id) AS average_rating,
-       r.id                      AS reviewId,
+        WHERE r.theme_id = t.id) AS total_rating,
+       r.id                      AS review_id,
        (SELECT COUNT(*)
         FROM review r
-        where r.theme_id = t.id) AS reviewCount,
+        where r.theme_id = t.id) AS review_count,
        r.score,
        r.hint,
        r.number_of_player,
