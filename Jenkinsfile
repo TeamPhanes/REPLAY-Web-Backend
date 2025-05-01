@@ -13,7 +13,11 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                env.PROFILE = env.CHANGE_ID ? 'local' : profileRules[env.GIT_BRANCH]
+                if(env.CHANGE_ID) {
+                    env.PROFILE = 'local'
+                } else {
+                    env.PROFILE = profileRules[env.GIT_BRANCH]
+                }
                 sh 'chmod +x gradlew'
                 sh "make build PROFILE=${env.PROFILE}"
             }
