@@ -68,4 +68,14 @@ public class UserService {
         review.updateReview(theme.getMyRating(), theme.getHint(), theme.getNumberOfPlayer(), theme.getThemeReview(), theme.getLevelReview(), theme.getStoryReview(), theme.getReviewComment(), theme.getSuccess());
         reviewService.updateReview(review);
     }
+
+    public UserDTO getUserByNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Long totalGathering = gatheringMemberService.getTotalGatheringCount(user.getId());
+        Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(user.getId(), Role.HOST);
+        Long totalTheme = participatingThemeService.getTotalThemeCount(user.getId());
+        Long successCount = reviewService.getCountBySuccess(true);
+        Long failCount = reviewService.getCountBySuccess(false);
+        return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
+    }
 }

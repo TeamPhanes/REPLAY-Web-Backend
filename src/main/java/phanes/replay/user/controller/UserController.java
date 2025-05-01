@@ -37,4 +37,14 @@ public class UserController {
     public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @RequestBody UserPlayThemeDTO theme) {
         userService.updateThemeReview(userId, theme);
     }
+
+    @GetMapping("/{nickname}")
+    public UserDTO getOtherUser(@PathVariable String nickname) {
+        UserDTO otherUser = userService.getUserByNickname(nickname);
+        if(Boolean.FALSE.equals(otherUser.getEmailMark()))
+            otherUser.setEmail("");
+        if(Boolean.FALSE.equals(otherUser.getGenderMark()))
+            otherUser.setGender("");
+        return otherUser;
+    }
 }

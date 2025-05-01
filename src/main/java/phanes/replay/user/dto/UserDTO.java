@@ -1,9 +1,6 @@
 package phanes.replay.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +13,9 @@ public class UserDTO {
 
     private String image;
     private String nickname;
+    @Setter
     private String gender;
+    @Setter
     private String email;
     private String comment;
     private Boolean genderMark;
