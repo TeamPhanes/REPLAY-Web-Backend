@@ -15,5 +15,5 @@ public interface GatheringService {
 
     List<GatheringListResponse> getGatheringList(GatheringListRequest request);
 
-    public Page<GatheringResponseDto> getGatheringList(Pageable pageable);
+    Page<GatheringResponseDto> getGatheringList(Pageable pageable);
 }
