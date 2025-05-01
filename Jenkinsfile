@@ -9,15 +9,11 @@ pipeline {
     }
     environment {
         REGISTRY = "harbor.phanescloud.com"
+        PROFILE = profileRules.get(GIT_BRANCH, 'local')
     }
     stages {
         stage('Build') {
             steps {
-                if(env.CHANGE_ID) {
-                    env.PROFILE = 'local'
-                } else {
-                    env.PROFILE = profileRules[env.GIT_BRANCH]
-                }
                 sh 'chmod +x gradlew'
                 sh "make build PROFILE=${env.PROFILE}"
             }
