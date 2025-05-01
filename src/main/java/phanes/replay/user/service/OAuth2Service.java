@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import phanes.replay.security.JwtProvider;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.domain.enums.SocialType;
-import phanes.replay.user.dto.SecurityToken;
-import phanes.replay.user.dto.SocialProfile;
+import phanes.replay.user.dto.oauth.SecurityToken;
+import phanes.replay.user.dto.oauth.SocialProfile;
 import phanes.replay.user.repository.UserRepository;
 import phanes.replay.user.strategy.SocialLoginStrategy;
 
