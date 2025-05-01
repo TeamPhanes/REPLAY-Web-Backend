@@ -32,4 +32,9 @@ public class UserController {
     public List<UserPlayThemeDTO> myPlayTheme(@AuthenticationPrincipal Long userId) {
         return userService.getMyPlayingTheme(userId);
     }
+
+    @PatchMapping("/me/theme")
+    public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @RequestBody UserPlayThemeDTO theme) {
+        userService.updateThemeReview(theme);
+    }
 }
