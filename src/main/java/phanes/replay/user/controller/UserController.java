@@ -35,6 +35,6 @@ public class UserController {
 
     @PatchMapping("/me/theme")
     public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @RequestBody UserPlayThemeDTO theme) {
-        userService.updateThemeReview(theme);
+        userService.updateThemeReview(userId, theme);
     }
 }

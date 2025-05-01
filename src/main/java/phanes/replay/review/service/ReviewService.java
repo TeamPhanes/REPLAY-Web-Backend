@@ -16,8 +16,8 @@ public class ReviewService {
         return reviewRepository.countBySuccess(success);
     }
 
-    public Review getReviewById(Long id) {
-        return reviewRepository.findById(id).orElseThrow(() -> new ReviewNotFountException("review not found"));
+    public Review getReviewById(Long id, Long userId) {
+        return reviewRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ReviewNotFountException("review not found"));
     }
 
     public void updateReview(Review review) {

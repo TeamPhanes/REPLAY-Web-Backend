@@ -2,11 +2,14 @@ package phanes.replay.user.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.UserDTO;
 import phanes.replay.user.dto.UserPlayThemeDTO;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -18,8 +21,14 @@ public interface UserMapper {
 
     @Mapping(source = "name", target = "themeName")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingThemeView.getGenres().split(\",\")))")
-    @Mapping(source = "averageRating", target = "totalRating")
+    @Mapping(source = "totalRating", target = "totalRating", qualifiedByName = "truncateTotalRating")
     @Mapping(source = "score", target = "myRating")
     @Mapping(source = "content", target = "reviewComment")
-    List<UserPlayThemeDTO> ParticipatingThemeViewToUserPlayThemeDTO(List<ParticipatingThemeView> participatingThemeView);
+    UserPlayThemeDTO ParticipatingThemeViewToUserPlayThemeDTO(ParticipatingThemeView participatingThemeView);
+
+    @Named("truncateTotalRating")
+    default Double truncateTotalRating(BigDecimal totalRating) {
+        if (totalRating == null) return null;
+        return totalRating.setScale(1, RoundingMode.DOWN).doubleValue();
+    }
 }

@@ -59,11 +59,12 @@ public class UserService {
 
     public List<UserPlayThemeDTO> getMyPlayingTheme(Long userId) {
         List<ParticipatingThemeView> userPlayingThemeList = participatingThemeService.getUserPlayingThemeList(userId);
-        return userMapper.ParticipatingThemeViewToUserPlayThemeDTO(userPlayingThemeList);
+        return userPlayingThemeList.stream().map(userMapper::ParticipatingThemeViewToUserPlayThemeDTO).toList();
     }
 
-    public void updateThemeReview(UserPlayThemeDTO theme) {
-        Review review = reviewService.getReviewById(theme.getReviewId());
+    public void updateThemeReview(Long userId, UserPlayThemeDTO theme) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Review review = reviewService.getReviewById(theme.getReviewId(), user.getId());
         review.updateReview(theme.getMyRating(), theme.getHint(), theme.getNumberOfPlayer(), theme.getThemeReview(), theme.getLevelReview(), theme.getStoryReview(), theme.getReviewComment(), theme.getSuccess());
         reviewService.updateReview(review);
     }
