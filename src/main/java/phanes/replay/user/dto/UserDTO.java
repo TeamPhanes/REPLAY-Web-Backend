@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import phanes.replay.gathering.domain.BaseTimeEntity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO extends BaseTimeEntity {
+public class UserDTO {
 
     private String image;
     private String nickname;
@@ -23,9 +23,10 @@ public class UserDTO extends BaseTimeEntity {
     private Boolean emailMark;
     private Long totalGathering;
     private Long totalMakeGathering;
-    private Long totalRoomEscape;
+    private Long totalTheme;
     private Long successCount;
     private Long failCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<String> representAchievement;
 }

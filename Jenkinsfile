@@ -4,12 +4,24 @@ pipeline {
     }
     environment {
         REGISTRY = "harbor.phanescloud.com"
+        PROFILE = 'local'
     }
     stages {
+        stage('Set Profile') {
+            steps {
+                script {
+                    echo "Branch: ${env.GIT_BRANCH}"
+                    if (env.GIT_BRANCH == 'dev') {
+                        env.PROFILE = 'dev'
+                    }
+                    echo "Selected Profile: ${env.PROFILE}"
+                }
+            }
+        }
         stage('Build') {
             steps {
                 sh 'chmod +x gradlew'
-                sh 'make build'
+                sh "make build PROFILE=${env.PROFILE}"
             }
         }
         stage('Image Build and Push') {

@@ -22,6 +22,7 @@ public class Review {
     private Boolean success;
     private Integer score;
     private Integer hint;
+    private Integer numberOfPlayer;
     private String themeReview;
     private String levelReview;
     private String storyReview;

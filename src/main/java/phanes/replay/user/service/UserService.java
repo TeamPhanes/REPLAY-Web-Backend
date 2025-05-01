@@ -17,6 +17,7 @@ import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.UserRepository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,14 +35,14 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow();
         Long totalGathering = gatheringMemberService.getTotalGatheringCount(userId);
         Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(userId, Role.HOST);
-        Long totalRoomEscape = participatingThemeService.getTotalRoomEscapeCount(userId);
+        Long totalTheme = participatingThemeService.getTotalThemeCount(userId);
         Long successCount = reviewService.getCountBySuccess(true);
         Long failCount = reviewService.getCountBySuccess(false);
-        return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalRoomEscape, successCount, failCount);
+        return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
     @Transactional
-    public void updateUser(Long userId, MultipartFile image, String nickname, String comment) {
+    public void updateUser(Long userId, MultipartFile image, String nickname, String comment, Boolean emailMark, Boolean genderMark) {
         String imageUrl;
         try {
             imageUrl = s3Service.uploadImage("replay", "images/" + UUID.randomUUID() + ".png", image);
@@ -49,7 +50,7 @@ public class UserService {
             throw new ImageUploadFailException("image upload fail");
         }
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        user.updateUserInfo(imageUrl, nickname, comment);
+        user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
         userRepository.save(user);
     }
 }

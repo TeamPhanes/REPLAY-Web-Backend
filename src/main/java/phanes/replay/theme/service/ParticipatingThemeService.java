@@ -10,7 +10,7 @@ public class ParticipatingThemeService {
 
     private final ParticipatingThemeRepository participatingThemeRepository;
 
-    public Long getTotalRoomEscapeCount(Long userId) {
+    public Long getTotalThemeCount(Long userId) {
         return participatingThemeRepository.countByUserId(userId);
     }
 }

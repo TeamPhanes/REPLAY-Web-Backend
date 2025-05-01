@@ -5,18 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.gathering.domain.BaseTimeEntity;
 import phanes.replay.user.domain.enums.SocialType;
 
 @Entity
 @Getter
 @Builder
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true, nullable = false)
     private String nickname;
     private String profileComment;
     private String profileImage;
@@ -28,8 +31,11 @@ public class User {
     private Boolean genderMark;
     private Boolean emailMark;
 
-    public void updateUserInfo(String profileImage, String nickname, String profileComment) {
+    public void updateUserInfo(String profileImage, String nickname, String profileComment, Boolean emailMark, Boolean genderMark) {
+        this.profileImage = profileImage;
         this.nickname = nickname;
         this.profileComment = profileComment;
+        this.emailMark = emailMark;
+        this.genderMark = genderMark;
     }
 }
