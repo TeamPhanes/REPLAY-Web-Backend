@@ -1,4 +1,4 @@
-package phanes.replay.gathering.controller;
+package phanes.replay.gathering.dto;
 
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,7 +26,7 @@ public class GatheringListResponse {
 
     private Integer playtime; // 플레이 타임
 
-    private String roomEscapeName; // 방탈출테마 이름
+    private String themeName; // 방탈출테마 이름
 
     private String name; // 모임 이름
 

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import phanes.replay.gathering.domain.Gathering;
+import phanes.replay.gathering.dto.GatheringResponseDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +18,29 @@ public interface GatheringRepository extends JpaRepository<Gathering, Long> {
 //    @Query("SELECT g from Gathering g where g.capacity >= :limit")
 //    List<Gathering> findByCapacity(@Param("limit") int limit);
 
-
+    @Query("SELECT new phanes.replay.gathering.dto.GatheringResponseDto(" +
+            "gathering.name, " +
+            "user.nickname, " +
+            "gathering.dateTime, " +
+            "gathering.registrationStart, " +
+            "gathering.registrationEnd, " +
+            "room.address, " +
+            "room.name," +
+            "Gcontent.price , " +
+            "room.level, " +
+            "room.playtime, " +
+            "gathering.capacity, " +
+            "genre.name, " + // 여기서 genre.name이 NULL이 될 수 있음
+            "room.image" +
+            ") " +
+            "FROM Gathering gathering " +
+            "JOIN Gathering_Member gm ON gathering.id = gm.gathering.id " +
+            "JOIN User user ON gm.user.id = user.id " +
+            "JOIN Theme room ON gathering.theme.id = room.id " +
+            "JOIN Gathering_Content Gcontent ON gathering.id = Gcontent.gathering.id " +
+            "LEFT JOIN Genre genre ON genre.theme.id = room.id " + // LEFT JOIN으로 변경
+            "WHERE gm.role = 'HOST'")
+    Page<GatheringResponseDto> findAllGatheringDto(Pageable pageable);
 
     // JPQL 작성
     @Query("Select g From Gathering g where g.name = :name")

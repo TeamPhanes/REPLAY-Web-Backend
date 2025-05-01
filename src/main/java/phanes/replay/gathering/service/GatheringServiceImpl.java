@@ -8,12 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import phanes.replay.gathering.controller.GatheringCreateRequest;
-import phanes.replay.gathering.controller.GatheringListRequest;
-import phanes.replay.gathering.controller.GatheringListResponse;
+import phanes.replay.gathering.dto.GatheringListRequest;
+import phanes.replay.gathering.dto.GatheringListResponse;
+import phanes.replay.gathering.dto.GatheringCreateRequest;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.Gathering_Content;
 import phanes.replay.gathering.domain.Gathering_Member;
+import phanes.replay.gathering.dto.GatheringResponseDto;
 import phanes.replay.gathering.repository.GatheringRepository;
 import phanes.replay.gathering.repository.Gathering_ContentRepository;
 import phanes.replay.gathering.repository.Gathering_MemberRepository;
@@ -40,6 +41,12 @@ public class GatheringServiceImpl implements GatheringService {
     private final UserRepository userRepository;
     private final ThemeRepository themeRepository;
     private final GatheringMapper gatheringMapper;
+
+
+    @Override
+    public Page<GatheringResponseDto> getGatheringList(Pageable pageable) {
+        return gatheringRepository.findAllGatheringDto(pageable);
+    }
 
     @Transactional
     @Override
@@ -153,7 +160,7 @@ public class GatheringServiceImpl implements GatheringService {
         // RoomEscape 정보 설정
         Theme theme = gathering.getTheme();
         if (theme != null) {
-            response.setRoomEscapeName(theme.getName());
+            response.setThemeName(theme.getName());
             response.setAddress(theme.getAddress());
             response.setSpot(theme.getSpot());
 
