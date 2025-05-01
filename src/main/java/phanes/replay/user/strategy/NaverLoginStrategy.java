@@ -7,10 +7,10 @@ import phanes.replay.config.properties.NaverProperties;
 import phanes.replay.user.client.NaverProfileClient;
 import phanes.replay.user.client.NaverTokenClient;
 import phanes.replay.user.domain.enums.SocialType;
-import phanes.replay.user.dto.NaverProfile;
-import phanes.replay.user.dto.NaverProfileResponse;
-import phanes.replay.user.dto.NaverTokenResponse;
-import phanes.replay.user.dto.SocialProfile;
+import phanes.replay.user.dto.oauth.NaverProfile;
+import phanes.replay.user.dto.oauth.NaverProfileResponse;
+import phanes.replay.user.dto.oauth.NaverTokenResponse;
+import phanes.replay.user.dto.oauth.SocialProfile;
 
 @Component
 @RequiredArgsConstructor
