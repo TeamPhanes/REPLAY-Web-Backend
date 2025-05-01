@@ -6,7 +6,10 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.user.dto.UserDTO;
+import phanes.replay.user.dto.UserPlayThemeDTO;
 import phanes.replay.user.service.UserService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +26,10 @@ public class UserController {
     @PatchMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateMe(@AuthenticationPrincipal Long userId, @RequestPart MultipartFile image, @RequestPart String nickname, @RequestPart String comment, @RequestPart Boolean emailMark, @RequestPart Boolean genderMark) {
         userService.updateUser(userId, image, nickname, comment, emailMark, genderMark);
+    }
+
+    @GetMapping("/me/theme")
+    public List<UserPlayThemeDTO> myPlayTheme(@AuthenticationPrincipal Long userId) {
+        return userService.getMyPlayingTheme(userId);
     }
 }

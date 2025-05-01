@@ -10,9 +10,11 @@ import phanes.replay.gathering.domain.Role;
 import phanes.replay.gathering.service.GatheringMemberService;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.ReviewService;
+import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.theme.service.ParticipatingThemeService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.UserDTO;
+import phanes.replay.user.dto.UserPlayThemeDTO;
 import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.UserRepository;
 
@@ -52,5 +54,10 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
         userRepository.save(user);
+    }
+
+    public List<UserPlayThemeDTO> getMyPlayingTheme(Long userId) {
+        List<ParticipatingThemeView> userPlayingThemeList = participatingThemeService.getUserPlayingThemeList(userId);
+        return userMapper.ParticipatingThemeViewToUserPlayThemeDTO(userPlayingThemeList);
     }
 }
