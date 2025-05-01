@@ -1,13 +1,16 @@
 spring:
     application:
         name: Replay
+    server:
+        servlet:
+            encoding:
+                force-response: true
     # 데이터베이스 설정
     datasource:
         driver-class-name: org.postgresql.Driver
         url: ENC[AES256_GCM,data:GrRBMNttyiF7q6ifRmsqJWz852cyluUpoJ3EVUNnX8JHaycEN2lUjG4bsg==,iv:s5xozAEQK0AuOAbTjMCoA81330wjQ5NpAUCp+PDobq4=,tag:C6nZvmNCCGGli/5uaQLU1A==,type:str]
         username: ENC[AES256_GCM,data:Y6ZsPhEx,iv:phLKb4/dhCXr6lCQhJSXOId1IQ9/vchSYzrFayiBjpg=,tag:KSqClAY7+DgvPfpicltJbg==,type:str]
         password: ENC[AES256_GCM,data:WZ+TCLDNd3L2fsU=,iv:1c6m3bPYIl74Uc+H39IZNTpIcY87IEvTYWNhUNFcHq4=,tag:Ux+SfqTeaXN8nuNkXkPnSQ==,type:str]
-
     # JPA 설정
     jpa:
         hibernate:
@@ -24,7 +27,6 @@ spring:
             password: ENC[AES256_GCM,data:6CP1vpvOTM75ZLI=,iv:BFot79cRIdITFi83nqcw1qbOvzmX7xkPLgR7cFKMfnY=,tag:6+GkoDlad82qLCWAt6e6rA==,type:str]
     flyway:
         locations: classpath:db/migration/postgresql
-
 # 로깅 설정
 logging:
     pattern:
@@ -42,7 +44,6 @@ management:
         web:
             exposure:
                 include: ENC[AES256_GCM,data:vBXxl5RYJt6fHwfaphIfVZX1/qXTOGyCjh+jmTuV,iv:FyeriG7Pn4uRznTTSsNHAvDBk8dRqQojmdbI6NGFG1Y=,tag:HeMYVE1DPhq6ilfk8c5VOQ==,type:str]
-
     metrics:
         tags:
             application: ${spring.application.name}
@@ -55,9 +56,7 @@ management:
         java:
             enabled: true
 server:
-    servlet:
-        encoding:
-            force-response: true
+    port: 8080
 app:
     domain:
         frontend: ENC[AES256_GCM,data:m2oT6P2hfPBUCzLo/db5QUSYJ1erIWUKJxvu7oPH,iv:fTmyIFDcsc7EEp2uKxUCkCY19ri6naMZ/GPMmQlmqUc=,tag:8vscL18pjXi+2Lj8gi0DyA==,type:str]
@@ -85,6 +84,7 @@ sops:
         - created_at: "2025-04-30T15:47:57Z"
           enc: |-
             -----BEGIN PGP MESSAGE-----
+
             hQIMA0pEQ+ak5/eRAQ/9G/j0vBejAZPnflzSaCuX0sLGpUmx4PckKSsWAJkqpP0x
             Fb1FzgI/Xw9bzP9hJg8GkH8A2bvB5iKbJQh6BJm1J/PxU3ZWW8HvCkGr6j4ItGMh
             lN+Y897wg4/H1TNploIlsAwtbwjVwaHma+UN+61yujjNuhYekjiE1rNFGgmadDi2
