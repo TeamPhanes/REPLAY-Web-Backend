@@ -14,6 +14,7 @@ import phanes.replay.review.service.ReviewService;
 import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.theme.service.ParticipatingThemeService;
 import phanes.replay.user.domain.User;
+import phanes.replay.user.dto.OtherUserDTO;
 import phanes.replay.user.dto.UserDTO;
 import phanes.replay.user.dto.UserPlayThemeDTO;
 import phanes.replay.user.mapper.UserMapper;
@@ -69,13 +70,13 @@ public class UserService {
         reviewService.updateReview(review);
     }
 
-    public UserDTO getUserByNickname(String nickname) {
+    public OtherUserDTO getUserByNickname(String nickname) {
         User user = userRepository.findByNickname(nickname).orElseThrow(() -> new UserNotFoundException("user not found"));
         Long totalGathering = gatheringMemberService.getTotalGatheringCount(user.getId());
         Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(user.getId(), Role.HOST);
         Long totalTheme = participatingThemeService.getTotalThemeCount(user.getId());
         Long successCount = reviewService.getCountBySuccess(true);
         Long failCount = reviewService.getCountBySuccess(false);
-        return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
+        return userMapper.UserToOtherUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import phanes.replay.user.dto.OtherUserDTO;
 import phanes.replay.user.dto.UserDTO;
 import phanes.replay.user.dto.UserPlayThemeDTO;
 import phanes.replay.user.service.UserService;
@@ -39,12 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/{nickname}")
-    public UserDTO getOtherUser(@PathVariable String nickname) {
-        UserDTO otherUser = userService.getUserByNickname(nickname);
-        if(Boolean.FALSE.equals(otherUser.getEmailMark()))
-            otherUser.setEmail("");
-        if(Boolean.FALSE.equals(otherUser.getGenderMark()))
-            otherUser.setGender("");
-        return otherUser;
+    public OtherUserDTO getOtherUser(@PathVariable String nickname) {
+        return userService.getUserByNickname(nickname);
     }
 }

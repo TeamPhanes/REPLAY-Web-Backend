@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.user.domain.User;
+import phanes.replay.user.dto.OtherUserDTO;
 import phanes.replay.user.dto.UserDTO;
 import phanes.replay.user.dto.UserPlayThemeDTO;
 
@@ -18,6 +19,12 @@ public interface UserMapper {
     @Mapping(source = "user.profileComment", target = "comment")
     @Mapping(source = "user.profileImage", target = "image")
     UserDTO UserToUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
+
+    @Mapping(source = "user.profileComment", target = "comment")
+    @Mapping(source = "user.profileImage", target = "image")
+    @Mapping(target = "gender", expression = "java(user.getGenderMark() ? user.getGender() : \"\")")
+    @Mapping(target = "email", expression = "java(user.getEmailMark() ? user.getEmail() : \"\")")
+    OtherUserDTO UserToOtherUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
 
     @Mapping(source = "name", target = "themeName")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingThemeView.getGenres().split(\",\")))")
