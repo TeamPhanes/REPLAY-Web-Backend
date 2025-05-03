@@ -3,13 +3,11 @@ package phanes.replay.user.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.dto.OtherUserDTO;
-import phanes.replay.user.dto.UserDTO;
-import phanes.replay.user.dto.UserParticipatingGatheringDTO;
-import phanes.replay.user.dto.UserPlayThemeDTO;
+import phanes.replay.user.dto.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -43,4 +41,9 @@ public interface UserMapper {
 
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingGatheringView.getGenres().split(\",\")))")
     UserParticipatingGatheringDTO ParticipatingGatheringViewToParticipatingGatheringDTO(ParticipatingGatheringView participatingGatheringView);
+
+    @Mapping(target = "gatheringId", source = "gathering.id")
+    @Mapping(target = "gatheringName", source = "gathering.name")
+    @Mapping(target = "time", expression = "java(gatheringComment.getCreatedAt().toLocalTime())")
+    UserCommentDTO GatheringCommentToUserCommentDTO(GatheringComment gatheringComment);
 }

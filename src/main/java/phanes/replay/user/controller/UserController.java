@@ -2,17 +2,17 @@ package phanes.replay.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import phanes.replay.user.dto.OtherUserDTO;
-import phanes.replay.user.dto.UserDTO;
-import phanes.replay.user.dto.UserParticipatingGatheringDTO;
-import phanes.replay.user.dto.UserPlayThemeDTO;
+import phanes.replay.user.dto.*;
 import phanes.replay.user.service.UserService;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -50,5 +50,12 @@ public class UserController {
     public List<UserParticipatingGatheringDTO> myParticipatingGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         PageRequest pageRequest = PageRequest.of(offset, limit);
         return userService.getMyParticipatingGathering(userId, pageRequest);
+    }
+
+    @GetMapping("/me/comment")
+    public Map<LocalDate, List<UserCommentDTO>> myComment(@AuthenticationPrincipal Long userId, @RequestParam("sortBy") String sortBy, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+        Sort.Direction direction = "create".equals(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(direction,"createdAt"));
+        return userService.getMyComment(userId, pageRequest);
     }
 }

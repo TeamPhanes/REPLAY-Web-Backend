@@ -7,9 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.exception.UserNotFoundException;
+import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.Gathering_Member;
 import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.gathering.domain.Role;
+import phanes.replay.gathering.service.GatheringCommentService;
 import phanes.replay.gathering.service.GatheringMemberService;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.domain.Review;
@@ -17,14 +19,12 @@ import phanes.replay.review.service.ReviewService;
 import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.theme.service.ParticipatingThemeService;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.dto.OtherUserDTO;
-import phanes.replay.user.dto.UserDTO;
-import phanes.replay.user.dto.UserParticipatingGatheringDTO;
-import phanes.replay.user.dto.UserPlayThemeDTO;
+import phanes.replay.user.dto.*;
 import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.UserRepository;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,6 +37,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final GatheringMemberService gatheringMemberService;
+    private final GatheringCommentService gatheringCommentService;
     private final ParticipatingThemeService participatingThemeService;
     private final ReviewService reviewService;
     private final S3Service s3Service;
@@ -102,5 +103,11 @@ public class UserService {
                                         .build())
                                 .toList()));
         return myParticipatingGathering;
+    }
+
+    public Map<LocalDate, List<UserCommentDTO>> getMyComment(Long userId, Pageable pageable) {
+        List<GatheringComment> myComment = gatheringCommentService.getMyComment(userId, pageable);
+        List<UserCommentDTO> commentDTOList = myComment.stream().map(userMapper::GatheringCommentToUserCommentDTO).toList();
+        return commentDTOList.stream().collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate()));
     }
 }
