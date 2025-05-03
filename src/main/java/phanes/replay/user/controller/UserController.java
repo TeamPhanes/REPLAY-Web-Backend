@@ -1,12 +1,14 @@
 package phanes.replay.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.user.dto.OtherUserDTO;
 import phanes.replay.user.dto.UserDTO;
+import phanes.replay.user.dto.UserParticipatingGatheringDTO;
 import phanes.replay.user.dto.UserPlayThemeDTO;
 import phanes.replay.user.service.UserService;
 
@@ -42,5 +44,11 @@ public class UserController {
     @GetMapping("/{nickname}")
     public OtherUserDTO getOtherUser(@PathVariable String nickname) {
         return userService.getUserByNickname(nickname);
+    }
+
+    @GetMapping("/me/gathering")
+    public List<UserParticipatingGatheringDTO> myParticipatingGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+        PageRequest pageRequest = PageRequest.of(offset, limit);
+        return userService.getMyParticipatingGathering(userId, pageRequest);
     }
 }

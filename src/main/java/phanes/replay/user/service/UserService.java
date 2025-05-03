@@ -1,11 +1,14 @@
 package phanes.replay.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.exception.UserNotFoundException;
+import phanes.replay.gathering.domain.Gathering_Member;
+import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.gathering.domain.Role;
 import phanes.replay.gathering.service.GatheringMemberService;
 import phanes.replay.image.service.S3Service;
@@ -16,13 +19,17 @@ import phanes.replay.theme.service.ParticipatingThemeService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.OtherUserDTO;
 import phanes.replay.user.dto.UserDTO;
+import phanes.replay.user.dto.UserParticipatingGatheringDTO;
 import phanes.replay.user.dto.UserPlayThemeDTO;
 import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.UserRepository;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -78,5 +85,22 @@ public class UserService {
         Long successCount = reviewService.getCountBySuccess(true);
         Long failCount = reviewService.getCountBySuccess(false);
         return userMapper.UserToOtherUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
+    }
+
+    public List<UserParticipatingGatheringDTO> getMyParticipatingGathering(Long userId, Pageable pageable) {
+        List<ParticipatingGatheringView> participatingGatheringView = gatheringMemberService.getParticipatingGatheringView(userId, pageable);
+        Set<Long> gatheringIdList = participatingGatheringView.stream().map(ParticipatingGatheringView::getGatheringId).collect(Collectors.toSet());
+        Map<Long, List<Gathering_Member>> collect = gatheringMemberService.getMemberList(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
+        List<UserParticipatingGatheringDTO> myParticipatingGathering = participatingGatheringView.stream().map(userMapper::ParticipatingGatheringViewToParticipatingGatheringDTO).toList();
+        myParticipatingGathering.forEach(pg ->
+                pg.setParticipants(
+                        collect.get(pg.getGatheringId()).stream()
+                                .map(gm -> UserParticipatingGatheringDTO.ParticipatingUserDTO
+                                        .builder()
+                                        .name(gm.getUser().getNickname())
+                                        .image(gm.getUser().getProfileImage())
+                                        .build())
+                                .toList()));
+        return myParticipatingGathering;
     }
 }

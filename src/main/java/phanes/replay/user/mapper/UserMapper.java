@@ -3,10 +3,12 @@ package phanes.replay.user.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.OtherUserDTO;
 import phanes.replay.user.dto.UserDTO;
+import phanes.replay.user.dto.UserParticipatingGatheringDTO;
 import phanes.replay.user.dto.UserPlayThemeDTO;
 
 import java.math.BigDecimal;
@@ -38,4 +40,7 @@ public interface UserMapper {
         if (totalRating == null) return null;
         return totalRating.setScale(1, RoundingMode.DOWN).doubleValue();
     }
+
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingGatheringView.getGenres().split(\",\")))")
+    UserParticipatingGatheringDTO ParticipatingGatheringViewToParticipatingGatheringDTO(ParticipatingGatheringView participatingGatheringView);
 }
