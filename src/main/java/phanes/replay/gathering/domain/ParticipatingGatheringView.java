@@ -1,0 +1,31 @@
+package phanes.replay.gathering.domain;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import org.hibernate.annotations.Immutable;
+import phanes.replay.theme.domain.enums.Level;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Entity
+@Immutable
+@Table(name = "participate_gathering_summary")
+public class ParticipatingGatheringView {
+
+    @Id
+    private Long userId;
+    private Long gatheringId;
+    private String name;
+    private String address;
+    private String spot;
+    private String cafe;
+    private Long themeId;
+    private String themeName;
+    private String image;
+    private String genres;
+    @Enumerated(EnumType.STRING)
+    private Level level;
+    private LocalDateTime dateTime;
+    private Integer capacity;
+}
