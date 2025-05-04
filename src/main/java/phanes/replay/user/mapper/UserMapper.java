@@ -7,6 +7,7 @@ import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.LikeGatheringView;
 import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.theme.domain.ParticipatingThemeView;
+import phanes.replay.theme.domain.ThemeLikeView;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.*;
 
@@ -40,6 +41,7 @@ public interface UserMapper {
         return totalRating.setScale(1, RoundingMode.DOWN).doubleValue();
     }
 
+    @Mapping(target = "participants", ignore = true)
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingGatheringView.getGenres().split(\",\")))")
     UserParticipatingGatheringDTO ParticipatingGatheringViewToParticipatingGatheringDTO(ParticipatingGatheringView participatingGatheringView);
 
@@ -50,4 +52,7 @@ public interface UserMapper {
 
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(likeGatheringView.getGenres().split(\",\")))")
     UserLikeGatheringDTO LikeGatheringViewToUserLikeGatheringDTO(LikeGatheringView likeGatheringView);
+
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(themeLikeView.getGenres().split(\",\")))")
+    UserLikeThemeDTO ThemeLikeViewToUserLikeThemeDTO(ThemeLikeView themeLikeView);
 }

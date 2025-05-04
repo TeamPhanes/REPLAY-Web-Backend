@@ -19,6 +19,7 @@ import phanes.replay.review.domain.Review;
 import phanes.replay.review.service.ReviewService;
 import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.theme.service.ParticipatingThemeService;
+import phanes.replay.theme.service.ThemeService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.*;
 import phanes.replay.user.mapper.UserMapper;
@@ -40,6 +41,7 @@ public class UserService {
     private final GatheringMemberService gatheringMemberService;
     private final GatheringCommentService gatheringCommentService;
     private final GatheringService gatheringService;
+    private final ThemeService themeService;
     private final ParticipatingThemeService participatingThemeService;
     private final ReviewService reviewService;
     private final S3Service s3Service;
@@ -115,5 +117,9 @@ public class UserService {
 
     public List<UserLikeGatheringDTO> getMyLikeGathering(Long userId, Pageable pageable) {
         return gatheringService.getUserLikeGathering(userId, pageable).stream().map(userMapper::LikeGatheringViewToUserLikeGatheringDTO).toList();
+    }
+
+    public List<UserLikeThemeDTO> getMyLikeTheme(Long userId, Pageable pageable) {
+        return themeService.getUserLikeTheme(userId,pageable).stream().map(userMapper::ThemeLikeViewToUserLikeThemeDTO).toList();
     }
 }
