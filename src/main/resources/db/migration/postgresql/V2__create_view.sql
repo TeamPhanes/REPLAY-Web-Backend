@@ -72,4 +72,18 @@ SELECT gl.user_id,
         WHERE gm.gathering_id = g.id) AS participant_count
 FROM gathering_like gl
          JOIN gathering g ON gl.gathering_id = g.id
-         JOIN theme_with_genres twg on g.theme_id = twg.id
+         JOIN theme_with_genres twg on g.theme_id = twg.id;
+
+CREATE OR REPLACE VIEW like_theme_summary AS
+SELECT tl.user_id,
+       twg.id   AS theme_id,
+       twg.address,
+       twg.spot,
+       twg.cafe,
+       twg.name AS theme_name,
+       twg.image,
+       twg.level,
+       twg.genres,
+       twg.playtime
+FROM theme_like tl
+         JOIN theme_with_genres twg ON tl.theme_id = twg.id;

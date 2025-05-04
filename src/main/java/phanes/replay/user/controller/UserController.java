@@ -64,4 +64,10 @@ public class UserController {
         PageRequest pageRequest = PageRequest.of(offset, limit);
         return userService.getMyLikeGathering(userId, pageRequest);
     }
+
+    @GetMapping("/me/theme/like")
+    public List<UserLikeThemeDTO> myLikeTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+        PageRequest pageRequest = PageRequest.of(offset, limit);
+        return userService.getMyLikeTheme(userId, pageRequest);
+    }
 }
