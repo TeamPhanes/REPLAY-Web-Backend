@@ -1,8 +1,6 @@
 package phanes.replay.theme.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.Immutable;
 import phanes.replay.theme.domain.enums.Level;
@@ -21,6 +19,7 @@ public class ThemeLikeView {
     private String cafe;
     private String themeName;
     private String image;
+    @Enumerated(EnumType.STRING)
     private Level level;
     private String genres;
     private Integer playtime;
