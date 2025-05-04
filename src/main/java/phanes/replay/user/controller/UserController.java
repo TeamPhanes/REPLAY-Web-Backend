@@ -31,6 +31,11 @@ public class UserController {
         userService.updateUser(userId, image, nickname, comment, emailMark, genderMark);
     }
 
+    @GetMapping("/{nickname}")
+    public OtherUserDTO getOtherUser(@PathVariable String nickname) {
+        return userService.getUserByNickname(nickname);
+    }
+
     @GetMapping("/me/theme")
     public List<UserPlayThemeDTO> myPlayTheme(@AuthenticationPrincipal Long userId) {
         return userService.getMyPlayingTheme(userId);
@@ -41,22 +46,10 @@ public class UserController {
         userService.updateThemeReview(userId, theme);
     }
 
-    @GetMapping("/{nickname}")
-    public OtherUserDTO getOtherUser(@PathVariable String nickname) {
-        return userService.getUserByNickname(nickname);
-    }
-
     @GetMapping("/me/gathering")
     public List<UserParticipatingGatheringDTO> myParticipatingGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         PageRequest pageRequest = PageRequest.of(offset, limit);
         return userService.getMyParticipatingGathering(userId, pageRequest);
-    }
-
-    @GetMapping("/me/comment")
-    public Map<LocalDate, List<UserCommentDTO>> myComment(@AuthenticationPrincipal Long userId, @RequestParam("sortBy") String sortBy, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        Sort.Direction direction = "create".equals(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC;
-        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(direction, "createdAt"));
-        return userService.getMyComment(userId, pageRequest);
     }
 
     @GetMapping("/me/gathering/like")
@@ -69,5 +62,12 @@ public class UserController {
     public List<UserLikeThemeDTO> myLikeTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         PageRequest pageRequest = PageRequest.of(offset, limit);
         return userService.getMyLikeTheme(userId, pageRequest);
+    }
+
+    @GetMapping("/me/comment")
+    public Map<LocalDate, List<UserCommentDTO>> myComment(@AuthenticationPrincipal Long userId, @RequestParam("sortBy") String sortBy, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+        Sort.Direction direction = "create".equals(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC;
+        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(direction, "createdAt"));
+        return userService.getMyComment(userId, pageRequest);
     }
 }
