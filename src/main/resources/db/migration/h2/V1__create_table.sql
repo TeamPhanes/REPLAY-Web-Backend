@@ -135,3 +135,10 @@ CREATE TABLE gathering_comment
     FOREIGN KEY (gathering_id) REFERENCES gathering (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
+
+CREATE TABLE gathering_like
+(
+    id           IDENTITY PRIMARY KEY,
+    gathering_id BIGINT,
+    user_id      BIGINT
+);

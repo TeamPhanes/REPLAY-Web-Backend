@@ -37,12 +37,12 @@ FROM participating_theme p
 
 CREATE OR REPLACE VIEW participate_gathering_summary AS
 SELECT gm.user_id,
-       g.id AS gathering_id,
+       g.id   AS gathering_id,
        g.name,
        t.address,
        t.spot,
        t.cafe,
-       t.id AS theme_id,
+       t.id   AS theme_id,
        t.name AS theme_name,
        t.image,
        t.genres,
@@ -52,3 +52,24 @@ SELECT gm.user_id,
 FROM gathering_member gm
          JOIN gathering g ON gm.gathering_id = g.id
          JOIN theme_with_genres t ON g.theme_id = t.id;
+
+CREATE OR REPLACE VIEW like_gathering_summary AS
+SELECT gl.user_id,
+       gl.gathering_id,
+       g.name,
+       twg.address,
+       twg.spot,
+       twg.cafe,
+       twg.id                         AS theme_id,
+       twg.image,
+       twg.name                       AS theme_name,
+       twg.genres,
+       twg.playtime,
+       twg.level,
+       g.capacity,
+       (SELECT COUNT(*)
+        FROM gathering_member gm
+        WHERE gm.gathering_id = g.id) AS participant_count
+FROM gathering_like gl
+         JOIN gathering g ON gl.gathering_id = g.id
+         JOIN theme_with_genres twg on g.theme_id = twg.id

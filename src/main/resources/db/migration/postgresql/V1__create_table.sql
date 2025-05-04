@@ -120,3 +120,10 @@ CREATE TABLE IF NOT EXISTS gathering_comment
     created_at   TIMESTAMP,
     updated_at   TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS gathering_like
+(
+    id           BIGSERIAL PRIMARY KEY,
+    gathering_id BIGINT REFERENCES gathering (id),
+    user_id      BIGINT REFERENCES users (id)
+);
