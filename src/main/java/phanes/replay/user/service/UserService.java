@@ -13,6 +13,7 @@ import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.gathering.domain.Role;
 import phanes.replay.gathering.service.GatheringCommentService;
 import phanes.replay.gathering.service.GatheringMemberService;
+import phanes.replay.gathering.service.GatheringService;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.domain.Review;
 import phanes.replay.review.service.ReviewService;
@@ -38,6 +39,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final GatheringMemberService gatheringMemberService;
     private final GatheringCommentService gatheringCommentService;
+    private final GatheringService gatheringService;
     private final ParticipatingThemeService participatingThemeService;
     private final ReviewService reviewService;
     private final S3Service s3Service;
@@ -109,5 +111,9 @@ public class UserService {
         List<GatheringComment> myComment = gatheringCommentService.getMyComment(userId, pageable);
         List<UserCommentDTO> commentDTOList = myComment.stream().map(userMapper::GatheringCommentToUserCommentDTO).toList();
         return commentDTOList.stream().collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate()));
+    }
+
+    public List<UserLikeGatheringDTO> getMyLikeGathering(Long userId, Pageable pageable) {
+        return gatheringService.getUserLikeGathering(userId, pageable).stream().map(userMapper::LikeGatheringViewToUserLikeGatheringDTO).toList();
     }
 }

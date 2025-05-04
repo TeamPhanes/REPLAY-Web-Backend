@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import phanes.replay.gathering.domain.GatheringComment;
+import phanes.replay.gathering.domain.LikeGatheringView;
 import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.user.domain.User;
@@ -46,4 +47,7 @@ public interface UserMapper {
     @Mapping(target = "gatheringName", source = "gathering.name")
     @Mapping(target = "time", expression = "java(gatheringComment.getCreatedAt().toLocalTime())")
     UserCommentDTO GatheringCommentToUserCommentDTO(GatheringComment gatheringComment);
+
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(likeGatheringView.getGenres().split(\",\")))")
+    UserLikeGatheringDTO LikeGatheringViewToUserLikeGatheringDTO(LikeGatheringView likeGatheringView);
 }
