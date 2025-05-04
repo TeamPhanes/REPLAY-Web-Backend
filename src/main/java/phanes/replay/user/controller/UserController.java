@@ -55,7 +55,13 @@ public class UserController {
     @GetMapping("/me/comment")
     public Map<LocalDate, List<UserCommentDTO>> myComment(@AuthenticationPrincipal Long userId, @RequestParam("sortBy") String sortBy, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         Sort.Direction direction = "create".equals(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC;
-        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(direction,"createdAt"));
+        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(direction, "createdAt"));
         return userService.getMyComment(userId, pageRequest);
+    }
+
+    @GetMapping("/me/gathering/like")
+    public List<UserLikeGatheringDTO> myLikeGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+        PageRequest pageRequest = PageRequest.of(offset, limit);
+        return userService.getMyLikeGathering(userId, pageRequest);
     }
 }
