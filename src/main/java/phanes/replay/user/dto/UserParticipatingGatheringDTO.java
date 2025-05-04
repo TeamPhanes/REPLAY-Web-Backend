@@ -23,6 +23,7 @@ public class UserParticipatingGatheringDTO {
     private String image;
     private List<String> genres;
     private String level;
+    private Integer playtime;
     private LocalDateTime dateTime;
     private Integer capacity;
     @Setter

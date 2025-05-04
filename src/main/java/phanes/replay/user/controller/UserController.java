@@ -36,6 +36,11 @@ public class UserController {
         return userService.getUserByNickname(nickname);
     }
 
+    @GetMapping("/me/schedule")
+    public Map<LocalDate, List<UserScheduleDTO>> mySchedule(@AuthenticationPrincipal Long userId) {
+        return userService.getMySchedule(userId);
+    }
+
     @GetMapping("/me/theme")
     public List<UserPlayThemeDTO> myPlayTheme(@AuthenticationPrincipal Long userId) {
         return userService.getMyPlayingTheme(userId);
