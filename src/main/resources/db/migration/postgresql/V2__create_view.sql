@@ -47,11 +47,18 @@ SELECT gm.user_id,
        t.image,
        t.genres,
        t.level,
+       t.playtime,
        g.date_time,
        g.capacity
 FROM gathering_member gm
          JOIN gathering g ON gm.gathering_id = g.id
          JOIN theme_with_genres t ON g.theme_id = t.id;
+
+CREATE OR REPLACE VIEW participate_gathering_member_count AS
+SELECT gathering_id,
+       COUNT(*) AS participant_count
+FROM gathering_member
+GROUP BY gathering_id;
 
 CREATE OR REPLACE VIEW like_gathering_summary AS
 SELECT gl.user_id,
@@ -67,12 +74,12 @@ SELECT gl.user_id,
        twg.playtime,
        twg.level,
        g.capacity,
-       (SELECT COUNT(*)
-        FROM gathering_member gm
-        WHERE gm.gathering_id = g.id) AS participant_count
+       COALESCE(pmc.participant_count, 0) AS participant_count
 FROM gathering_like gl
          JOIN gathering g ON gl.gathering_id = g.id
-         JOIN theme_with_genres twg on g.theme_id = twg.id;
+         JOIN theme_with_genres twg ON g.theme_id = twg.id
+         LEFT JOIN participate_gathering_member_count pmc
+                   ON g.id = pmc.gathering_id;
 
 CREATE OR REPLACE VIEW like_theme_summary AS
 SELECT tl.user_id,
@@ -87,3 +94,17 @@ SELECT tl.user_id,
        twg.playtime
 FROM theme_like tl
          JOIN theme_with_genres twg ON tl.theme_id = twg.id;
+
+CREATE OR REPLACE VIEW participate_gathering_with_like AS
+SELECT pgs.*,
+       CASE
+           WHEN gl.user_id IS NOT NULL THEN true
+           ELSE false
+           END                            AS is_liked,
+       COALESCE(pmc.participant_count, 0) AS participant_count
+FROM participate_gathering_summary pgs
+         LEFT JOIN gathering_like gl
+                   ON pgs.user_id = gl.user_id
+                       AND pgs.gathering_id = gl.gathering_id
+         LEFT JOIN participate_gathering_member_count pmc
+                   ON pgs.gathering_id = pmc.gathering_id;

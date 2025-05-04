@@ -7,11 +7,11 @@ import phanes.replay.theme.domain.enums.Level;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Entity
+@Getter
 @Immutable
-@Table(name = "participate_gathering_summary")
-public class ParticipatingGatheringView {
+@Table(name = "participate_gathering_with_like")
+public class GatheringScheduleView {
 
     @Id
     private Long userId;
@@ -29,4 +29,6 @@ public class ParticipatingGatheringView {
     private Integer playtime;
     private LocalDateTime dateTime;
     private Integer capacity;
+    private Integer participantCount;
+    private Boolean isLiked;
 }

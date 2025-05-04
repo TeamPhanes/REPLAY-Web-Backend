@@ -7,10 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.exception.UserNotFoundException;
-import phanes.replay.gathering.domain.GatheringComment;
-import phanes.replay.gathering.domain.Gathering_Member;
-import phanes.replay.gathering.domain.ParticipatingGatheringView;
-import phanes.replay.gathering.domain.Role;
+import phanes.replay.gathering.domain.*;
 import phanes.replay.gathering.service.GatheringCommentService;
 import phanes.replay.gathering.service.GatheringMemberService;
 import phanes.replay.gathering.service.GatheringService;
@@ -120,6 +117,15 @@ public class UserService {
     }
 
     public List<UserLikeThemeDTO> getMyLikeTheme(Long userId, Pageable pageable) {
-        return themeService.getUserLikeTheme(userId,pageable).stream().map(userMapper::ThemeLikeViewToUserLikeThemeDTO).toList();
+        return themeService.getUserLikeTheme(userId, pageable).stream().map(userMapper::ThemeLikeViewToUserLikeThemeDTO).toList();
+    }
+
+    public Map<LocalDate, List<UserScheduleDTO>> getMySchedule(Long userId) {
+        List<GatheringScheduleView> userSchedule = gatheringService.getUserSchedule(userId);
+        return userSchedule
+                .stream()
+                .collect(Collectors.groupingBy(gsv -> gsv.getDateTime().toLocalDate(),
+                        Collectors.mapping(userMapper::GatheringScheduleViewToUserScheduleDTO,
+                                Collectors.toList())));
     }
 }

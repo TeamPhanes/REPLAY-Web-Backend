@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import phanes.replay.gathering.domain.GatheringComment;
+import phanes.replay.gathering.domain.GatheringScheduleView;
 import phanes.replay.gathering.domain.LikeGatheringView;
 import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.theme.domain.ParticipatingThemeView;
@@ -55,4 +56,8 @@ public interface UserMapper {
 
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(themeLikeView.getGenres().split(\",\")))")
     UserLikeThemeDTO ThemeLikeViewToUserLikeThemeDTO(ThemeLikeView themeLikeView);
+
+    @Mapping(target = "time", expression = "java(gatheringScheduleView.getDateTime().toLocalTime())")
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(gatheringScheduleView.getGenres().split(\",\")))")
+    UserScheduleDTO GatheringScheduleViewToUserScheduleDTO(GatheringScheduleView gatheringScheduleView);
 }
