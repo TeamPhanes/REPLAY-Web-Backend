@@ -18,11 +18,11 @@ public class UserPlayThemeDTO {
     private String spot;
     private String cafe;
     private String themeName;
-    private String image;
+    private String listImage;
     private String level;
     private List<String> genres;
     private Integer playtime;
-    private Double totalRating;
+    private Double rating;
     private Long reviewId;
     private Integer reviewCount;
     private Integer myRating;
