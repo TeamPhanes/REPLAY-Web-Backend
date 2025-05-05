@@ -21,13 +21,13 @@ public class ParticipatingThemeView {
     private String spot;
     private String cafe;
     private String name;
-    private String image;
+    private String listImage;
     private String level;
     private Integer playtime;
     private String genres;
-    private BigDecimal totalRating;
+    private BigDecimal rating;
     private Long reviewId;
-    private Integer reviewCount;
+    private Long reviewCount;
     private Integer score;
     private Integer hint;
     private Integer numberOfPlayer;
