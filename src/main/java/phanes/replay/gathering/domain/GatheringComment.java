@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Gathering_Comment {
+public class GatheringComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +24,11 @@ public class Gathering_Comment {
     private String content; // 댓글내용
 
     @Column
-    private Long parent_id; // 부모 댓글
+    private Long parentId; // 부모 댓글
 
     @Column
-    private LocalDateTime created_at; // 생성일
+    private LocalDateTime createdAt; // 생성일
 
     @Column
-    private LocalDateTime updated_at; // 수정일
+    private LocalDateTime updatedAt; // 수정일
 }

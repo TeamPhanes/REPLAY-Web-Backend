@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import phanes.replay.user.dto.KakaoTokenResponse;
+import phanes.replay.user.dto.oauth.KakaoTokenResponse;
 
 @FeignClient(name = "kakaoTokenClient", url = "https://kauth.kakao.com")
 public interface KakaoTokenClient {

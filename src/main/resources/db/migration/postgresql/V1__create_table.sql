@@ -1,4 +1,4 @@
-CREATE TABLE users
+CREATE TABLE IF NOT EXISTS users
 (
     id              BIGSERIAL PRIMARY KEY,
     email           VARCHAR(50),
@@ -14,7 +14,7 @@ CREATE TABLE users
     updated_at      TIMESTAMP
 );
 
-CREATE TABLE theme
+CREATE TABLE IF NOT EXISTS theme
 (
     id       BIGSERIAL PRIMARY KEY,
     name     VARCHAR(20),
@@ -28,14 +28,14 @@ CREATE TABLE theme
     level    VARCHAR(10)
 );
 
-CREATE TABLE theme_like
+CREATE TABLE IF NOT EXISTS theme_like
 (
     id       BIGSERIAL PRIMARY KEY,
     theme_id BIGINT REFERENCES theme (id),
     user_id  BIGINT REFERENCES users (id)
 );
 
-CREATE TABLE theme_content
+CREATE TABLE IF NOT EXISTS theme_content
 (
     id       BIGSERIAL PRIMARY KEY,
     theme_id BIGINT UNIQUE REFERENCES theme (id),
@@ -43,7 +43,7 @@ CREATE TABLE theme_content
     story    VARCHAR(255)
 );
 
-CREATE TABLE review
+CREATE TABLE IF NOT EXISTS review
 (
     id               BIGSERIAL PRIMARY KEY,
     content          VARCHAR(255),
@@ -58,7 +58,7 @@ CREATE TABLE review
     theme_review     VARCHAR(255)
 );
 
-CREATE TABLE refresh_token
+CREATE TABLE IF NOT EXISTS refresh_token
 (
     id          BIGSERIAL PRIMARY KEY,
     expire_date TIMESTAMP,
@@ -66,21 +66,21 @@ CREATE TABLE refresh_token
     token       VARCHAR(40)
 );
 
-CREATE TABLE participating_theme
+CREATE TABLE IF NOT EXISTS participating_theme
 (
     id       BIGSERIAL PRIMARY KEY,
     theme_id BIGINT REFERENCES theme (id),
     user_id  BIGINT REFERENCES users (id)
 );
 
-CREATE TABLE genre
+CREATE TABLE IF NOT EXISTS genre
 (
     id       BIGSERIAL PRIMARY KEY,
     name     VARCHAR(8),
     theme_id BIGINT REFERENCES theme (id)
 );
 
-CREATE TABLE gathering
+CREATE TABLE IF NOT EXISTS gathering
 (
     id                 BIGSERIAL PRIMARY KEY,
     name               VARCHAR(20) NOT NULL,
@@ -94,7 +94,7 @@ CREATE TABLE gathering
     updated_at         TIMESTAMP
 );
 
-CREATE TABLE gathering_member
+CREATE TABLE IF NOT EXISTS gathering_member
 (
     id           BIGSERIAL PRIMARY KEY,
     role         VARCHAR(10),
@@ -102,7 +102,7 @@ CREATE TABLE gathering_member
     user_id      BIGINT REFERENCES users (id)
 );
 
-CREATE TABLE gathering_content
+CREATE TABLE IF NOT EXISTS gathering_content
 (
     id           BIGSERIAL PRIMARY KEY,
     content      VARCHAR(255) DEFAULT '모임 소개글입니다',
@@ -110,7 +110,7 @@ CREATE TABLE gathering_content
     price        VARCHAR(8)
 );
 
-CREATE TABLE gathering_comment
+CREATE TABLE IF NOT EXISTS gathering_comment
 (
     id           BIGSERIAL PRIMARY KEY,
     content      VARCHAR(255),
@@ -119,4 +119,11 @@ CREATE TABLE gathering_comment
     user_id      BIGINT REFERENCES users (id),
     created_at   TIMESTAMP,
     updated_at   TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS gathering_like
+(
+    id           BIGSERIAL PRIMARY KEY,
+    gathering_id BIGINT REFERENCES gathering (id),
+    user_id      BIGINT REFERENCES users (id)
 );

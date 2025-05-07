@@ -1,4 +1,4 @@
-package phanes.replay.user.dto;
+package phanes.replay.user.dto.oauth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

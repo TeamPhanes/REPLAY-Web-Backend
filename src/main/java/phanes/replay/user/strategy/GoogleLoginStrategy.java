@@ -9,9 +9,9 @@ import phanes.replay.config.properties.GoogleProperties;
 import phanes.replay.user.client.GoogleProfileClient;
 import phanes.replay.user.client.GoogleTokenClient;
 import phanes.replay.user.domain.enums.SocialType;
-import phanes.replay.user.dto.GoogleProfileResponse;
-import phanes.replay.user.dto.GoogleTokenResponse;
-import phanes.replay.user.dto.SocialProfile;
+import phanes.replay.user.dto.oauth.GoogleProfileResponse;
+import phanes.replay.user.dto.oauth.GoogleTokenResponse;
+import phanes.replay.user.dto.oauth.SocialProfile;
 
 @Component
 @RequiredArgsConstructor

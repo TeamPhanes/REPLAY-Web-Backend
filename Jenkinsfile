@@ -1,23 +1,17 @@
+def profileRules = [
+    'dev': 'dev',
+    'main': 'prod'
+]
+
 pipeline {
     agent {
         label 'phanes'
     }
     environment {
         REGISTRY = "harbor.phanescloud.com"
-        PROFILE = 'local'
+        PROFILE = profileRules.get(GIT_BRANCH, 'local')
     }
     stages {
-        stage('Set Profile') {
-            steps {
-                script {
-                    echo "Branch: ${env.GIT_BRANCH}"
-                    if (env.GIT_BRANCH == 'dev') {
-                        env.PROFILE = 'dev'
-                    }
-                    echo "Selected Profile: ${env.PROFILE}"
-                }
-            }
-        }
         stage('Build') {
             steps {
                 sh 'chmod +x gradlew'

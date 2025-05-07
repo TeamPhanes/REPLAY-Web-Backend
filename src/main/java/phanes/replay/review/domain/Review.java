@@ -30,4 +30,15 @@ public class Review {
     private User user;
     @ManyToOne
     private Theme theme;
+
+    public void updateReview(Integer myRating, Integer hint, Integer numberOfPlayer, String themeReview, String levelReview, String storyReview, String reviewComment, Boolean success) {
+        this.score = myRating;
+        this.hint = hint;
+        this.numberOfPlayer = numberOfPlayer;
+        this.themeReview = themeReview;
+        this.levelReview = levelReview;
+        this.storyReview = storyReview;
+        this.success = success;
+        this.content = reviewComment;
+    }
 }
