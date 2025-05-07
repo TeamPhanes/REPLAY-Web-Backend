@@ -23,6 +23,7 @@ public class ThemeService {
     public List<ThemeLikeView> getUserLikeTheme(Long userId, Pageable pageable) {
         return themeLikeViewRepository.findByUserId(userId, pageable);
     }
+
     public List<ThemeListResponse> getThemes(ThemeSearchRequest request, Long userId) {
         Pageable pageable = PageRequest.of(request.getOffset(), request.getLimit());
         return themeRepository.searchWithSort(
