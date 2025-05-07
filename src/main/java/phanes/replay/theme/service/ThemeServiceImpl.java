@@ -12,11 +12,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ThemeServiceImpl implements ThemeService {
+public class ThemeServiceImpl {
 
     private final ThemeRepository themeRepository;
 
-    @Override
+
     public List<ThemeListResponse> getThemes(ThemeSearchRequest request, Long userId) {
         Pageable pageable = PageRequest.of(request.getOffset(), request.getLimit());
         return themeRepository.searchWithSort(
