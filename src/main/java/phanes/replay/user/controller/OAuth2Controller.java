@@ -13,7 +13,7 @@ import phanes.replay.annotation.ValidateSocialType;
 import phanes.replay.config.properties.DomainProperties;
 import phanes.replay.exception.StateNotFoundException;
 import phanes.replay.user.domain.enums.SocialType;
-import phanes.replay.user.dto.SecurityToken;
+import phanes.replay.user.dto.oauth.SecurityToken;
 import phanes.replay.user.service.OAuth2Service;
 import phanes.replay.user.service.RefreshTokenService;
 import phanes.replay.utils.CookieUtils;

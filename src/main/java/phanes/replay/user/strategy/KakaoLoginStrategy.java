@@ -9,9 +9,9 @@ import phanes.replay.config.properties.KakaoProperties;
 import phanes.replay.user.client.KakaoProfileClient;
 import phanes.replay.user.client.KakaoTokenClient;
 import phanes.replay.user.domain.enums.SocialType;
-import phanes.replay.user.dto.KakaoProfileResponse;
-import phanes.replay.user.dto.KakaoTokenResponse;
-import phanes.replay.user.dto.SocialProfile;
+import phanes.replay.user.dto.oauth.KakaoProfileResponse;
+import phanes.replay.user.dto.oauth.KakaoTokenResponse;
+import phanes.replay.user.dto.oauth.SocialProfile;
 
 @Component
 @RequiredArgsConstructor

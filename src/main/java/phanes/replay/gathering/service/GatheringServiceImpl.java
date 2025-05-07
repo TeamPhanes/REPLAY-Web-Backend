@@ -11,12 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.gathering.controller.GatheringCreateRequest;
 import phanes.replay.gathering.controller.GatheringListRequest;
 import phanes.replay.gathering.controller.GatheringListResponse;
-import phanes.replay.gathering.domain.Gathering;
-import phanes.replay.gathering.domain.Gathering_Content;
-import phanes.replay.gathering.domain.Gathering_Member;
-import phanes.replay.gathering.repository.GatheringRepository;
-import phanes.replay.gathering.repository.Gathering_ContentRepository;
-import phanes.replay.gathering.repository.Gathering_MemberRepository;
+import phanes.replay.gathering.domain.*;
+import phanes.replay.gathering.repository.*;
 import phanes.replay.theme.domain.Genre;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.repository.GenreRepository;
@@ -36,6 +32,8 @@ public class GatheringServiceImpl implements GatheringService {
     private final GatheringRepository gatheringRepository;
     private final Gathering_ContentRepository gathering_contentRepository;
     private final Gathering_MemberRepository gathering_memberRepository;
+    private final LikeGatheringViewRepository likeGatheringViewRepository;
+    private final GatheringScheduleViewRepository gatheringScheduleViewRepository;
     private final GenreRepository genreRepository;
     private final UserRepository userRepository;
     private final ThemeRepository themeRepository;
@@ -180,5 +178,15 @@ public class GatheringServiceImpl implements GatheringService {
         response.setIsLiked(false);
 
         return response;
+    }
+
+    @Override
+    public List<LikeGatheringView> getUserLikeGathering(Long userId, Pageable pageable) {
+        return likeGatheringViewRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<GatheringScheduleView> getUserSchedule(Long userId) {
+        return gatheringScheduleViewRepository.findAllByUserId(userId);
     }
 }
