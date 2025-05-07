@@ -31,7 +31,7 @@ public interface UserMapper {
 
     @Mapping(source = "name", target = "themeName")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingThemeView.getGenres().split(\",\")))")
-    @Mapping(source = "totalRating", target = "totalRating", qualifiedByName = "truncateTotalRating")
+    @Mapping(source = "rating", target = "rating", qualifiedByName = "truncateTotalRating")
     @Mapping(source = "score", target = "myRating")
     @Mapping(source = "content", target = "reviewComment")
     UserPlayThemeDTO ParticipatingThemeViewToUserPlayThemeDTO(ParticipatingThemeView participatingThemeView);
@@ -54,8 +54,10 @@ public interface UserMapper {
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(likeGatheringView.getGenres().split(\",\")))")
     UserLikeGatheringDTO LikeGatheringViewToUserLikeGatheringDTO(LikeGatheringView likeGatheringView);
 
+    @Mapping(source = "rating", target = "rating", qualifiedByName = "truncateTotalRating")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(themeLikeView.getGenres().split(\",\")))")
     UserLikeThemeDTO ThemeLikeViewToUserLikeThemeDTO(ThemeLikeView themeLikeView);
+
 
     @Mapping(target = "time", expression = "java(gatheringScheduleView.getDateTime().toLocalTime())")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(gatheringScheduleView.getGenres().split(\",\")))")

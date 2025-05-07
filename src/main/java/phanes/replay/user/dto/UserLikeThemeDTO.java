@@ -19,8 +19,12 @@ public class UserLikeThemeDTO {
     private String spot;
     private String cafe;
     private String themeName;
-    private String image;
+    private String listImage;
     private Level level;
     private List<String> genres;
     private Integer playtime;
+    private Long reviewCount;
+    private Double rating;
+    private Boolean isMarked;
+    private Boolean isLiked;
 }

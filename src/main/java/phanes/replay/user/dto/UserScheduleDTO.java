@@ -21,7 +21,7 @@ public class UserScheduleDTO {
     private String spot;
     private String cafe;
     private String themeName;
-    private String image;
+    private String listImage;
     private List<String> genres;
     private Integer playtime;
     private Level level;

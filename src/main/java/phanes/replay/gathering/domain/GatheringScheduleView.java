@@ -22,7 +22,7 @@ public class GatheringScheduleView {
     private String cafe;
     private Long themeId;
     private String themeName;
-    private String image;
+    private String listImage;
     private String genres;
     @Enumerated(EnumType.STRING)
     private Level level;

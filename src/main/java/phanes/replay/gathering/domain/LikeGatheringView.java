@@ -19,7 +19,7 @@ public class LikeGatheringView {
     private String spot;
     private String cafe;
     private Long themeId;
-    private String image;
+    private String listImage;
     private String themeName;
     private String genres;
     private Integer playtime;

@@ -20,7 +20,7 @@ public class UserParticipatingGatheringDTO {
     private String cafe;
     private Long themeId;
     private String themeName;
-    private String image;
+    private String listImage;
     private List<String> genres;
     private String level;
     private Integer playtime;
