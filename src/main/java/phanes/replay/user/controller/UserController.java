@@ -1,12 +1,13 @@
 package phanes.replay.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import phanes.replay.user.controller.request.UpdateMeRequest;
 import phanes.replay.user.dto.*;
 import phanes.replay.user.service.UserService;
 
@@ -27,8 +28,8 @@ public class UserController {
     }
 
     @PatchMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void updateMe(@AuthenticationPrincipal Long userId, @RequestPart MultipartFile image, @RequestPart String nickname, @RequestPart String comment, @RequestPart String emailMark, @RequestPart String genderMark) {
-        userService.updateUser(userId, image, nickname, comment, Boolean.parseBoolean(emailMark), Boolean.parseBoolean(genderMark));
+    public void updateMe(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid UpdateMeRequest updateMeRequest) {
+        userService.updateUser(userId, updateMeRequest.getImage(), updateMeRequest.getNickname(), updateMeRequest.getComment(), Boolean.parseBoolean(updateMeRequest.getEmailMark()), Boolean.parseBoolean(updateMeRequest.getGenderMark()));
     }
 
     @GetMapping("/{nickname}")
