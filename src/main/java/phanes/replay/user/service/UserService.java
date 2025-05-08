@@ -1,6 +1,7 @@
 package phanes.replay.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,10 +25,7 @@ import phanes.replay.user.repository.UserRepository;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -107,9 +105,11 @@ public class UserService {
     }
 
     public Map<LocalDate, List<UserCommentDTO>> getMyComment(Long userId, Pageable pageable) {
-        List<GatheringComment> myComment = gatheringCommentService.getMyComment(userId, pageable);
-        List<UserCommentDTO> commentDTOList = myComment.stream().map(userMapper::GatheringCommentToUserCommentDTO).toList();
-        return commentDTOList.stream().collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate()));
+        Page<GatheringComment> myComment = gatheringCommentService.getMyComment(userId, pageable);
+        return myComment
+                .stream()
+                .map(userMapper::GatheringCommentToUserCommentDTO)
+                .collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate(), LinkedHashMap::new, Collectors.toList()));
     }
 
     public List<UserLikeGatheringDTO> getMyLikeGathering(Long userId, Pageable pageable) {
