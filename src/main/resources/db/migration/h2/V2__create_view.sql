@@ -65,7 +65,8 @@ SELECT gm.user_id,
        twg.level,
        twg.playtime,
        g.date_time,
-       g.capacity
+       g.capacity,
+       g.registration_end
 FROM gathering_member gm
          JOIN gathering g ON gm.gathering_id = g.id
          JOIN theme_with_genres twg ON g.theme_id = twg.id;
@@ -83,7 +84,9 @@ SELECT gl.user_id,
        twg.genres,
        twg.playtime,
        twg.level,
+       g.date_time,
        g.capacity,
+       g.registration_end,
        COALESCE(pmc.participant_count, 0) AS participant_count
 FROM gathering_like gl
          JOIN gathering g ON gl.gathering_id = g.id

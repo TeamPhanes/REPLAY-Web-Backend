@@ -28,6 +28,7 @@ public class UserParticipatingGatheringDTO {
     private Integer capacity;
     @Setter
     private List<ParticipatingUserDTO> participants;
+    private LocalDateTime registrationEnd;
 
     @Getter
     @Builder
