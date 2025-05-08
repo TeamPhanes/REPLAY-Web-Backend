@@ -29,4 +29,5 @@ public class ParticipatingGatheringView {
     private Integer playtime;
     private LocalDateTime dateTime;
     private Integer capacity;
+    private LocalDateTime registrationEnd;
 }

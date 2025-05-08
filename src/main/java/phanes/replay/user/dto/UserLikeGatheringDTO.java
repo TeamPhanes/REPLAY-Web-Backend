@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.theme.domain.enums.Level;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -24,5 +26,8 @@ public class UserLikeGatheringDTO {
     private List<String> genres;
     private Integer playtime;
     private Integer capacity;
+    private Level level;
+    private LocalDateTime dateTime;
     private Integer participantCount;
+    private LocalDateTime registrationEnd;
 }
