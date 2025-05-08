@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Getter
 @Builder
@@ -16,7 +15,6 @@ public class UserCommentDTO {
 
     private Long gatheringId;
     private String gatheringName;
-    private LocalTime time;
     private String content;
     private LocalDateTime createdAt;
 }
