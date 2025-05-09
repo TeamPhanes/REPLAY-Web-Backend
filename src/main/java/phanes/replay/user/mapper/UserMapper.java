@@ -48,7 +48,6 @@ public interface UserMapper {
 
     @Mapping(target = "gatheringId", source = "gathering.id")
     @Mapping(target = "gatheringName", source = "gathering.name")
-    @Mapping(target = "time", expression = "java(gatheringComment.getCreatedAt().toLocalTime())")
     UserCommentDTO GatheringCommentToUserCommentDTO(GatheringComment gatheringComment);
 
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(likeGatheringView.getGenres().split(\",\")))")

@@ -1,11 +1,11 @@
 package phanes.replay.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.gathering.domain.*;
 import phanes.replay.gathering.service.GatheringCommentService;
@@ -22,12 +22,8 @@ import phanes.replay.user.dto.*;
 import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.UserRepository;
 
-import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,13 +52,8 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long userId, MultipartFile image, String nickname, String comment, Boolean emailMark, Boolean genderMark) {
-        String imageUrl;
-        try {
-            imageUrl = s3Service.uploadImage("replay", "images/" + UUID.randomUUID() + ".png", image);
-        } catch (IOException e) {
-            throw new ImageUploadFailException("image upload fail");
-        }
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        String imageUrl = image == null ? user.getProfileImage() : s3Service.uploadImage("replay", "images/" + UUID.randomUUID() + ".png", image);
         user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
         userRepository.save(user);
     }
@@ -107,9 +98,11 @@ public class UserService {
     }
 
     public Map<LocalDate, List<UserCommentDTO>> getMyComment(Long userId, Pageable pageable) {
-        List<GatheringComment> myComment = gatheringCommentService.getMyComment(userId, pageable);
-        List<UserCommentDTO> commentDTOList = myComment.stream().map(userMapper::GatheringCommentToUserCommentDTO).toList();
-        return commentDTOList.stream().collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate()));
+        Page<GatheringComment> myComment = gatheringCommentService.getMyComment(userId, pageable);
+        return myComment
+                .stream()
+                .map(userMapper::GatheringCommentToUserCommentDTO)
+                .collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate(), LinkedHashMap::new, Collectors.toList()));
     }
 
     public List<UserLikeGatheringDTO> getMyLikeGathering(Long userId, Pageable pageable) {
