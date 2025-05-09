@@ -27,6 +27,5 @@ public class ThemeLikeView {
     private Integer playtime;
     private Long reviewCount;
     private BigDecimal rating;
-    private Boolean isLiked;
     private Boolean isMarked;
 }
