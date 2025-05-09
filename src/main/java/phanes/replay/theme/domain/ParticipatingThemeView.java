@@ -36,4 +36,5 @@ public class ParticipatingThemeView {
     private String storyReview;
     private String content;
     private Boolean success;
+    private Boolean isLiked;
 }

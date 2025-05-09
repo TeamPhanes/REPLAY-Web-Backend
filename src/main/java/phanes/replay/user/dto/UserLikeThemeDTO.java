@@ -26,5 +26,4 @@ public class UserLikeThemeDTO {
     private Long reviewCount;
     private Double rating;
     private Boolean isMarked;
-    private Boolean isLiked;
 }

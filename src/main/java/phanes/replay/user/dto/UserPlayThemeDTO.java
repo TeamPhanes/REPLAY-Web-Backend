@@ -33,4 +33,5 @@ public class UserPlayThemeDTO {
     private String storyReview;
     private String reviewComment;
     private Boolean success;
+    private Boolean isLiked;
 }

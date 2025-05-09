@@ -29,6 +29,7 @@ public class UserParticipatingGatheringDTO {
     @Setter
     private List<ParticipatingUserDTO> participants;
     private LocalDateTime registrationEnd;
+    private Boolean isLiked;
 
     @Getter
     @Builder
