@@ -9,7 +9,7 @@ IMAGE := $(REGISTRY)/$(IMAGE_PROJECT)/$(IMAGE_NAME):$(IMAGE_TAG)
 
 build: decrypt
 	./gradlew clean
-	./gradlew build -Pspring.profiles.active=$(PROFILE)
+	./gradlew build
 
 docker-build: decrypt
 	docker build --network host -t ${IMAGE} .

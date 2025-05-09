@@ -1,21 +1,15 @@
-def profileRules = [
-    'dev': 'dev',
-    'main': 'prod'
-]
-
 pipeline {
     agent {
         label 'phanes'
     }
     environment {
         REGISTRY = "harbor.phanescloud.com"
-        PROFILE = profileRules.get(GIT_BRANCH, 'local')
     }
     stages {
         stage('Build') {
             steps {
                 sh 'chmod +x gradlew'
-                sh "make build PROFILE=${env.PROFILE}"
+                sh 'make build'
             }
         }
         stage('Image Build and Push') {
