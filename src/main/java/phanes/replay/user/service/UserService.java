@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.gathering.domain.*;
 import phanes.replay.gathering.service.GatheringCommentService;
@@ -23,7 +22,6 @@ import phanes.replay.user.dto.*;
 import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.UserRepository;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -54,13 +52,8 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long userId, MultipartFile image, String nickname, String comment, Boolean emailMark, Boolean genderMark) {
-        String imageUrl;
-        try {
-            imageUrl = s3Service.uploadImage("replay", "images/" + UUID.randomUUID() + ".png", image);
-        } catch (IOException e) {
-            throw new ImageUploadFailException("image upload fail");
-        }
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        String imageUrl = image == null ? user.getProfileImage() : s3Service.uploadImage("replay", "images/" + UUID.randomUUID() + ".png", image);
         user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
         userRepository.save(user);
     }
