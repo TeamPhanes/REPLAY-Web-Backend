@@ -1,0 +1,727 @@
+openapi: 3.0.1
+info:
+  title: Replay Project
+  description: Replay Project API Swagger
+  version: v1
+servers:
+  - url: https://replay-be.phanescloud.com
+    description: Generated server url
+paths:
+  /gathering:
+    get:
+      tags:
+        - gathering-controller
+      operationId: getGatheringList
+      parameters:
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: keyword
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: location
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: genre
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 10
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+            default: 0
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+        - gathering-controller
+      operationId: creatGathering
+      parameters:
+        - name: Authorization
+          in: header
+          required: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GatheringCreateRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /auth/refresh:
+    post:
+      tags:
+        - o-auth-2-controller
+      operationId: refresh
+      responses:
+        '200':
+          description: OK
+  /auth/logout:
+    post:
+      tags:
+        - o-auth-2-controller
+      operationId: logout
+      responses:
+        '200':
+          description: OK
+  /user/me:
+    get:
+      tags:
+        - user-controller
+      operationId: me
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+    patch:
+      tags:
+        - user-controller
+      operationId: updateMe
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateMeRequest'
+      responses:
+        '200':
+          description: OK
+  /user/me/theme:
+    get:
+      tags:
+        - user-controller
+      operationId: myPlayTheme
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPlayThemeDTO'
+    patch:
+      tags:
+        - user-controller
+      operationId: updateMyPlayTheme
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPlayThemeDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+  /user/{nickname}:
+    get:
+      tags:
+        - user-controller
+      operationId: getOtherUser
+      parameters:
+        - name: nickname
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/OtherUserDTO'
+  /user/me/theme/like:
+    get:
+      tags:
+        - user-controller
+      operationId: myLikeTheme
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserLikeThemeDTO'
+  /user/me/schedule:
+    get:
+      tags:
+        - user-controller
+      operationId: mySchedule
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/UserScheduleDTO'
+  /user/me/gathering:
+    get:
+      tags:
+        - user-controller
+      operationId: myParticipatingGathering
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserParticipatingGatheringDTO'
+  /user/me/gathering/like:
+    get:
+      tags:
+        - user-controller
+      operationId: myLikeGathering
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserLikeGatheringDTO'
+  /user/me/comment:
+    get:
+      tags:
+        - user-controller
+      operationId: myComment
+      parameters:
+        - name: sortBy
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/UserCommentDTO'
+  /auth/{socialType}:
+    get:
+      tags:
+        - o-auth-2-controller
+      operationId: getSocialLoginProviderUrl
+      parameters:
+        - name: socialType
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /auth/{socialType}/callback:
+    get:
+      tags:
+        - o-auth-2-controller
+      operationId: socialLoginCallback
+      parameters:
+        - name: socialType
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            text/html:
+              schema:
+                type: string
+components:
+  schemas:
+    GatheringCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        content:
+          type: string
+        roomEscapeId:
+          type: integer
+          format: int64
+        price:
+          type: string
+        dateTime:
+          type: string
+          format: date-time
+        registrationStart:
+          type: string
+          format: date-time
+        registrationEnd:
+          type: string
+          format: date-time
+        capacity:
+          minimum: 2
+          type: integer
+          format: int32
+    UpdateMeRequest:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+        nickname:
+          type: string
+        comment:
+          type: string
+        emailMark:
+          pattern: true|false
+          type: string
+        genderMark:
+          pattern: true|false
+          type: string
+    UserPlayThemeDTO:
+      type: object
+      properties:
+        themeId:
+          type: integer
+          format: int64
+        address:
+          type: string
+        spot:
+          type: string
+        cafe:
+          type: string
+        themeName:
+          type: string
+        listImage:
+          type: string
+        level:
+          type: string
+        genres:
+          type: array
+          items:
+            type: string
+        playtime:
+          type: integer
+          format: int32
+        rating:
+          type: number
+          format: double
+        reviewId:
+          type: integer
+          format: int64
+        reviewCount:
+          type: integer
+          format: int32
+        myRating:
+          type: integer
+          format: int32
+        hint:
+          type: integer
+          format: int32
+        numberOfPlayer:
+          type: integer
+          format: int32
+        themeReview:
+          type: string
+        levelReview:
+          type: string
+        storyReview:
+          type: string
+        reviewComment:
+          type: string
+        success:
+          type: boolean
+        isLiked:
+          type: boolean
+    OtherUserDTO:
+      type: object
+      properties:
+        image:
+          type: string
+        nickname:
+          type: string
+        gender:
+          type: string
+        email:
+          type: string
+        comment:
+          type: string
+        totalGathering:
+          type: integer
+          format: int64
+        totalMakeGathering:
+          type: integer
+          format: int64
+        totalTheme:
+          type: integer
+          format: int64
+        successCount:
+          type: integer
+          format: int64
+        failCount:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        representAchievement:
+          type: array
+          items:
+            type: string
+    UserDTO:
+      type: object
+      properties:
+        image:
+          type: string
+        nickname:
+          type: string
+        gender:
+          type: string
+        email:
+          type: string
+        comment:
+          type: string
+        genderMark:
+          type: boolean
+        emailMark:
+          type: boolean
+        totalGathering:
+          type: integer
+          format: int64
+        totalMakeGathering:
+          type: integer
+          format: int64
+        totalTheme:
+          type: integer
+          format: int64
+        successCount:
+          type: integer
+          format: int64
+        failCount:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        representAchievement:
+          type: array
+          items:
+            type: string
+    UserLikeThemeDTO:
+      type: object
+      properties:
+        themeId:
+          type: integer
+          format: int64
+        address:
+          type: string
+        spot:
+          type: string
+        cafe:
+          type: string
+        themeName:
+          type: string
+        listImage:
+          type: string
+        level:
+          type: string
+          enum:
+            - EASY
+            - NORMAL
+            - HARD
+        genres:
+          type: array
+          items:
+            type: string
+        playtime:
+          type: integer
+          format: int32
+        reviewCount:
+          type: integer
+          format: int64
+        rating:
+          type: number
+          format: double
+        isMarked:
+          type: boolean
+    LocalTime:
+      type: object
+      properties:
+        hour:
+          type: integer
+          format: int32
+        minute:
+          type: integer
+          format: int32
+        second:
+          type: integer
+          format: int32
+        nano:
+          type: integer
+          format: int32
+    UserScheduleDTO:
+      type: object
+      properties:
+        gatheringId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        spot:
+          type: string
+        cafe:
+          type: string
+        themeName:
+          type: string
+        listImage:
+          type: string
+        genres:
+          type: array
+          items:
+            type: string
+        playtime:
+          type: integer
+          format: int32
+        level:
+          type: string
+          enum:
+            - EASY
+            - NORMAL
+            - HARD
+        time:
+          $ref: '#/components/schemas/LocalTime'
+        capacity:
+          type: integer
+          format: int32
+        participantCount:
+          type: integer
+          format: int32
+        isLiked:
+          type: boolean
+    ParticipatingUserDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+    UserParticipatingGatheringDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        gatheringId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        spot:
+          type: string
+        cafe:
+          type: string
+        themeId:
+          type: integer
+          format: int64
+        themeName:
+          type: string
+        listImage:
+          type: string
+        genres:
+          type: array
+          items:
+            type: string
+        level:
+          type: string
+        playtime:
+          type: integer
+          format: int32
+        dateTime:
+          type: string
+          format: date-time
+        capacity:
+          type: integer
+          format: int32
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParticipatingUserDTO'
+        registrationEnd:
+          type: string
+          format: date-time
+        isLiked:
+          type: boolean
+    UserLikeGatheringDTO:
+      type: object
+      properties:
+        gatheringId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          type: string
+        spot:
+          type: string
+        cafe:
+          type: string
+        themeId:
+          type: integer
+          format: int64
+        listImage:
+          type: string
+        themeName:
+          type: string
+        genres:
+          type: array
+          items:
+            type: string
+        playtime:
+          type: integer
+          format: int32
+        capacity:
+          type: integer
+          format: int32
+        level:
+          type: string
+          enum:
+            - EASY
+            - NORMAL
+            - HARD
+        dateTime:
+          type: string
+          format: date-time
+        participantCount:
+          type: integer
+          format: int32
+        registrationEnd:
+          type: string
+          format: date-time
+    UserCommentDTO:
+      type: object
+      properties:
+        gatheringId:
+          type: integer
+          format: int64
+        gatheringName:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
