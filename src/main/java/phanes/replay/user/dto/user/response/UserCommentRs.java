@@ -1,4 +1,4 @@
-package phanes.replay.user.dto;
+package phanes.replay.user.dto.user.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCommentDTO {
+public class UserCommentRs {
 
     private Long gatheringId;
     private String gatheringName;

@@ -18,7 +18,8 @@ import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.theme.service.ParticipatingThemeService;
 import phanes.replay.theme.service.ThemeService;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.dto.*;
+import phanes.replay.user.dto.user.request.UserPlayThemeRq;
+import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.UserRepository;
 
@@ -40,7 +41,7 @@ public class UserService {
     private final S3Service s3Service;
     private final UserMapper userMapper;
 
-    public UserDTO getUser(Long userId) {
+    public UserRs getUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         Long totalGathering = gatheringMemberService.getTotalGatheringCount(userId);
         Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(userId, Role.HOST);
@@ -58,19 +59,19 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<UserPlayThemeDTO> getMyPlayingTheme(Long userId) {
+    public List<UserPlayThemeRq> getMyPlayingTheme(Long userId) {
         List<ParticipatingThemeView> userPlayingThemeList = participatingThemeService.getUserPlayingThemeList(userId);
         return userPlayingThemeList.stream().map(userMapper::ParticipatingThemeViewToUserPlayThemeDTO).toList();
     }
 
-    public void updateThemeReview(Long userId, UserPlayThemeDTO theme) {
+    public void updateThemeReview(Long userId, UserPlayThemeRq theme) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Review review = reviewService.getReviewById(theme.getReviewId(), user.getId());
         review.updateReview(theme.getMyRating(), theme.getHint(), theme.getNumberOfPlayer(), theme.getThemeReview(), theme.getLevelReview(), theme.getStoryReview(), theme.getReviewComment(), theme.getSuccess());
         reviewService.updateReview(review);
     }
 
-    public OtherUserDTO getUserByNickname(String nickname) {
+    public OtherUserRs getUserByNickname(String nickname) {
         User user = userRepository.findByNickname(nickname).orElseThrow(() -> new UserNotFoundException("user not found"));
         Long totalGathering = gatheringMemberService.getTotalGatheringCount(user.getId());
         Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(user.getId(), Role.HOST);
@@ -80,15 +81,15 @@ public class UserService {
         return userMapper.UserToOtherUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
-    public List<UserParticipatingGatheringDTO> getMyParticipatingGathering(Long userId, Pageable pageable) {
+    public List<UserParticipatingGatheringRs> getMyParticipatingGathering(Long userId, Pageable pageable) {
         List<ParticipatingGatheringView> participatingGatheringView = gatheringMemberService.getParticipatingGatheringView(userId, pageable);
         Set<Long> gatheringIdList = participatingGatheringView.stream().map(ParticipatingGatheringView::getGatheringId).collect(Collectors.toSet());
         Map<Long, List<Gathering_Member>> collect = gatheringMemberService.getMemberList(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
-        List<UserParticipatingGatheringDTO> myParticipatingGathering = participatingGatheringView.stream().map(userMapper::ParticipatingGatheringViewToParticipatingGatheringDTO).toList();
+        List<UserParticipatingGatheringRs> myParticipatingGathering = participatingGatheringView.stream().map(userMapper::ParticipatingGatheringViewToParticipatingGatheringDTO).toList();
         myParticipatingGathering.forEach(pg ->
                 pg.setParticipants(
                         collect.get(pg.getGatheringId()).stream()
-                                .map(gm -> UserParticipatingGatheringDTO.ParticipatingUserDTO
+                                .map(gm -> UserParticipatingGatheringRs.ParticipatingUserDTO
                                         .builder()
                                         .name(gm.getUser().getNickname())
                                         .image(gm.getUser().getProfileImage())
@@ -97,7 +98,7 @@ public class UserService {
         return myParticipatingGathering;
     }
 
-    public Map<LocalDate, List<UserCommentDTO>> getMyComment(Long userId, Pageable pageable) {
+    public Map<LocalDate, List<UserCommentRs>> getMyComment(Long userId, Pageable pageable) {
         Page<GatheringComment> myComment = gatheringCommentService.getMyComment(userId, pageable);
         return myComment
                 .stream()
@@ -105,11 +106,11 @@ public class UserService {
                 .collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate(), LinkedHashMap::new, Collectors.toList()));
     }
 
-    public List<UserLikeGatheringDTO> getMyLikeGathering(Long userId, Pageable pageable) {
+    public List<UserLikeGatheringRs> getMyLikeGathering(Long userId, Pageable pageable) {
         return gatheringService.getUserLikeGathering(userId, pageable).stream().map(userMapper::LikeGatheringViewToUserLikeGatheringDTO).toList();
     }
 
-    public List<UserLikeThemeDTO> getMyLikeTheme(Long userId, Pageable pageable) {
+    public List<UserLikeThemeRs> getMyLikeTheme(Long userId, Pageable pageable) {
         return themeService.getUserLikeTheme(userId, pageable).stream().map(userMapper::ThemeLikeViewToUserLikeThemeDTO).toList();
     }
 

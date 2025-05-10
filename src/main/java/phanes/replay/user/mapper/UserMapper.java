@@ -10,7 +10,8 @@ import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.theme.domain.ThemeLikeView;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.dto.*;
+import phanes.replay.user.dto.user.request.UserPlayThemeRq;
+import phanes.replay.user.dto.user.response.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,20 +22,20 @@ public interface UserMapper {
 
     @Mapping(source = "user.profileComment", target = "comment")
     @Mapping(source = "user.profileImage", target = "image")
-    UserDTO UserToUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
+    UserRs UserToUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
 
     @Mapping(source = "user.profileComment", target = "comment")
     @Mapping(source = "user.profileImage", target = "image")
     @Mapping(target = "gender", expression = "java(user.getGenderMark() ? user.getGender() : \"\")")
     @Mapping(target = "email", expression = "java(user.getEmailMark() ? user.getEmail() : \"\")")
-    OtherUserDTO UserToOtherUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
+    OtherUserRs UserToOtherUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
 
     @Mapping(source = "name", target = "themeName")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingThemeView.getGenres().split(\",\")))")
     @Mapping(source = "rating", target = "rating", qualifiedByName = "truncateTotalRating")
     @Mapping(source = "score", target = "myRating")
     @Mapping(source = "content", target = "reviewComment")
-    UserPlayThemeDTO ParticipatingThemeViewToUserPlayThemeDTO(ParticipatingThemeView participatingThemeView);
+    UserPlayThemeRq ParticipatingThemeViewToUserPlayThemeDTO(ParticipatingThemeView participatingThemeView);
 
     @Named("truncateTotalRating")
     default Double truncateTotalRating(BigDecimal totalRating) {
@@ -44,18 +45,18 @@ public interface UserMapper {
 
     @Mapping(target = "participants", ignore = true)
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingGatheringView.getGenres().split(\",\")))")
-    UserParticipatingGatheringDTO ParticipatingGatheringViewToParticipatingGatheringDTO(ParticipatingGatheringView participatingGatheringView);
+    UserParticipatingGatheringRs ParticipatingGatheringViewToParticipatingGatheringDTO(ParticipatingGatheringView participatingGatheringView);
 
     @Mapping(target = "gatheringId", source = "gathering.id")
     @Mapping(target = "gatheringName", source = "gathering.name")
-    UserCommentDTO GatheringCommentToUserCommentDTO(GatheringComment gatheringComment);
+    UserCommentRs GatheringCommentToUserCommentDTO(GatheringComment gatheringComment);
 
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(likeGatheringView.getGenres().split(\",\")))")
-    UserLikeGatheringDTO LikeGatheringViewToUserLikeGatheringDTO(LikeGatheringView likeGatheringView);
+    UserLikeGatheringRs LikeGatheringViewToUserLikeGatheringDTO(LikeGatheringView likeGatheringView);
 
     @Mapping(source = "rating", target = "rating", qualifiedByName = "truncateTotalRating")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(themeLikeView.getGenres().split(\",\")))")
-    UserLikeThemeDTO ThemeLikeViewToUserLikeThemeDTO(ThemeLikeView themeLikeView);
+    UserLikeThemeRs ThemeLikeViewToUserLikeThemeDTO(ThemeLikeView themeLikeView);
 
 
     @Mapping(target = "time", expression = "java(gatheringScheduleView.getDateTime().toLocalTime())")
