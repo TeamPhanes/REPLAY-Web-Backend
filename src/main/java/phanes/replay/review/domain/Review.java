@@ -9,7 +9,6 @@ import phanes.replay.gathering.domain.BaseTimeEntity;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.user.domain.User;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -30,8 +29,6 @@ public class Review extends BaseTimeEntity {
     private String themeReview;
     private String levelReview;
     private String storyReview;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     @ManyToOne
     private User user;
     @ManyToOne
