@@ -41,8 +41,8 @@ public class UserService {
     private final S3Service s3Service;
     private final UserMapper userMapper;
 
-    public UserRs getUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
+    public UserRs getProfileUserInfo(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
         Long totalGathering = gatheringMemberService.getTotalGatheringCount(userId);
         Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(userId, Role.HOST);
         Long totalTheme = participatingThemeService.getTotalThemeCount(userId);

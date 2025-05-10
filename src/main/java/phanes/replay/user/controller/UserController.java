@@ -27,7 +27,7 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me")
     public UserRs me(@AuthenticationPrincipal Long userId) {
-        return userService.getUser(userId);
+        return userService.getProfileUserInfo(userId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
