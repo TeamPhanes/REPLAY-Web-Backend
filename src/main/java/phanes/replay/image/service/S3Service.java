@@ -7,6 +7,7 @@ import phanes.replay.config.properties.S3Properties;
 import phanes.replay.exception.ImageUploadFailException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -18,11 +19,11 @@ public class S3Service {
     private final S3Client s3Client;
     private final S3Properties s3Properties;
 
-    public String uploadImage(String bucket, String key, MultipartFile image) {
+    public String uploadImage(String key, MultipartFile image) {
         try {
             s3Client.putObject(
                     PutObjectRequest.builder()
-                            .bucket(bucket)
+                            .bucket(s3Properties.getBucket())
                             .key(key)
                             .contentType(image.getContentType())
                             .build(),
@@ -31,6 +32,13 @@ public class S3Service {
         } catch (IOException e) {
             throw new ImageUploadFailException("image upload fail");
         }
-        return String.format("%s/%s/%s", s3Properties.getEndpoint(), bucket, key);
+        return String.format("%s/%s/%s", s3Properties.getEndpoint(), s3Properties.getBucket(), key);
+    }
+
+    public void deleteImage(String replay, String uploadImage) {
+        s3Client.deleteObject(DeleteObjectRequest.builder()
+                .bucket(replay)
+                .key(uploadImage)
+                .build());
     }
 }

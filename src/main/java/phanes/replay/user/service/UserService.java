@@ -54,7 +54,7 @@ public class UserService {
     @Transactional
     public void updateUser(Long userId, MultipartFile image, String nickname, String comment, Boolean emailMark, Boolean genderMark) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
-        String imageUrl = image == null ? user.getProfileImage() : s3Service.uploadImage("replay", "images/" + UUID.randomUUID() + ".png", image);
+        String imageUrl = image == null ? user.getProfileImage() : s3Service.uploadImage("user/" + UUID.randomUUID() + ".png", image);
         user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
         userRepository.save(user);
     }
