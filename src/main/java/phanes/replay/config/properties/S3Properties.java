@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "s3")
 public class S3Properties {
 
+    private String bucket;
     private String endpoint;
     private String accessKey;
     private String secretKey;

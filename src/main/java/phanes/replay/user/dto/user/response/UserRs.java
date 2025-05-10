@@ -1,4 +1,4 @@
-package phanes.replay.user.dto;
+package phanes.replay.user.dto.user.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +12,15 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OtherUserDTO {
+public class UserRs {
 
     private String image;
     private String nickname;
     private String gender;
     private String email;
     private String comment;
+    private Boolean genderMark;
+    private Boolean emailMark;
     private Long totalGathering;
     private Long totalMakeGathering;
     private Long totalTheme;

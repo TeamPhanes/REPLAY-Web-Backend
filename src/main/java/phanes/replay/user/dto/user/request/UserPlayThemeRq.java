@@ -1,4 +1,4 @@
-package phanes.replay.user.dto;
+package phanes.replay.user.dto.user.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPlayThemeDTO {
+public class UserPlayThemeRq {
 
     private Long themeId;
     private String address;
@@ -25,7 +25,7 @@ public class UserPlayThemeDTO {
     private Double rating;
     private Long reviewId;
     private Integer reviewCount;
-    private Integer myRating;
+    private Double myRating;
     private Integer hint;
     private Integer numberOfPlayer;
     private String themeReview;
