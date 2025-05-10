@@ -1,9 +1,9 @@
 package phanes.replay.user.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,7 +23,6 @@ import java.time.Duration;
 import java.util.Locale;
 import java.util.UUID;
 
-@Slf4j
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -82,6 +81,7 @@ public class OAuth2Controller {
         response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + newAccessToken);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION).replace("Bearer ", "");
