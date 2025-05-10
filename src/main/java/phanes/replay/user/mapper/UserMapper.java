@@ -2,7 +2,6 @@ package phanes.replay.user.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.GatheringScheduleView;
 import phanes.replay.gathering.domain.LikeGatheringView;
@@ -13,8 +12,6 @@ import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.user.request.UserPlayThemeRq;
 import phanes.replay.user.dto.user.response.*;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -32,16 +29,9 @@ public interface UserMapper {
 
     @Mapping(source = "name", target = "themeName")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingThemeView.getGenres().split(\",\")))")
-    @Mapping(source = "rating", target = "rating", qualifiedByName = "truncateTotalRating")
     @Mapping(source = "score", target = "myRating")
     @Mapping(source = "content", target = "reviewComment")
     UserPlayThemeRq ParticipatingThemeViewToUserPlayThemeDTO(ParticipatingThemeView participatingThemeView);
-
-    @Named("truncateTotalRating")
-    default Double truncateTotalRating(BigDecimal totalRating) {
-        if (totalRating == null) return null;
-        return totalRating.setScale(1, RoundingMode.DOWN).doubleValue();
-    }
 
     @Mapping(target = "participants", ignore = true)
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingGatheringView.getGenres().split(\",\")))")
@@ -54,7 +44,6 @@ public interface UserMapper {
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(likeGatheringView.getGenres().split(\",\")))")
     UserLikeGatheringRs LikeGatheringViewToUserLikeGatheringDTO(LikeGatheringView likeGatheringView);
 
-    @Mapping(source = "rating", target = "rating", qualifiedByName = "truncateTotalRating")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(themeLikeView.getGenres().split(\",\")))")
     UserLikeThemeRs ThemeLikeViewToUserLikeThemeDTO(ThemeLikeView themeLikeView);
 

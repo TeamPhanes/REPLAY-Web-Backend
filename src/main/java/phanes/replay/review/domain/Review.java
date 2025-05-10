@@ -20,7 +20,7 @@ public class Review {
     private Long id;
     private String content;
     private Boolean success;
-    private Integer score;
+    private Double score;
     private Integer hint;
     private Integer numberOfPlayer;
     private String themeReview;

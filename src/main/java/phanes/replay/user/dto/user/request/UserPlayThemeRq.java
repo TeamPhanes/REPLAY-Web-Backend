@@ -25,7 +25,7 @@ public class UserPlayThemeRq {
     private Double rating;
     private Long reviewId;
     private Integer reviewCount;
-    private Integer myRating;
+    private Double myRating;
     private Integer hint;
     private Integer numberOfPlayer;
     private String themeReview;
