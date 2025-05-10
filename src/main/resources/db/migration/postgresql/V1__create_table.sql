@@ -49,7 +49,6 @@ CREATE TABLE IF NOT EXISTS review
     content          VARCHAR(255),
     hint             INT,
     score            double precision,
-    image            VARCHAR(200),
     success          BOOLEAN,
     theme_id         BIGINT REFERENCES theme (id),
     user_id          BIGINT REFERENCES users (id),
@@ -64,7 +63,7 @@ CREATE TABLE IF NOT EXISTS review
 CREATE TABLE IF NOT EXISTS review_image
 (
     id        BIGSERIAL PRIMARY KEY,
-    url     VARCHAR(200),
+    url       VARCHAR(200),
     review_id BIGINT REFERENCES review (id)
 );
 

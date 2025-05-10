@@ -52,7 +52,6 @@ CREATE TABLE review
     content          VARCHAR(255),
     hint             INT,
     score            DOUBLE,
-    image            VARCHAR(200),
     success          BOOLEAN,
     theme_id         BIGINT,
     user_id          BIGINT,
