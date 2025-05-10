@@ -1,16 +1,39 @@
 package phanes.replay.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.exception.ReviewNotFountException;
+import phanes.replay.exception.UserNotFoundException;
+import phanes.replay.image.service.S3Service;
 import phanes.replay.review.domain.Review;
+import phanes.replay.review.domain.ReviewImage;
+import phanes.replay.review.dto.request.ReviewCreateRq;
+import phanes.replay.review.dto.response.ReviewRs;
+import phanes.replay.review.mapper.ReviewMapper;
+import phanes.replay.review.repository.ReviewImageRepository;
 import phanes.replay.review.repository.ReviewRepository;
+import phanes.replay.theme.domain.Theme;
+import phanes.replay.theme.service.ThemeService;
+import phanes.replay.user.domain.User;
+import phanes.replay.user.repository.UserRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final ReviewMapper reviewMapper;
+    private final UserRepository userRepository;
+    private final ThemeService themeService;
+    private final S3Service s3Service;
+    private final ReviewImageRepository reviewImageRepository;
 
     public Long getCountBySuccess(Boolean success) {
         return reviewRepository.countBySuccess(success);
@@ -22,5 +45,45 @@ public class ReviewService {
 
     public void updateReview(Review review) {
         reviewRepository.save(review);
+    }
+
+    public List<ReviewRs> getReviewByThemeId(Long themeId, Pageable pageable) {
+        return reviewRepository.findAllByThemeId(themeId, pageable).stream().map(reviewMapper::ReviewToReviewDTO).toList();
+    }
+
+    @Transactional
+    public void createReview(Long userId, ReviewCreateRq reviewCreateRq) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        Theme theme = themeService.getTheme(reviewCreateRq.getThemeId());
+        Review review = Review.builder()
+                .content(reviewCreateRq.getContent())
+                .success(Boolean.parseBoolean(reviewCreateRq.getSuccess()))
+                .score(reviewCreateRq.getRating())
+                .hint(reviewCreateRq.getHint())
+                .numberOfPlayer(reviewCreateRq.getNumberOfPlayer())
+                .themeReview(reviewCreateRq.getThemeReview())
+                .storyReview(reviewCreateRq.getStoryReview())
+                .levelReview(reviewCreateRq.getLevelReview())
+                .user(user)
+                .theme(theme)
+                .build();
+        reviewRepository.save(review);
+
+        List<String> uploadImageList = new ArrayList<>();
+        try {
+            for (MultipartFile image : reviewCreateRq.getImages()) {
+                String uploadImage = s3Service.uploadImage("review/" + UUID.randomUUID() + ".png", image);
+                uploadImageList.add(uploadImage);
+                ReviewImage reviewImage = ReviewImage.builder()
+                        .url(uploadImage)
+                        .review(review)
+                        .build();
+                reviewImageRepository.save(reviewImage);
+            }
+        } catch (Exception e) {
+            for (String uploadImage : uploadImageList) {
+                s3Service.deleteImage("replay", uploadImage);
+            }
+        }
     }
 }
