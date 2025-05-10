@@ -11,8 +11,8 @@ public interface ReviewMapper {
 
     @Mapping(target = "rating", source = "score")
     @Mapping(target = "playUser", source = "numberOfPlayer")
-    @Mapping(target = "image", source = "user.profileImage")
     @Mapping(target = "user.name", source = "user.nickname")
     @Mapping(target = "user.image", source = "user.profileImage")
+    @Mapping(target = "image", expression = "java(review.getImages().isEmpty() ? \"\" : review.getImages().getFirst().getUrl())")
     ReviewRs ReviewToReviewDTO(Review review);
 }
