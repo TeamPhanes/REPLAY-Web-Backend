@@ -1,14 +1,18 @@
 package phanes.replay.gathering.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import phanes.replay.user.domain.User;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class GatheringComment {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class GatheringComment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +30,7 @@ public class GatheringComment {
     @Column
     private Long parentId; // 부모 댓글
 
-    @Column
-    private LocalDateTime createdAt; // 생성일
-
-    @Column
-    private LocalDateTime updatedAt; // 수정일
+    public void updateComment(String content) {
+        this.content = content;
+    }
 }

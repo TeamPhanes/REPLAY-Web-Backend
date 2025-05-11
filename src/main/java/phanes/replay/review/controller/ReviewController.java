@@ -28,7 +28,7 @@ public class ReviewController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping
-    public void updateReview(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid ReviewCreateRq reviewCreateRq) {
+    public void createReview(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid ReviewCreateRq reviewCreateRq) {
         reviewService.createReview(userId, reviewCreateRq);
     }
 

@@ -7,8 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import phanes.replay.gathering.domain.GatheringComment;
 
+import java.util.Optional;
+
 public interface GatheringCommentRepository extends JpaRepository<GatheringComment, Long> {
 
     @Query("SELECT gc FROM GatheringComment gc JOIN gc.gathering WHERE gc.user.id = :userId")
     Page<GatheringComment> findByUserId(@Param("userId") Long userId, Pageable pageable);
+    @Query("SELECT gc FROM GatheringComment gc JOIN gc.user WHERE gc.gathering.id = :gatheringId")
+    Page<GatheringComment> findByGatheringId(Long gatheringId, Pageable pageable);
+    Optional<GatheringComment> findByIdAndGatheringIdAndUserId(Long commentId, Long gatheringId, Long userId);
 }
