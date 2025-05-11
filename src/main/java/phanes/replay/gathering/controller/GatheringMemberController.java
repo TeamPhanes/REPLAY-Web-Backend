@@ -1,10 +1,9 @@
 package phanes.replay.gathering.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import phanes.replay.gathering.dto.response.GatheringMemberRs;
 import phanes.replay.gathering.service.GatheringMemberService;
 
@@ -20,5 +19,11 @@ public class GatheringMemberController {
     @GetMapping("/{gatheringId}")
     public List<GatheringMemberRs> memberList(@PathVariable Long gatheringId) {
         return gatheringMemberService.getMemberList(gatheringId);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping
+    public void addMember(@AuthenticationPrincipal Long userId, @RequestParam Long gatheringId) {
+        gatheringMemberService.addMember(userId, gatheringId);
     }
 }
