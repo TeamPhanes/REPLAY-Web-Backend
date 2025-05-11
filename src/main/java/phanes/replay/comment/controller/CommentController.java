@@ -1,11 +1,11 @@
 package phanes.replay.comment.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+import phanes.replay.comment.dto.request.CommentCreateRq;
 import phanes.replay.comment.dto.response.CommentRs;
 import phanes.replay.comment.service.CommentService;
 
@@ -22,5 +22,11 @@ public class CommentController {
     public List<CommentRs> commentList(@RequestParam Long gatheringId, @RequestParam int offset, @RequestParam int limit) {
         PageRequest pageRequest = PageRequest.of(offset, limit);
         return commentService.getCommentByGatheringId(gatheringId, pageRequest);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping
+    public void createComment(@AuthenticationPrincipal Long userId, @RequestParam Long gatheringId, @RequestBody CommentCreateRq commentCreateRq) {
+        commentService.createComment(userId, gatheringId, commentCreateRq);
     }
 }
