@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.review.dto.request.ReviewCreateRq;
+import phanes.replay.review.dto.response.ReviewRatingRs;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.service.ReviewService;
 
@@ -29,5 +30,16 @@ public class ReviewController {
     @PostMapping
     public void updateReview(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid ReviewCreateRq reviewCreateRq) {
         reviewService.createReview(userId, reviewCreateRq);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/{reviewId}")
+    public void deleteReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @RequestParam Long themeId) {
+        reviewService.deleteReview(userId, reviewId, themeId);
+    }
+
+    @GetMapping("/rating")
+    public ReviewRatingRs reviewRating(@RequestParam Long themeId) {
+        return reviewService.getReviewRatingByThemeId(themeId);
     }
 }
