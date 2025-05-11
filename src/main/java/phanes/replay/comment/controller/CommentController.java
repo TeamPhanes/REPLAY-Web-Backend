@@ -35,4 +35,10 @@ public class CommentController {
     public void updateComment(@AuthenticationPrincipal Long userId, @PathVariable Long commentId, @RequestParam Long gatheringId, @RequestBody String content) {
         commentService.updateComment(userId, commentId, gatheringId, content);
     }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/{commentId}")
+    public void deleteComment(@AuthenticationPrincipal Long userId, @PathVariable Long commentId, @RequestParam Long gatheringId) {
+        commentService.deleteComment(userId, commentId, gatheringId);
+    }
 }

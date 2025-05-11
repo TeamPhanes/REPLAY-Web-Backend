@@ -47,4 +47,9 @@ public class CommentService {
         comment.updateComment(content);
         commentRepository.save(comment);
     }
+
+    public void deleteComment(Long userId, Long commentId, Long gatheringId) {
+        GatheringComment comment = commentRepository.findByIdAndGatheringIdAndUserId(commentId, userId, gatheringId).orElseThrow(() -> new CommentNotFoundException("comment not found"));
+        commentRepository.delete(comment);
+    }
 }
