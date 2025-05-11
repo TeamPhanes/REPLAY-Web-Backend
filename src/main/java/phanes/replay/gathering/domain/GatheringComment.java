@@ -29,4 +29,8 @@ public class GatheringComment extends BaseTimeEntity {
 
     @Column
     private Long parentId; // 부모 댓글
+
+    public void updateComment(String content) {
+        this.content = content;
+    }
 }

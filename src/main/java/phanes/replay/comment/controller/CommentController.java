@@ -29,4 +29,10 @@ public class CommentController {
     public void createComment(@AuthenticationPrincipal Long userId, @RequestParam Long gatheringId, @RequestBody CommentCreateRq commentCreateRq) {
         commentService.createComment(userId, gatheringId, commentCreateRq);
     }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PatchMapping("/{commentId}")
+    public void updateComment(@AuthenticationPrincipal Long userId, @PathVariable Long commentId, @RequestParam Long gatheringId, @RequestBody String content) {
+        commentService.updateComment(userId, commentId, gatheringId, content);
+    }
 }

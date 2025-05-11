@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import phanes.replay.comment.dto.request.CommentCreateRq;
 import phanes.replay.comment.dto.response.CommentRs;
 import phanes.replay.comment.mapper.CommentMapper;
+import phanes.replay.exception.CommentNotFoundException;
 import phanes.replay.exception.GatheringNotFoundException;
 import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.gathering.domain.Gathering;
@@ -39,5 +40,11 @@ public class CommentService {
                 .content(commentCreateRq.getContent())
                 .parentId(commentCreateRq.getParentId())
                 .build());
+    }
+
+    public void updateComment(Long userId, Long commentId, Long gatheringId, String content) {
+        GatheringComment comment = commentRepository.findByIdAndGatheringIdAndUserId(commentId, gatheringId, userId).orElseThrow(() -> new CommentNotFoundException("comment not found"));
+        comment.updateComment(content);
+        commentRepository.save(comment);
     }
 }
