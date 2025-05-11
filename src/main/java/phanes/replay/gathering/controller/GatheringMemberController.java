@@ -26,4 +26,10 @@ public class GatheringMemberController {
     public void addMember(@AuthenticationPrincipal Long userId, @RequestParam Long gatheringId) {
         gatheringMemberService.addMember(userId, gatheringId);
     }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping
+    public void deleteMember(@AuthenticationPrincipal Long userId, @RequestParam Long gatheringId) {
+        gatheringMemberService.deleteMember(userId, gatheringId);
+    }
 }

@@ -60,4 +60,9 @@ public class GatheringMemberService {
                 .build();
         gatheringMemberRepository.save(member);
     }
+
+    public void deleteMember(Long userId, Long gatheringId) {
+        Gathering_Member member = gatheringMemberRepository.findByUserIdAndGatheringId(userId, gatheringId);
+        gatheringMemberRepository.delete(member);
+    }
 }
