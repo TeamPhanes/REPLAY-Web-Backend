@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import phanes.replay.gathering.domain.Gathering_Member;
 import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.gathering.domain.Role;
+import phanes.replay.gathering.dto.response.GatheringMemberRs;
+import phanes.replay.gathering.mapper.GatheringMemberMapper;
 import phanes.replay.gathering.repository.Gathering_MemberRepository;
 import phanes.replay.gathering.repository.ParticipatingGatheringViewRepository;
 
@@ -18,6 +20,7 @@ public class GatheringMemberService {
 
     private final Gathering_MemberRepository gatheringMemberRepository;
     private final ParticipatingGatheringViewRepository participatingGatheringViewRepository;
+    private final GatheringMemberMapper gatheringMemberMapper;
 
     public Long getTotalGatheringCount(Long userId) {
         return gatheringMemberRepository.countByUserIdAndRoleEquals(userId, Role.HOST);
@@ -33,5 +36,9 @@ public class GatheringMemberService {
 
     public List<Gathering_Member> getMemberList(Set<Long> gatheringIdList) {
         return gatheringMemberRepository.findAllByMember(gatheringIdList);
+    }
+
+    public List<GatheringMemberRs> getMemberList(Long gatheringId) {
+        return gatheringMemberRepository.findAllByGatheringId(gatheringId).stream().map(gatheringMemberMapper::toGatheringRs).toList();
     }
 }
