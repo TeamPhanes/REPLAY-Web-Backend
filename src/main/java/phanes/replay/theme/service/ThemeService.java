@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import phanes.replay.exception.ThemeNotFoundException;
+import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.domain.ThemeLikeView;
 import phanes.replay.theme.dto.ThemeListResponse;
 import phanes.replay.theme.dto.ThemeSearchRequest;
@@ -33,5 +35,7 @@ public class ThemeService {
                 request.getSortBy(),
                 pageable
         );
+    public Theme getTheme(Long themeId) {
+        return themeRepository.findById(themeId).orElseThrow(() -> new ThemeNotFoundException("theme not found"));
     }
 }

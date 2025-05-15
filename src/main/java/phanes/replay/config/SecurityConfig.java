@@ -30,7 +30,8 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml",
                                 "/gathering/**",
                                 "/room/**",
-                                "/user/**"
+                                "/user/**",
+                                "/review/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

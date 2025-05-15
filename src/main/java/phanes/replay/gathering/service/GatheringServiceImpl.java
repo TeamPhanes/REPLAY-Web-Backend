@@ -181,8 +181,8 @@ public class GatheringServiceImpl implements GatheringService {
     }
 
     @Override
-    public List<LikeGatheringView> getUserLikeGathering(Long userId, Pageable pageable) {
-        return likeGatheringViewRepository.findByUserId(userId);
+    public Page<LikeGatheringView> getUserLikeGathering(Long userId, Pageable pageable) {
+        return likeGatheringViewRepository.findByUserId(userId, pageable);
     }
 
     @Override

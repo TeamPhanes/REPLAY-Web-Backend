@@ -1,4 +1,4 @@
-package phanes.replay.user.dto;
+package phanes.replay.user.dto.user.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,25 +6,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.theme.domain.enums.Level;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLikeThemeDTO {
+public class UserLikeGatheringRs {
 
-    private Long themeId;
+    private Long gatheringId;
+    private String name;
     private String address;
     private String spot;
     private String cafe;
-    private String themeName;
+    private Long themeId;
     private String listImage;
-    private Level level;
+    private String themeName;
     private List<String> genres;
     private Integer playtime;
-    private Long reviewCount;
-    private Double rating;
-    private Boolean isMarked;
-    private Boolean isLiked;
+    private Integer capacity;
+    private Level level;
+    private LocalDateTime dateTime;
+    private Integer participantCount;
+    private LocalDateTime registrationEnd;
 }

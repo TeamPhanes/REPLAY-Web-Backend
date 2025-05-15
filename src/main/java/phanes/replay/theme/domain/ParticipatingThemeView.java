@@ -6,8 +6,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import org.hibernate.annotations.Immutable;
 
-import java.math.BigDecimal;
-
 @Entity
 @Immutable
 @Getter
@@ -25,10 +23,10 @@ public class ParticipatingThemeView {
     private String level;
     private Integer playtime;
     private String genres;
-    private BigDecimal rating;
+    private Double rating;
     private Long reviewId;
     private Long reviewCount;
-    private Integer score;
+    private Double score;
     private Integer hint;
     private Integer numberOfPlayer;
     private String themeReview;
@@ -36,4 +34,5 @@ public class ParticipatingThemeView {
     private String storyReview;
     private String content;
     private Boolean success;
+    private Boolean isLiked;
 }

@@ -9,7 +9,7 @@ IMAGE := $(REGISTRY)/$(IMAGE_PROJECT)/$(IMAGE_NAME):$(IMAGE_TAG)
 
 build: decrypt
 	./gradlew clean
-	./gradlew build -Pspring.profiles.active=$(PROFILE)
+	./gradlew build
 
 docker-build: decrypt
 	docker build --network host -t ${IMAGE} .
@@ -27,8 +27,12 @@ decrypt:
 	@if grep -q "sops:" src/main/resources/application-dev.yaml; then \
 		sops -d -i src/main/resources/application-dev.yaml; \
 	fi
+	@if grep -q "sops:" src/test/resources/application.yaml; then \
+		sops -d -i src/test/resources/application.yaml; \
+	fi
 
 encrypt:
 	sops -e -i src/main/resources/application.yaml
 	sops -e -i src/main/resources/application-local.yaml
 	sops -e -i src/main/resources/application-dev.yaml
+	sops -e -i src/test/resources/application.yaml

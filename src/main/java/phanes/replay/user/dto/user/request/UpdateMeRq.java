@@ -1,11 +1,13 @@
-package phanes.replay.user.controller.request;
+package phanes.replay.user.dto.user.request;
 
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
-public class UpdateMeRequest {
+@Setter
+public class UpdateMeRq {
 
     private MultipartFile image;
     private String nickname;

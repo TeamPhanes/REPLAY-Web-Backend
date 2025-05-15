@@ -1,4 +1,4 @@
-package phanes.replay.user.dto;
+package phanes.replay.user.dto.user.response;
 
 import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserParticipatingGatheringDTO {
+public class UserParticipatingGatheringRs {
     @JsonIgnore
     private Long userId;
     private Long gatheringId;
@@ -28,6 +28,8 @@ public class UserParticipatingGatheringDTO {
     private Integer capacity;
     @Setter
     private List<ParticipatingUserDTO> participants;
+    private LocalDateTime registrationEnd;
+    private Boolean isLiked;
 
     @Getter
     @Builder

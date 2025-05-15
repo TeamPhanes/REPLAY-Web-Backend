@@ -2,10 +2,10 @@ CREATE TABLE IF NOT EXISTS users
 (
     id              BIGSERIAL PRIMARY KEY,
     email           VARCHAR(50),
-    gender          VARCHAR(255),
+    gender          VARCHAR(2),
     nickname        VARCHAR(32) UNIQUE,
     profile_comment VARCHAR(255),
-    profile_image   VARCHAR(255),
+    profile_image   VARCHAR(200),
     social_id       VARCHAR(100),
     social_type     VARCHAR(10),
     email_mark      BOOLEAN,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS theme
 (
     id       BIGSERIAL PRIMARY KEY,
     name     VARCHAR(20),
-    image    VARCHAR(255),
+    image    VARCHAR(200),
     city     VARCHAR(5),
     state    VARCHAR(5),
     spot     VARCHAR(10),
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS theme_content
 (
     id       BIGSERIAL PRIMARY KEY,
     theme_id BIGINT UNIQUE REFERENCES theme (id),
-    image    VARCHAR(255),
+    image    VARCHAR(200),
     story    VARCHAR(255)
 );
 
@@ -48,14 +48,23 @@ CREATE TABLE IF NOT EXISTS review
     id               BIGSERIAL PRIMARY KEY,
     content          VARCHAR(255),
     hint             INT,
-    score            INT,
+    score            double precision,
     success          BOOLEAN,
     theme_id         BIGINT REFERENCES theme (id),
     user_id          BIGINT REFERENCES users (id),
     number_of_player INT,
-    level_review     VARCHAR(255),
-    story_review     VARCHAR(255),
-    theme_review     VARCHAR(255)
+    level_review     VARCHAR(5),
+    story_review     VARCHAR(5),
+    theme_review     VARCHAR(5),
+    created_at       TIMESTAMP,
+    updated_at       TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS review_image
+(
+    id        BIGSERIAL PRIMARY KEY,
+    url       VARCHAR(200),
+    review_id BIGINT REFERENCES review (id)
 );
 
 CREATE TABLE IF NOT EXISTS refresh_token
@@ -89,7 +98,7 @@ CREATE TABLE IF NOT EXISTS gathering
     date_time          TIMESTAMP   NOT NULL,
     registration_start TIMESTAMP   NOT NULL,
     registration_end   TIMESTAMP   NOT NULL,
-    list_image         VARCHAR(255),
+    list_image         VARCHAR(200),
     created_at         TIMESTAMP,
     updated_at         TIMESTAMP
 );

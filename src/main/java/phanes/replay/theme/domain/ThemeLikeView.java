@@ -5,8 +5,6 @@ import lombok.Getter;
 import org.hibernate.annotations.Immutable;
 import phanes.replay.theme.domain.enums.Level;
 
-import java.math.BigDecimal;
-
 @Entity
 @Getter
 @Immutable
@@ -26,7 +24,6 @@ public class ThemeLikeView {
     private String genres;
     private Integer playtime;
     private Long reviewCount;
-    private BigDecimal rating;
-    private Boolean isLiked;
+    private Double rating;
     private Boolean isMarked;
 }
