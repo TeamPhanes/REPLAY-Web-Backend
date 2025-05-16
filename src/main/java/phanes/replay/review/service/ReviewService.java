@@ -96,9 +96,9 @@ public class ReviewService {
     }
 
     public ReviewRatingRs getReviewRatingByThemeId(Long themeId) {
-        Object[] result = reviewRepository.findCountAndAverageByThemeId(themeId);
-        Long totalCount = ((Number) result[0]).longValue();
-        Double rating = result[1] != null ? ((Number) result[1]).doubleValue() : 0.0;
+        Object[][] result = reviewRepository.findCountAndAverageByThemeId(themeId);
+        Long totalCount = ((Number) result[0][0]).longValue();
+        Double rating = result[0][1] != null ? ((Number) result[0][1]).doubleValue() : 0.0;
         List<Long> scores = toScoreList(reviewRepository.countAllByThemeId(themeId));
         return ReviewRatingRs.builder()
                 .scoreCount(totalCount)

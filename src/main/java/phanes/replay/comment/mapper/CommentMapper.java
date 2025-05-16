@@ -9,6 +9,14 @@ import phanes.replay.gathering.domain.GatheringComment;
 public interface CommentMapper {
 
 
+    @Mapping(target = "reComments", ignore = true)
+    @Mapping(target = "commentId", source = "id")
     @Mapping(target = "nickname", source = "user.nickname")
+    @Mapping(target = "image", source = "user.profileImage")
     CommentRs toCommentRs(GatheringComment comment);
+
+    @Mapping(target = "reCommentId", source = "id")
+    @Mapping(target = "nickname", source = "user.nickname")
+    @Mapping(target = "image", source = "user.profileImage")
+    CommentRs.ReCommentRs toReCommentRs(GatheringComment comment);
 }
