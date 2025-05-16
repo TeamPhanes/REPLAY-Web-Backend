@@ -19,6 +19,9 @@ public class ReviewRs {
     private Boolean success;
     private Integer hint;
     private Integer playUser;
+    private String themeReview;
+    private String levelReview;
+    private String storyReview;
     private ReviewUserDTO user;
     private LocalDateTime createdAt;
 

@@ -21,7 +21,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
                 FROM Review r
                 WHERE r.theme.id = :themeId
             """)
-    Object[] findCountAndAverageByThemeId(Long themeId);
+    Object[][] findCountAndAverageByThemeId(Long themeId);
     @Query("""
             SELECT r.score, COUNT(*) AS count
             FROM Review r
