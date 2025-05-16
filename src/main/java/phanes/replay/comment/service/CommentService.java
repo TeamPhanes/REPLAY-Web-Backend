@@ -1,6 +1,8 @@
 package phanes.replay.comment.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import phanes.replay.comment.dto.request.CommentCreateRq;
@@ -16,8 +18,13 @@ import phanes.replay.gathering.repository.GatheringRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -28,7 +35,11 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     public List<CommentRs> getCommentByGatheringId(Long gatheringId, Pageable pageable) {
-        return commentRepository.findByGatheringId(gatheringId, pageable).stream().map(commentMapper::toCommentRs).toList();
+        Page<GatheringComment> gatheringComment = commentRepository.findByGatheringId(gatheringId, pageable);
+        Map<Long, List<GatheringComment>> groupedByParent = gatheringComment.stream().collect(Collectors.groupingBy(gc -> Optional.ofNullable(gc.getParentId()).orElse(0L)));
+        List<CommentRs> rootComment = groupedByParent.getOrDefault(0L, new ArrayList<>()).stream().map(commentMapper::toCommentRs).toList();
+        rootComment.forEach(c -> c.setReComments(groupedByParent.getOrDefault(c.getCommentId(), new ArrayList<>()).stream().map(commentMapper::toReCommentRs).toList()));
+        return rootComment;
     }
 
     public void createComment(Long userId, Long gatheringId, CommentCreateRq commentCreateRq) {
@@ -49,7 +60,8 @@ public class CommentService {
     }
 
     public void deleteComment(Long userId, Long commentId, Long gatheringId) {
-        GatheringComment comment = commentRepository.findByIdAndGatheringIdAndUserId(commentId, userId, gatheringId).orElseThrow(() -> new CommentNotFoundException("comment not found"));
+        log.info("userId: {}, gatheringId: {}, commentId: {}", userId, gatheringId, commentId);
+        GatheringComment comment = commentRepository.findByIdAndGatheringIdAndUserId(commentId, gatheringId, userId).orElseThrow(() -> new CommentNotFoundException("comment not found"));
         commentRepository.delete(comment);
     }
 }

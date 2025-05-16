@@ -1,10 +1,7 @@
 package phanes.replay.gathering.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import phanes.replay.user.domain.User;
 
 @Entity
@@ -12,6 +9,7 @@ import phanes.replay.user.domain.User;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class GatheringComment extends BaseTimeEntity {
 
     @Id
