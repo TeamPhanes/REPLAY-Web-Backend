@@ -3,7 +3,6 @@ package phanes.replay.user.service;
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import phanes.replay.security.JwtProvider;
@@ -20,7 +19,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuth2Service {
