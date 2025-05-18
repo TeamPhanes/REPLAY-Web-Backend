@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringContent;
 import phanes.replay.gathering.domain.GatheringMember;
-import phanes.replay.gathering.dto.request.CreateGatheringRq;
+import phanes.replay.gathering.dto.request.GatheringCreateRq;
 import phanes.replay.gathering.dto.request.GatheringRq;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.repository.GatheringContentRepository;
@@ -42,7 +42,7 @@ public class GatheringService {
     private final GatheringMapper gatheringMapper;
 
     @Transactional
-    public void createGathering(CreateGatheringRq request, Long userId) {
+    public void createGathering(GatheringCreateRq request, Long userId) {
         // 엔티티 조회
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User Not Found"));
         if (user == null) {

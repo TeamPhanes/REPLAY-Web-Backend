@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import phanes.replay.gathering.dto.request.CreateGatheringRq;
+import phanes.replay.gathering.dto.request.GatheringCreateRq;
 import phanes.replay.gathering.dto.request.GatheringRq;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.service.GatheringService;
@@ -23,7 +23,7 @@ public class GatheringController {
     private final GatheringService gatheringService;
     @PostMapping
     public ResponseEntity<?> creatGathering(
-            @RequestBody @Valid CreateGatheringRq request,
+            @RequestBody @Valid GatheringCreateRq request,
             @RequestHeader(value = "Authorization", required = false) String authHeader,
             BindingResult bindingResult
             ){
