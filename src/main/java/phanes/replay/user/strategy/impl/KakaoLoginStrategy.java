@@ -11,6 +11,7 @@ import phanes.replay.user.client.KakaoTokenClient;
 import phanes.replay.user.domain.enums.SocialType;
 import phanes.replay.user.dto.oauth.KakaoProfileResponse;
 import phanes.replay.user.dto.oauth.KakaoTokenResponse;
+import phanes.replay.user.dto.oauth.KakaoUserInfo;
 import phanes.replay.user.dto.oauth.SocialProfile;
 import phanes.replay.user.strategy.SocialLoginStrategy;
 
@@ -50,7 +51,7 @@ public class KakaoLoginStrategy implements SocialLoginStrategy {
 
         KakaoTokenResponse tokenResponse = kakaoTokenClient.getToken(formData);
         KakaoProfileResponse profileResponse = kakaoProfileClient.getProfile("Bearer " + tokenResponse.getAccessToken());
-        KakaoProfileResponse.KakaoProfile.Profile profile = profileResponse.getKakao_account().getProfile();
+        KakaoUserInfo profile = profileResponse.getKakao_account().getProfile();
         return SocialProfile.builder()
                 .socialId(String.valueOf(profileResponse.getId()))
                 .profileImage(profile.getThumbnailImageUrl())
