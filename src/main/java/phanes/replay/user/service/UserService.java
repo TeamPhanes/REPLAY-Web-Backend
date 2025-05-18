@@ -102,8 +102,8 @@ public class UserService {
                 .collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate(), LinkedHashMap::new, Collectors.toList()));
     }
 
-    public List<UserLikeGatheringRs> getMyLikeGathering(Long userId, Pageable pageable) {
-        return gatheringService.getUserLikeGathering(userId, pageable).stream().map(userMapper::LikeGatheringViewToUserLikeGatheringDTO).toList();
+    public List<UserLikeGatheringRs> getMyLikeGathering(Long userId, Integer limit, Integer offset) {
+        return userGatheringQueryMapper.findUserLikeGathering(userId, limit, offset).stream().map(userMapper::LikeGatheringViewToUserLikeGatheringDTO).toList();
     }
 
     public List<UserLikeThemeRs> getMyLikeTheme(Long userId, Pageable pageable) {

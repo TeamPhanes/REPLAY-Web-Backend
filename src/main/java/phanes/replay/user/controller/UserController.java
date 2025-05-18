@@ -61,8 +61,7 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/gathering/like")
     public List<UserLikeGatheringRs> myLikeGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        PageRequest pageRequest = PageRequest.of(offset, limit);
-        return userService.getMyLikeGathering(userId, pageRequest);
+        return userService.getMyLikeGathering(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")

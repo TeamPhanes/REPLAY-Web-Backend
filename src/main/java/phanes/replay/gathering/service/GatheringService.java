@@ -8,11 +8,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import phanes.replay.gathering.domain.*;
+import phanes.replay.gathering.domain.Gathering;
+import phanes.replay.gathering.domain.GatheringContent;
+import phanes.replay.gathering.domain.GatheringMember;
+import phanes.replay.gathering.domain.GatheringScheduleView;
 import phanes.replay.gathering.dto.request.CreateGatheringRq;
 import phanes.replay.gathering.dto.request.GatheringRq;
 import phanes.replay.gathering.dto.response.GatheringRs;
-import phanes.replay.gathering.repository.*;
+import phanes.replay.gathering.repository.GatheringContentRepository;
+import phanes.replay.gathering.repository.GatheringMemberRepository;
+import phanes.replay.gathering.repository.GatheringRepository;
+import phanes.replay.gathering.repository.GatheringScheduleViewRepository;
 import phanes.replay.theme.domain.Genre;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.repository.GenreRepository;
@@ -32,7 +38,6 @@ public class GatheringService {
     private final GatheringRepository gatheringRepository;
     private final GatheringContentRepository gathering_contentRepository;
     private final GatheringMemberRepository gathering_memberRepository;
-    private final LikeGatheringViewRepository likeGatheringViewRepository;
     private final GatheringScheduleViewRepository gatheringScheduleViewRepository;
     private final GenreRepository genreRepository;
     private final UserRepository userRepository;
@@ -176,10 +181,6 @@ public class GatheringService {
         response.setIsLiked(false);
 
         return response;
-    }
-
-    public Page<LikeGatheringView> getUserLikeGathering(Long userId, Pageable pageable) {
-        return likeGatheringViewRepository.findByUserId(userId, pageable);
     }
 
     public List<GatheringScheduleView> getUserSchedule(Long userId) {

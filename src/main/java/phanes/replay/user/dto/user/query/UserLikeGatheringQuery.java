@@ -1,17 +1,17 @@
-package phanes.replay.gathering.domain;
+package phanes.replay.user.dto.user.query;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 import lombok.Getter;
-import org.hibernate.annotations.Immutable;
+import lombok.Setter;
 import phanes.replay.theme.domain.enums.Level;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
-@Immutable
-@Table(name = "like_gathering_summary")
-public class LikeGatheringView {
+@Setter
+public class UserLikeGatheringQuery {
 
     @Id
     private Long userId;
