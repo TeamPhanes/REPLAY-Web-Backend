@@ -18,7 +18,7 @@ import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.repository.GenreRepository;
 import phanes.replay.theme.repository.ThemeRepository;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.repository.UserRepository;
+import phanes.replay.user.persistence.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -1,0 +1,7 @@
+<mapper namespace="phanes.replay.user.persistence.mapper.UserGatheringQueryMapper">
+    <select id="findUserParticipantGathering" resultType="phanes.replay.user.dto.user.query.UserParticipantGatheringQuery">
+        SELECT *
+        FROM gathering_participant
+        WHERE user_id = #{userId}
+    </select>
+</mapper>

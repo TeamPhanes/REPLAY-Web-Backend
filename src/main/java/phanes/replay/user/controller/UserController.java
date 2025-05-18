@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.user.dto.user.request.UpdateMeRq;
-import phanes.replay.user.dto.user.request.UserPlayThemeRq;
 import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.service.UserService;
 
@@ -49,14 +48,8 @@ public class UserController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/theme")
-    public List<UserPlayThemeRq> myPlayTheme(@AuthenticationPrincipal Long userId) {
-        return userService.getMyPlayingTheme(userId);
-    }
-
-    @SecurityRequirement(name = "bearerAuth")
-    @PatchMapping("/me/theme")
-    public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @RequestBody UserPlayThemeRq theme) {
-        userService.updateThemeReview(userId, theme);
+    public List<UserVisitThemeRs> myVisitTheme(@AuthenticationPrincipal Long userId) {
+        return userService.getMyVisitTheme(userId);
     }
 
     @SecurityRequirement(name = "bearerAuth")

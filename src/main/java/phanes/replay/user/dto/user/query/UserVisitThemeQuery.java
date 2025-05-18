@@ -1,16 +1,16 @@
-package phanes.replay.theme.domain;
+package phanes.replay.user.dto.user.query;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.Immutable;
+import lombok.NoArgsConstructor;
 
-@Entity
-@Immutable
 @Getter
-@Table(name = "participate_theme_summary")
-public class ParticipatingThemeView {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserVisitThemeQuery {
 
     @Id
     private Long userId;

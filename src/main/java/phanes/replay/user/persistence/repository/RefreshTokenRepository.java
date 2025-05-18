@@ -1,4 +1,4 @@
-package phanes.replay.user.repository;
+package phanes.replay.user.persistence.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import phanes.replay.user.domain.RefreshToken;

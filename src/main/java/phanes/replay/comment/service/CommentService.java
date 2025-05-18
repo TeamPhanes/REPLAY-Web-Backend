@@ -16,7 +16,7 @@ import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.repository.GatheringCommentRepository;
 import phanes.replay.gathering.repository.GatheringRepository;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.repository.UserRepository;
+import phanes.replay.user.persistence.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package phanes.replay.user.dto.user.request;
+package phanes.replay.user.dto.user.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPlayThemeRq {
+public class UserVisitThemeRs {
 
     private Long themeId;
     private String address;

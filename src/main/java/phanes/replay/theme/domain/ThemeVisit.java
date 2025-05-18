@@ -12,7 +12,7 @@ import phanes.replay.user.domain.User;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParticipatingTheme {
+public class ThemeVisit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

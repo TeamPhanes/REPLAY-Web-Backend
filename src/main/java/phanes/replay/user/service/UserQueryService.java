@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.repository.UserRepository;
+import phanes.replay.user.persistence.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor

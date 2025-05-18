@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.exception.ReviewNotFountException;
-import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.domain.Review;
 import phanes.replay.review.domain.ReviewImage;
 import phanes.replay.review.dto.request.ReviewCreateRq;
+import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.review.dto.response.ReviewRatingRs;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.mapper.ReviewMapper;
@@ -19,7 +19,7 @@ import phanes.replay.review.repository.ReviewRepository;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.service.ThemeService;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.repository.UserRepository;
+import phanes.replay.user.service.UserQueryService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,21 +33,17 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
-    private final UserRepository userRepository;
+    private final UserQueryService userQueryService;
+    private final ReviewQueryService reviewQueryService;
     private final ThemeService themeService;
     private final S3Service s3Service;
     private final ReviewImageRepository reviewImageRepository;
 
-    public Long getCountBySuccess(Boolean success) {
-        return reviewRepository.countBySuccess(success);
-    }
-
-    public Review getReviewById(Long id, Long userId) {
-        return reviewRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ReviewNotFountException("review not found"));
-    }
-
-    public void updateReview(Review review) {
-        reviewRepository.save(review);
+    public void updateThemeReview(Long userId, ReviewUpdateRq reviewUpdateRq) {
+        User user = userQueryService.findByUserId(userId);
+        Review review = reviewQueryService.findByIdAndUserId(reviewUpdateRq.getId(), user.getId());
+        review.updateReview(reviewUpdateRq);
+        reviewQueryService.save(review);
     }
 
     public List<ReviewRs> getReviewByThemeId(Long themeId, Pageable pageable) {
@@ -56,7 +52,7 @@ public class ReviewService {
 
     @Transactional
     public void createReview(Long userId, ReviewCreateRq reviewCreateRq) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = userQueryService.findByUserId(userId);
         Theme theme = themeService.getTheme(reviewCreateRq.getThemeId());
         Review review = Review.builder()
                 .content(reviewCreateRq.getContent())

@@ -1,17 +1,19 @@
-package phanes.replay.gathering.domain;
+package phanes.replay.user.dto.user.query;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.Immutable;
+import lombok.NoArgsConstructor;
 import phanes.replay.theme.domain.enums.Level;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Entity
-@Immutable
-@Table(name = "participate_gathering_summary")
-public class ParticipatingGatheringView {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserParticipantGatheringQuery {
 
     @Id
     private Long userId;
@@ -24,7 +26,6 @@ public class ParticipatingGatheringView {
     private String themeName;
     private String listImage;
     private String genres;
-    @Enumerated(EnumType.STRING)
     private Level level;
     private Integer playtime;
     private LocalDateTime dateTime;

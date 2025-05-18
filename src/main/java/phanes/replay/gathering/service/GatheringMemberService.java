@@ -1,50 +1,29 @@
 package phanes.replay.gathering.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import phanes.replay.exception.GatheringNotFoundException;
 import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringMember;
-import phanes.replay.gathering.domain.ParticipatingGatheringView;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.response.GatheringMemberRs;
 import phanes.replay.gathering.mapper.GatheringMemberMapper;
 import phanes.replay.gathering.repository.GatheringMemberRepository;
 import phanes.replay.gathering.repository.GatheringRepository;
-import phanes.replay.gathering.repository.ParticipatingGatheringViewRepository;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.repository.UserRepository;
+import phanes.replay.user.persistence.repository.UserRepository;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class GatheringMemberService {
 
     private final GatheringMemberRepository gatheringMemberRepository;
-    private final ParticipatingGatheringViewRepository participatingGatheringViewRepository;
     private final GatheringMemberMapper gatheringMemberMapper;
     private final UserRepository userRepository;
     private final GatheringRepository gatheringRepository;
-
-    public Long getTotalGatheringCount(Long userId) {
-        return gatheringMemberRepository.countByUserIdAndRoleEquals(userId, Role.HOST);
-    }
-
-    public Long getTotalMakeGatheringCount(Long userId, Role role) {
-        return gatheringMemberRepository.countByUserIdAndRoleEquals(userId, role);
-    }
-
-    public List<ParticipatingGatheringView> getParticipatingGatheringView(Long userId, Pageable pageable) {
-        return participatingGatheringViewRepository.findAllByUserId(userId, pageable);
-    }
-
-    public List<GatheringMember> getMemberList(Set<Long> gatheringIdList) {
-        return gatheringMemberRepository.findAllByMember(gatheringIdList);
-    }
 
     public List<GatheringMemberRs> getMemberList(Long gatheringId) {
         return gatheringMemberRepository.findAllByGatheringId(gatheringId).stream().map(gatheringMemberMapper::toGatheringRs).toList();

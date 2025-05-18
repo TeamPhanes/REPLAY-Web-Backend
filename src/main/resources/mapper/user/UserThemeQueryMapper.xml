@@ -1,0 +1,7 @@
+<mapper namespace="phanes.replay.user.persistence.mapper.UserThemeQueryMapper">
+    <select id="findUserVisitThemes" resultType="phanes.replay.user.dto.user.query.UserVisitThemeQuery">
+        SELECT *
+        FROM theme_visit_with_review
+        WHERE user_id = #{userId}
+    </select>
+</mapper>

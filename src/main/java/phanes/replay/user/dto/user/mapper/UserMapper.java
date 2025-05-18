@@ -1,15 +1,14 @@
-package phanes.replay.user.mapper;
+package phanes.replay.user.dto.user.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.GatheringScheduleView;
 import phanes.replay.gathering.domain.LikeGatheringView;
-import phanes.replay.gathering.domain.ParticipatingGatheringView;
-import phanes.replay.theme.domain.ParticipatingThemeView;
 import phanes.replay.theme.domain.ThemeLikeView;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.dto.user.request.UserPlayThemeRq;
+import phanes.replay.user.dto.user.query.UserParticipantGatheringQuery;
+import phanes.replay.user.dto.user.query.UserVisitThemeQuery;
 import phanes.replay.user.dto.user.response.*;
 
 import java.util.List;
@@ -31,11 +30,11 @@ public interface UserMapper {
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingThemeView.getGenres().split(\",\")))")
     @Mapping(source = "score", target = "myRating")
     @Mapping(source = "content", target = "reviewComment")
-    UserPlayThemeRq ParticipatingThemeViewToUserPlayThemeDTO(ParticipatingThemeView participatingThemeView);
+    UserVisitThemeRs toUserVisitThemeRs(UserVisitThemeQuery userVisitThemeQuery);
 
     @Mapping(target = "participants", ignore = true)
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingGatheringView.getGenres().split(\",\")))")
-    UserParticipatingGatheringRs ParticipatingGatheringViewToParticipatingGatheringDTO(ParticipatingGatheringView participatingGatheringView);
+    UserParticipatingGatheringRs ParticipatingGatheringViewToParticipatingGatheringDTO(UserParticipantGatheringQuery userParticipantGatheringQuery);
 
     @Mapping(target = "gatheringId", source = "gathering.id")
     @Mapping(target = "gatheringName", source = "gathering.name")

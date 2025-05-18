@@ -11,7 +11,7 @@ import phanes.replay.user.domain.User;
 import phanes.replay.user.domain.enums.SocialType;
 import phanes.replay.user.dto.oauth.SecurityToken;
 import phanes.replay.user.dto.oauth.SocialProfile;
-import phanes.replay.user.repository.UserRepository;
+import phanes.replay.user.persistence.repository.UserRepository;
 import phanes.replay.user.strategy.SocialLoginStrategy;
 
 import java.util.List;

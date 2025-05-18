@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.review.dto.request.ReviewCreateRq;
+import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.review.dto.response.ReviewRatingRs;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.service.ReviewService;
@@ -30,6 +31,12 @@ public class ReviewController {
     @PostMapping
     public void createReview(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid ReviewCreateRq reviewCreateRq) {
         reviewService.createReview(userId, reviewCreateRq);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PatchMapping()
+    public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @RequestBody ReviewUpdateRq reviewUpdateRq) {
+        reviewService.updateThemeReview(userId, reviewUpdateRq);
     }
 
     @SecurityRequirement(name = "bearerAuth")

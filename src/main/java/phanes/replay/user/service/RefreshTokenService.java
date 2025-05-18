@@ -9,7 +9,7 @@ import phanes.replay.exception.UnAuthenticateException;
 import phanes.replay.security.JwtProvider;
 import phanes.replay.user.domain.RefreshToken;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.repository.RefreshTokenRepository;
+import phanes.replay.user.persistence.repository.RefreshTokenRepository;
 
 import java.time.Instant;
 import java.util.Optional;
