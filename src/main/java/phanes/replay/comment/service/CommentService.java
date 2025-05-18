@@ -8,14 +8,12 @@ import phanes.replay.comment.dto.request.CommentCreateRq;
 import phanes.replay.comment.dto.response.CommentRs;
 import phanes.replay.comment.mapper.CommentMapper;
 import phanes.replay.exception.CommentNotFoundException;
-import phanes.replay.exception.GatheringNotFoundException;
-import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.repository.GatheringCommentRepository;
-import phanes.replay.gathering.repository.GatheringRepository;
+import phanes.replay.gathering.service.GatheringQueryService;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.persistence.repository.UserRepository;
+import phanes.replay.user.service.UserQueryService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +26,8 @@ import java.util.stream.Collectors;
 public class CommentService {
 
     private final GatheringCommentRepository commentRepository;
-    private final GatheringRepository gatheringRepository;
-    private final UserRepository userRepository;
+    private final GatheringQueryService gatheringQueryService;
+    private final UserQueryService userQueryService;
     private final CommentMapper commentMapper;
 
     public List<CommentRs> getCommentByGatheringId(Long gatheringId, Pageable pageable) {
@@ -41,8 +39,8 @@ public class CommentService {
     }
 
     public void createComment(Long userId, Long gatheringId, CommentCreateRq commentCreateRq) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User Not Found"));
-        Gathering gathering = gatheringRepository.findById(gatheringId).orElseThrow(() -> new GatheringNotFoundException("Gathering Not Found"));
+        User user = userQueryService.findByUserId(userId);
+        Gathering gathering = gatheringQueryService.findById(gatheringId);
         commentRepository.save(GatheringComment.builder()
                 .user(user)
                 .gathering(gathering)
