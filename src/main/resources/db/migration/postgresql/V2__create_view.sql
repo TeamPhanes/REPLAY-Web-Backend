@@ -144,7 +144,7 @@ SELECT twg.id                                                    AS theme_id,
        COALESCE(tlc.like_count, 0)                               AS like_count,
        tl.user_id,
        CASE WHEN tl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked,
-       CASE WHEN tv.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_visited
+       CASE WHEN tv.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_marked
 FROM theme_with_genres twg
          LEFT JOIN review_avg_rating rar ON twg.id = rar.theme_id
          LEFT JOIN review_count rc ON twg.id = rc.theme_id
