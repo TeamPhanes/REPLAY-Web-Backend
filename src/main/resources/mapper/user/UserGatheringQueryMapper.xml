@@ -15,7 +15,7 @@
         OFFSET #{offset}
     </select>
 
-    <select id="findUserSchedule" resultType="phanes.replay.user.dto.user.query.UserSchedule">
+    <select id="findUserSchedule" resultType="phanes.replay.user.dto.user.query.UserScheduleQuery">
         SELECT *
         FROM gathering_schedule
         WHERE user_id = #{userId}

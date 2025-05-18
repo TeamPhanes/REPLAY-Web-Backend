@@ -43,7 +43,7 @@ public interface UserMapper {
     UserLikeThemeRs toUserLikeThemeRs(UserLikeThemeQuery userLikeThemeQuery);
 
 
-    @Mapping(target = "time", expression = "java(userSchedule.getDateTime().toLocalTime())")
-    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(userSchedule.getGenres().split(\",\")))")
-    UserScheduleRs toUserScheduleRs(UserSchedule userSchedule);
+    @Mapping(target = "time", expression = "java(userScheduleQuery.getDateTime().toLocalTime())")
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(userScheduleQuery.getGenres().split(\",\")))")
+    UserScheduleRs toUserScheduleRs(UserScheduleQuery userScheduleQuery);
 }

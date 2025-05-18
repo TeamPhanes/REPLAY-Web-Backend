@@ -17,7 +17,7 @@ import phanes.replay.theme.service.ThemeVisitQueryService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.user.mapper.UserMapper;
 import phanes.replay.user.dto.user.query.UserParticipantGatheringQuery;
-import phanes.replay.user.dto.user.query.UserSchedule;
+import phanes.replay.user.dto.user.query.UserScheduleQuery;
 import phanes.replay.user.dto.user.query.UserVisitThemeQuery;
 import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.persistence.mapper.UserGatheringQueryMapper;
@@ -107,8 +107,8 @@ public class UserService {
     }
 
     public Map<LocalDate, List<UserScheduleRs>> getMySchedule(Long userId) {
-        List<UserSchedule> userSchedule = userGatheringQueryMapper.findUserSchedule(userId);
-        return userSchedule.stream()
+        List<UserScheduleQuery> userScheduleQuery = userGatheringQueryMapper.findUserSchedule(userId);
+        return userScheduleQuery.stream()
                 .collect(Collectors.groupingBy(gsv -> gsv.getDateTime().toLocalDate(),
                         Collectors.mapping(userMapper::toUserScheduleRs, Collectors.toList())));
     }

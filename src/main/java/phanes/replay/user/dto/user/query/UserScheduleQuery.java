@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserSchedule {
+public class UserScheduleQuery {
 
     @Id
     private Long userId;
