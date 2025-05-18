@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-public class UpdateMeRq {
+public class UserUpdateRq {
 
     private MultipartFile image;
     private String nickname;
