@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import phanes.replay.exception.ThemeNotFoundException;
 import phanes.replay.theme.domain.Theme;
-import phanes.replay.theme.repository.ThemeRepository;
+import phanes.replay.theme.persistence.repository.ThemeRepository;
 
 @Service
 @RequiredArgsConstructor

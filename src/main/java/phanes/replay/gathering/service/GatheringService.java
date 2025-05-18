@@ -19,8 +19,8 @@ import phanes.replay.gathering.repository.GatheringMemberRepository;
 import phanes.replay.gathering.repository.GatheringRepository;
 import phanes.replay.theme.domain.Genre;
 import phanes.replay.theme.domain.Theme;
-import phanes.replay.theme.repository.GenreRepository;
-import phanes.replay.theme.repository.ThemeRepository;
+import phanes.replay.theme.persistence.repository.GenreRepository;
+import phanes.replay.theme.persistence.repository.ThemeRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.persistence.repository.UserRepository;
 
