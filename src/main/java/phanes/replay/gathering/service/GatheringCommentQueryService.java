@@ -9,7 +9,7 @@ import phanes.replay.gathering.repository.GatheringCommentRepository;
 
 @Service
 @RequiredArgsConstructor
-public class GatheringCommentService {
+public class GatheringCommentQueryService {
 
     private final GatheringCommentRepository gatheringCommentRepository;
 

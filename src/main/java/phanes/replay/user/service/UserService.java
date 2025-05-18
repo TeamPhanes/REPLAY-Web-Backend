@@ -10,7 +10,7 @@ import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.GatheringScheduleView;
 import phanes.replay.gathering.domain.enums.Role;
-import phanes.replay.gathering.service.GatheringCommentService;
+import phanes.replay.gathering.service.GatheringCommentQueryService;
 import phanes.replay.gathering.service.GatheringMemberQueryService;
 import phanes.replay.gathering.service.GatheringService;
 import phanes.replay.image.service.S3Service;
@@ -37,7 +37,7 @@ public class UserService {
     private final GatheringMemberQueryService gatheringMemberQueryService;
     private final UserThemeQueryMapper userThemeQueryMapper;
     private final UserGatheringQueryMapper userGatheringQueryMapper;
-    private final GatheringCommentService gatheringCommentService;
+    private final GatheringCommentQueryService gatheringCommentQueryService;
     private final GatheringService gatheringService;
     private final ThemeService themeService;
     private final ThemeVisitQueryService themeVisitQueryService;
@@ -96,9 +96,8 @@ public class UserService {
     }
 
     public Map<LocalDate, List<UserCommentRs>> getMyComment(Long userId, Pageable pageable) {
-        Page<GatheringComment> myComment = gatheringCommentService.getMyComment(userId, pageable);
-        return myComment
-                .stream()
+        Page<GatheringComment> myComment = gatheringCommentQueryService.getMyComment(userId, pageable);
+        return myComment.stream()
                 .map(userMapper::GatheringCommentToUserCommentDTO)
                 .collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate(), LinkedHashMap::new, Collectors.toList()));
     }
