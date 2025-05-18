@@ -3,12 +3,8 @@ package phanes.replay.user.dto.user.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import phanes.replay.gathering.domain.GatheringComment;
-import phanes.replay.gathering.domain.GatheringScheduleView;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.dto.user.query.UserLikeGatheringQuery;
-import phanes.replay.user.dto.user.query.UserLikeThemeQuery;
-import phanes.replay.user.dto.user.query.UserParticipantGatheringQuery;
-import phanes.replay.user.dto.user.query.UserVisitThemeQuery;
+import phanes.replay.user.dto.user.query.*;
 import phanes.replay.user.dto.user.response.*;
 
 import java.util.List;
@@ -49,5 +45,5 @@ public interface UserMapper {
 
     @Mapping(target = "time", expression = "java(gatheringScheduleView.getDateTime().toLocalTime())")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(gatheringScheduleView.getGenres().split(\",\")))")
-    UserScheduleDTO GatheringScheduleViewToUserScheduleDTO(GatheringScheduleView gatheringScheduleView);
+    UserScheduleDTO GatheringScheduleViewToUserScheduleDTO(UserSchedule userSchedule);
 }

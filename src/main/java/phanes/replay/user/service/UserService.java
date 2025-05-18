@@ -8,18 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.GatheringMember;
-import phanes.replay.gathering.domain.GatheringScheduleView;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.service.GatheringCommentQueryService;
 import phanes.replay.gathering.service.GatheringMemberQueryService;
-import phanes.replay.gathering.service.GatheringService;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.service.ReviewQueryService;
-import phanes.replay.theme.service.ThemeService;
 import phanes.replay.theme.service.ThemeVisitQueryService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.user.mapper.UserMapper;
 import phanes.replay.user.dto.user.query.UserParticipantGatheringQuery;
+import phanes.replay.user.dto.user.query.UserSchedule;
 import phanes.replay.user.dto.user.query.UserVisitThemeQuery;
 import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.persistence.mapper.UserGatheringQueryMapper;
@@ -38,8 +36,6 @@ public class UserService {
     private final UserThemeQueryMapper userThemeQueryMapper;
     private final UserGatheringQueryMapper userGatheringQueryMapper;
     private final GatheringCommentQueryService gatheringCommentQueryService;
-    private final GatheringService gatheringService;
-    private final ThemeService themeService;
     private final ThemeVisitQueryService themeVisitQueryService;
     private final ReviewQueryService reviewQueryService;
     private final S3Service s3Service;
@@ -111,7 +107,7 @@ public class UserService {
     }
 
     public Map<LocalDate, List<UserScheduleDTO>> getMySchedule(Long userId) {
-        List<GatheringScheduleView> userSchedule = gatheringService.getUserSchedule(userId);
+        List<UserSchedule> userSchedule = userGatheringQueryMapper.findUserSchedule(userId);
         return userSchedule
                 .stream()
                 .collect(Collectors.groupingBy(gsv -> gsv.getDateTime().toLocalDate(),

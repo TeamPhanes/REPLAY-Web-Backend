@@ -14,4 +14,10 @@
         LIMIT #{limit}
         OFFSET #{offset}
     </select>
+
+    <select id="findUserSchedule" resultType="phanes.replay.user.dto.user.query.UserSchedule">
+        SELECT *
+        FROM gathering_schedule
+        WHERE user_id = #{userId}
+    </select>
 </mapper>
