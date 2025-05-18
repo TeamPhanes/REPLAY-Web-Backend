@@ -12,7 +12,7 @@ import phanes.replay.user.domain.User;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Gathering_Member {
+public class GatheringMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,15 +27,15 @@ public class Gathering_Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public static Gathering_Member createHost(User host, Gathering gathering) {
-        Gathering_Member member = new Gathering_Member();
+    public static GatheringMember createHost(User host, Gathering gathering) {
+        GatheringMember member = new GatheringMember();
         member.user = host;
         member.gathering = gathering;
         member.role = Role.HOST;
         return member;
     }
-    public static Gathering_Member createMember(User user, Gathering gathering) {
-        Gathering_Member member = new Gathering_Member();
+    public static GatheringMember createMember(User user, Gathering gathering) {
+        GatheringMember member = new GatheringMember();
         member.user = user;
         member.gathering = gathering;
         member.role = Role.MEMBER;

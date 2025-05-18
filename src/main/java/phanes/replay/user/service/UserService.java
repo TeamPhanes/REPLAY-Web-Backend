@@ -82,7 +82,7 @@ public class UserService {
     public List<UserParticipatingGatheringRs> getMyParticipatingGathering(Long userId, Pageable pageable) {
         List<ParticipatingGatheringView> participatingGatheringView = gatheringMemberService.getParticipatingGatheringView(userId, pageable);
         Set<Long> gatheringIdList = participatingGatheringView.stream().map(ParticipatingGatheringView::getGatheringId).collect(Collectors.toSet());
-        Map<Long, List<Gathering_Member>> collect = gatheringMemberService.getMemberList(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
+        Map<Long, List<GatheringMember>> collect = gatheringMemberService.getMemberList(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
         List<UserParticipatingGatheringRs> myParticipatingGathering = participatingGatheringView.stream().map(userMapper::ParticipatingGatheringViewToParticipatingGatheringDTO).toList();
         myParticipatingGathering.forEach(pg ->
                 pg.setParticipants(

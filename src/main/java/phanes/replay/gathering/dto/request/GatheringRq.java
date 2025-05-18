@@ -1,11 +1,11 @@
-package phanes.replay.gathering.controller;
+package phanes.replay.gathering.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class GatheringListRequest {
+public class GatheringRq {
 
     private String sortBy;
     private String keyword;

@@ -6,7 +6,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
-public class Gathering_Content {
+public class GatheringContent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +22,12 @@ public class Gathering_Content {
     @Column(length = 8)
     private String price; // 가격
 
-    public static Gathering_Content create(
+    public static GatheringContent create(
             Gathering gathering,
             String content,
             String price
     ) {
-        Gathering_Content gathering_content = new Gathering_Content();
+        GatheringContent gathering_content = new GatheringContent();
         gathering_content.gathering = gathering;
         gathering_content.content = content;
         gathering_content.price = price;

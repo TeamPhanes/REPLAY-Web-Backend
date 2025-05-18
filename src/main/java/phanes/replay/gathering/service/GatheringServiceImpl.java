@@ -8,10 +8,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import phanes.replay.gathering.controller.GatheringCreateRequest;
-import phanes.replay.gathering.controller.GatheringListRequest;
-import phanes.replay.gathering.controller.GatheringListResponse;
 import phanes.replay.gathering.domain.*;
+import phanes.replay.gathering.dto.request.CreateGatheringRq;
+import phanes.replay.gathering.dto.request.GatheringRq;
+import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.repository.*;
 import phanes.replay.theme.domain.Genre;
 import phanes.replay.theme.domain.Theme;
@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 public class GatheringServiceImpl implements GatheringService {
 
     private final GatheringRepository gatheringRepository;
-    private final Gathering_ContentRepository gathering_contentRepository;
-    private final Gathering_MemberRepository gathering_memberRepository;
+    private final GatheringContentRepository gathering_contentRepository;
+    private final GatheringMemberRepository gathering_memberRepository;
     private final LikeGatheringViewRepository likeGatheringViewRepository;
     private final GatheringScheduleViewRepository gatheringScheduleViewRepository;
     private final GenreRepository genreRepository;
@@ -41,7 +41,7 @@ public class GatheringServiceImpl implements GatheringService {
 
     @Transactional
     @Override
-    public void createGathering(GatheringCreateRequest request, Long userId) {
+    public void createGathering(CreateGatheringRq request, Long userId) {
         // 엔티티 조회
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User Not Found"));
         if (user == null) {
@@ -54,16 +54,16 @@ public class GatheringServiceImpl implements GatheringService {
         Gathering savedGathering = gatheringRepository.save(gathering);
 
         // 콘텐츠 생성
-        Gathering_Content content = gatheringMapper.ToContentEntity(request, savedGathering);
+        GatheringContent content = gatheringMapper.ToContentEntity(request, savedGathering);
         gathering_contentRepository.save(content);
 
         // 멤버 추가
-        Gathering_Member member = Gathering_Member.createHost(user, savedGathering);
+        GatheringMember member = GatheringMember.createHost(user, savedGathering);
         gathering_memberRepository.save(member);
     }
 
     @Override
-    public List<GatheringListResponse> getGatheringList(GatheringListRequest request) {
+    public List<GatheringRs> getGatheringList(GatheringRq request) {
         Sort sort;
         if ("registrationEnd".equals(request.getSortBy())) {
             sort = Sort.by(Sort.Direction.ASC, "registrationEnd");
@@ -125,7 +125,7 @@ public class GatheringServiceImpl implements GatheringService {
     }
 
     // 단일 파라미터만 제공되었는지 확인하는 메서드
-    private boolean onlyOneParameterProvided(GatheringListRequest request) {
+    private boolean onlyOneParameterProvided(GatheringRq request) {
         int paramCount = 0;
         if (request.getKeyword() != null && !request.getKeyword().isEmpty()) paramCount++;
         if (request.getLocation() != null && !request.getLocation().isEmpty()) paramCount++;
@@ -135,15 +135,15 @@ public class GatheringServiceImpl implements GatheringService {
     }
 
     // 엔티티 리스트를 응답 DTO 리스트로 변환하는 메서드
-    private List<GatheringListResponse> convertToResponseList(List<Gathering> gatherings) {
+    private List<GatheringRs> convertToResponseList(List<Gathering> gatherings) {
         return gatherings.stream()
                 .map(this::convertToResponse)
                 .collect(Collectors.toList());
     }
 
     // 개별 엔티티를 응답 DTO로 변환하는 메서드
-    private GatheringListResponse convertToResponse(Gathering gathering) {
-        GatheringListResponse response = new GatheringListResponse();
+    private GatheringRs convertToResponse(Gathering gathering) {
+        GatheringRs response = new GatheringRs();
 
         response.setGatheringId(gathering.getId());
         response.setName(gathering.getName());

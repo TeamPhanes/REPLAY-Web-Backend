@@ -7,12 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import phanes.replay.gathering.domain.Gathering;
+import phanes.replay.gathering.dto.request.CreateGatheringRq;
+import phanes.replay.gathering.dto.request.GatheringRq;
+import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.service.GatheringServiceImpl;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -23,7 +25,7 @@ public class GatheringController {
     private final GatheringServiceImpl gatheringService;
     @PostMapping
     public ResponseEntity<?> creatGathering(
-            @RequestBody @Valid GatheringCreateRequest request,
+            @RequestBody @Valid CreateGatheringRq request,
             @RequestHeader(value = "Authorization", required = false) String authHeader,
             BindingResult bindingResult
             ){
@@ -68,7 +70,7 @@ public class GatheringController {
 
         try{
 
-            GatheringListRequest request = new GatheringListRequest();
+            GatheringRq request = new GatheringRq();
             request.setSortBy(sortBy);
             request.setKeyword(keyword);
             request.setLocation(location);
@@ -79,7 +81,7 @@ public class GatheringController {
 
             // 서비스
 
-            List<GatheringListResponse> response = gatheringService.getGatheringList(request);
+            List<GatheringRs> response = gatheringService.getGatheringList(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
