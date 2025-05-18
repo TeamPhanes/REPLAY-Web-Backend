@@ -1,4 +1,4 @@
-package phanes.replay.user.dto.oauth;
+package phanes.replay.user.dto.oauth.kakao;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NaverProfileResponse {
-    private String resultcode;
-    private String message;
-    private NaverProfile response;
+public class KakaoProfileResponse {
+    private Long id;
+    private KakaoProfile kakao_account;
 }

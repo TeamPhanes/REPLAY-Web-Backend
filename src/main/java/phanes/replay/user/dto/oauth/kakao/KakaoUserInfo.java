@@ -1,4 +1,4 @@
-package phanes.replay.user.dto.oauth;
+package phanes.replay.user.dto.oauth.kakao;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

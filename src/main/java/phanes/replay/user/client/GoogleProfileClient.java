@@ -3,7 +3,7 @@ package phanes.replay.user.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import phanes.replay.user.dto.oauth.GoogleProfileResponse;
+import phanes.replay.user.dto.oauth.google.GoogleProfileResponse;
 
 @FeignClient(name = "googleProfileClient", url = "https://www.googleapis.com")
 public interface GoogleProfileClient {

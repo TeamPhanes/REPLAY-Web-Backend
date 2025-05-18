@@ -1,4 +1,4 @@
-package phanes.replay.user.dto.oauth;
+package phanes.replay.user.dto.oauth.naver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

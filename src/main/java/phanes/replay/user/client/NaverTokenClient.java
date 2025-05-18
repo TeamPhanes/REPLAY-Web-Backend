@@ -3,7 +3,7 @@ package phanes.replay.user.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import phanes.replay.user.dto.oauth.NaverTokenResponse;
+import phanes.replay.user.dto.oauth.naver.NaverTokenResponse;
 
 @FeignClient(value = "NaverToken", url = "https://nid.naver.com")
 public interface NaverTokenClient {
