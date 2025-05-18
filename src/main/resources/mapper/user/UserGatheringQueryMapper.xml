@@ -3,5 +3,7 @@
         SELECT *
         FROM gathering_participant
         WHERE user_id = #{userId}
+        LIMIT #{limit}
+        OFFSET #{offset}
     </select>
 </mapper>

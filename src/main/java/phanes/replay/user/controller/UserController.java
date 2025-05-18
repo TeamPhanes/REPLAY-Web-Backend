@@ -55,8 +55,7 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/gathering")
     public List<UserParticipatingGatheringRs> myParticipatingGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        PageRequest pageRequest = PageRequest.of(offset, limit);
-        return userService.getMyParticipatingGathering(userId, pageRequest);
+        return userService.getMyParticipatingGathering(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")

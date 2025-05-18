@@ -1,18 +1,14 @@
 package phanes.replay.user.dto.user.query;
 
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 import phanes.replay.theme.domain.enums.Level;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Setter
 public class UserParticipantGatheringQuery {
 
     @Id

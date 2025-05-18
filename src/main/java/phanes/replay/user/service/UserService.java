@@ -64,7 +64,7 @@ public class UserService {
     }
 
     public List<UserVisitThemeRs> getMyVisitTheme(Long userId, Integer limit, Integer offset) {
-        Page<UserVisitThemeQuery> userPlayingThemeList = userThemeQueryMapper.findUserVisitThemes(userId, limit, offset);
+        List<UserVisitThemeQuery> userPlayingThemeList = userThemeQueryMapper.findUserVisitThemes(userId, limit, offset);
         return userPlayingThemeList.stream().map(userMapper::toUserVisitThemeRs).toList();
     }
 
@@ -78,8 +78,8 @@ public class UserService {
         return userMapper.UserToOtherUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
-    public List<UserParticipatingGatheringRs> getMyParticipatingGathering(Long userId, Pageable pageable) {
-        List<UserParticipantGatheringQuery> userParticipantGatheringQuery = userGatheringQueryMapper.findUserParticipantGathering(userId, pageable);
+    public List<UserParticipatingGatheringRs> getMyParticipatingGathering(Long userId, Integer limit, Integer offset) {
+        List<UserParticipantGatheringQuery> userParticipantGatheringQuery = userGatheringQueryMapper.findUserParticipantGathering(userId, limit, offset);
         Set<Long> gatheringIdList = userParticipantGatheringQuery.stream().map(UserParticipantGatheringQuery::getGatheringId).collect(Collectors.toSet());
         Map<Long, List<GatheringMember>> collect = gatheringMemberQueryService.getMemberList(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
         List<UserParticipatingGatheringRs> myParticipatingGathering = userParticipantGatheringQuery.stream().map(userMapper::ParticipatingGatheringViewToParticipatingGatheringDTO).toList();
