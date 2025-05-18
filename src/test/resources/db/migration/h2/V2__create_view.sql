@@ -110,10 +110,10 @@ SELECT tl.user_id,
        twg.playtime,
        CAST(COALESCE(rar.rating, 0.0) AS DOUBLE)                  AS rating,
        COALESCE(rc.review_count, 0)                               AS review_count,
-       CASE WHEN pt.theme_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_marked
+       CASE WHEN tv.theme_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_marked
 FROM theme_like tl
          JOIN theme_with_genres twg ON tl.theme_id = twg.id
-         LEFT JOIN theme_visit pt ON tl.user_id = pt.user_id AND tl.theme_id = pt.theme_id
+         LEFT JOIN theme_visit tv ON tl.user_id = tv.user_id AND tl.theme_id = tv.theme_id
          LEFT JOIN review_avg_rating rar ON twg.id = rar.theme_id
          LEFT JOIN review_count rc ON twg.id = rc.theme_id;
 
@@ -123,3 +123,23 @@ SELECT gp.*,
 FROM gathering_participant gp
          LEFT JOIN gathering_member_count gmc
                    ON gp.gathering_id = gmc.gathering_id;
+
+CREATE OR REPLACE VIEW theme_list_with_review_and_liked_and_marked AS
+SELECT twg.id                                                    AS theme_id,
+       twg.name                                                  AS theme_name,
+       twg.address,
+       twg.spot,
+       twg.cafe,
+       twg.level,
+       twg.playtime,
+       twg.image                                                 AS list_image,
+       twg.genres,
+       COALESCE(rar.rating, 0)                                   AS rating,
+       COALESCE(rc.review_count, 0)                              AS review_count,
+       CASE WHEN tl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked,
+       CASE WHEN tv.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_visited
+FROM theme_with_genres twg
+         LEFT JOIN review_avg_rating rar ON twg.id = rar.theme_id
+         LEFT JOIN review_count rc ON twg.id = rc.theme_id
+         LEFT JOIN theme_like tl ON tl.theme_id = twg.id
+         LEFT JOIN theme_visit tv ON tv.theme_id = twg.id AND tv.user_id = tl.user_id
