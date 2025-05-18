@@ -1,8 +1,5 @@
 package phanes.replay.user.dto.user.query;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import phanes.replay.theme.domain.enums.Level;
@@ -13,8 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 public class UserScheduleQuery {
 
-    @Id
-    private Long userId;
     private Long gatheringId;
     private String name;
     private String address;
@@ -24,7 +19,6 @@ public class UserScheduleQuery {
     private String themeName;
     private String listImage;
     private String genres;
-    @Enumerated(EnumType.STRING)
     private Level level;
     private Integer playtime;
     private LocalDateTime dateTime;

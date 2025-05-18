@@ -1,6 +1,5 @@
 package phanes.replay.user.dto.user.query;
 
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class UserVisitThemeQuery {
 
-    @Id
-    private Long userId;
     private Long themeId;
     private String address;
     private String spot;
