@@ -2,6 +2,7 @@ package phanes.replay.gathering.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import phanes.replay.common.domain.BaseTimeEntity;
 import phanes.replay.user.domain.User;
 
 @Entity

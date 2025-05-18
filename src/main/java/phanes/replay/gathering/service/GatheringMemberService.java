@@ -8,7 +8,7 @@ import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.ParticipatingGatheringView;
-import phanes.replay.gathering.domain.Role;
+import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.response.GatheringMemberRs;
 import phanes.replay.gathering.mapper.GatheringMemberMapper;
 import phanes.replay.gathering.repository.GatheringMemberRepository;

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.user.domain.User;
 
 @Entity

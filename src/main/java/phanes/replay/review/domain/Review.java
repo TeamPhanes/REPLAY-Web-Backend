@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import phanes.replay.gathering.domain.BaseTimeEntity;
+import phanes.replay.common.domain.BaseTimeEntity;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.user.domain.User;
 

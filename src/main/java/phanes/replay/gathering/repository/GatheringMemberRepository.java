@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import phanes.replay.gathering.domain.GatheringMember;
-import phanes.replay.gathering.domain.Role;
+import phanes.replay.gathering.domain.enums.Role;
 
 import java.util.List;
 import java.util.Set;

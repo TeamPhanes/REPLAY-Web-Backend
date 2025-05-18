@@ -1,4 +1,4 @@
-package phanes.replay.gathering.domain;
+package phanes.replay.common.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
