@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import phanes.replay.user.dto.oauth.GoogleTokenResponse;
+import phanes.replay.user.dto.oauth.google.GoogleTokenResponse;
 
 @FeignClient(name = "googleTokenClient", url = "https://oauth2.googleapis.com")
 public interface GoogleTokenClient {

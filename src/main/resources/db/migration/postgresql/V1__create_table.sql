@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS refresh_token
     token       VARCHAR(40)
 );
 
-CREATE TABLE IF NOT EXISTS participating_theme
+CREATE TABLE IF NOT EXISTS theme_visit
 (
     id       BIGSERIAL PRIMARY KEY,
     theme_id BIGINT REFERENCES theme (id),

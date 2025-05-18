@@ -1,5 +1,6 @@
 package phanes.replay;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,6 +19,7 @@ import phanes.replay.config.properties.*;
 		KakaoProperties.class,
 		S3Properties.class
 })
+@MapperScan("phanes.replay.**.persistence.mapper")
 public class ReplayApplication {
 
 	public static void main(String[] args) {

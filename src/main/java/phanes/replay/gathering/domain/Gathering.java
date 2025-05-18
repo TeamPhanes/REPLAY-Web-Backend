@@ -2,6 +2,7 @@ package phanes.replay.gathering.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import phanes.replay.common.domain.BaseTimeEntity;
 import phanes.replay.theme.domain.Theme;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Gathering extends BaseTimeEntity{
+public class Gathering extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,6 +60,6 @@ public class Gathering extends BaseTimeEntity{
     }
 
     @OneToMany(mappedBy = "gathering")
-    private List<Gathering_Member> gathering_member = new ArrayList<>();
+    private List<GatheringMember> gathering_member = new ArrayList<>();
 
 }

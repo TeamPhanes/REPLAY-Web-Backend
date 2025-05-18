@@ -2,28 +2,28 @@ package phanes.replay.gathering.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import phanes.replay.gathering.domain.Gathering;
-import phanes.replay.gathering.service.GatheringServiceImpl;
+import phanes.replay.gathering.dto.request.CreateGatheringRq;
+import phanes.replay.gathering.dto.request.GatheringRq;
+import phanes.replay.gathering.dto.response.GatheringRs;
+import phanes.replay.gathering.service.GatheringService;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/gathering")
 public class GatheringController {
 
-    private final GatheringServiceImpl gatheringService;
+    private final GatheringService gatheringService;
     @PostMapping
     public ResponseEntity<?> creatGathering(
-            @RequestBody @Valid GatheringCreateRequest request,
+            @RequestBody @Valid CreateGatheringRq request,
             @RequestHeader(value = "Authorization", required = false) String authHeader,
             BindingResult bindingResult
             ){
@@ -68,7 +68,7 @@ public class GatheringController {
 
         try{
 
-            GatheringListRequest request = new GatheringListRequest();
+            GatheringRq request = new GatheringRq();
             request.setSortBy(sortBy);
             request.setKeyword(keyword);
             request.setLocation(location);
@@ -79,7 +79,7 @@ public class GatheringController {
 
             // 서비스
 
-            List<GatheringListResponse> response = gatheringService.getGatheringList(request);
+            List<GatheringRs> response = gatheringService.getGatheringList(request);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,30 +90,3 @@ public class GatheringController {
     }
 
 }
-
-
-//    @PostMapping
-//    public ResponseEntity<?> createGathering(
-//            @Valid @RequestBody GatheringCreateRequest request,
-//            BindingResult bindingResult) {
-//
-//        // 검사
-//        if (bindingResult.hasErrors()) {
-//            Map<String, String> errors = new HashMap<>();
-//            errors.put("errors", "부적절한 요청입니다.");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-//        }
-//        // 서비스 호출
-//        try {
-//            String result = gatheringService.createGathering(request);
-//            // 성공 응답
-//            Map<String, String> success = new HashMap<>();
-//            success.put("message", result);
-//            return ResponseEntity.ok(success);
-//        } catch (Exception e) {
-//            // 실패 응답
-//            Map<String, String> errors = new HashMap<>();
-//            errors.put("errors", e.getMessage());
-//            return ResponseEntity.badRequest().body(errors);
-//        }
-//    }

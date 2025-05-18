@@ -82,7 +82,7 @@ CREATE TABLE refresh_token
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE participating_theme
+CREATE TABLE theme_visit
 (
     id       IDENTITY PRIMARY KEY,
     theme_id BIGINT,

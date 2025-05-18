@@ -1,15 +1,15 @@
 package phanes.replay.gathering.service;
 
 import org.springframework.stereotype.Component;
-import phanes.replay.gathering.controller.GatheringCreateRequest;
 import phanes.replay.gathering.domain.Gathering;
-import phanes.replay.gathering.domain.Gathering_Content;
+import phanes.replay.gathering.domain.GatheringContent;
+import phanes.replay.gathering.dto.request.CreateGatheringRq;
 import phanes.replay.theme.domain.Theme;
 
 @Component
 public class GatheringMapper {
 
-    public Gathering requestToEntity(GatheringCreateRequest request, Theme theme) {
+    public Gathering requestToEntity(CreateGatheringRq request, Theme theme) {
         return Gathering.create(
                 theme,
                 request.getName(),
@@ -20,8 +20,8 @@ public class GatheringMapper {
         );
     }
 
-    public Gathering_Content ToContentEntity(GatheringCreateRequest request, Gathering gathering) {
-        return Gathering_Content.create(
+    public GatheringContent ToContentEntity(CreateGatheringRq request, Gathering gathering) {
+        return GatheringContent.create(
                 gathering,
                 request.getContent(),
                 request.getPrice()

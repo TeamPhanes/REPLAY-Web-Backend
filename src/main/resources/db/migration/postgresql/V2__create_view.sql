@@ -23,8 +23,8 @@ SELECT theme_id,
 FROM review
 GROUP BY theme_id;
 
-CREATE OR REPLACE VIEW participate_theme_summary AS
-SELECT p.user_id,
+CREATE OR REPLACE VIEW theme_visit_with_review AS
+SELECT tv.user_id,
        twg.id                                                    AS theme_id,
        twg.address,
        twg.spot,
@@ -46,14 +46,14 @@ SELECT p.user_id,
        r.content,
        r.success,
        CASE WHEN tl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
-FROM participating_theme p
-         JOIN theme_with_genres twg ON p.theme_id = twg.id
+FROM theme_visit tv
+         JOIN theme_with_genres twg ON tv.theme_id = twg.id
          LEFT JOIN review r ON twg.id = r.theme_id
          LEFT JOIN review_avg_rating rar ON twg.id = rar.theme_id
          LEFT JOIN review_count rc ON twg.id = rc.theme_id
-         LEFT JOIN theme_like tl ON p.user_id = tl.user_id AND twg.id = tl.theme_id;
+         LEFT JOIN theme_like tl ON tv.user_id = tl.user_id AND twg.id = tl.theme_id;
 
-CREATE OR REPLACE VIEW participate_gathering_summary AS
+CREATE OR REPLACE VIEW gathering_participant AS
 SELECT gm.user_id,
        g.id                                                           AS gathering_id,
        g.name,
@@ -75,7 +75,7 @@ FROM gathering_member gm
          JOIN theme_with_genres twg ON g.theme_id = twg.id
          LEFT JOIN gathering_like gl ON gm.user_id = gl.user_id AND g.id = gl.gathering_id;
 
-CREATE OR REPLACE VIEW like_gathering_summary AS
+CREATE OR REPLACE VIEW gathering_like_with_participant AS
 SELECT gl.user_id,
        gl.gathering_id,
        g.name,
@@ -97,7 +97,7 @@ FROM gathering_like gl
          JOIN theme_with_genres twg ON g.theme_id = twg.id
          LEFT JOIN gathering_member_count pmc ON g.id = pmc.gathering_id;
 
-CREATE OR REPLACE VIEW like_theme_summary AS
+CREATE OR REPLACE VIEW theme_like_with_review_summary AS
 SELECT tl.user_id,
        twg.id                                                     AS theme_id,
        twg.address,
@@ -113,13 +113,13 @@ SELECT tl.user_id,
        CASE WHEN pt.theme_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_marked
 FROM theme_like tl
          JOIN theme_with_genres twg ON tl.theme_id = twg.id
-         LEFT JOIN participating_theme pt ON tl.user_id = pt.user_id AND tl.theme_id = pt.theme_id
+         LEFT JOIN theme_visit pt ON tl.user_id = pt.user_id AND tl.theme_id = pt.theme_id
          LEFT JOIN review_avg_rating rar ON twg.id = rar.theme_id
          LEFT JOIN review_count rc ON twg.id = rc.theme_id;
 
-CREATE OR REPLACE VIEW participate_gathering_with_like AS
-SELECT pgs.*,
-       COALESCE(pmc.participant_count, 0) AS participant_count
-FROM participate_gathering_summary pgs
-         LEFT JOIN gathering_member_count pmc
-                   ON pgs.gathering_id = pmc.gathering_id;
+CREATE OR REPLACE VIEW gathering_schedule AS
+SELECT gp.*,
+       COALESCE(gmc.participant_count, 0) AS participant_count
+FROM gathering_participant gp
+         LEFT JOIN gathering_member_count gmc
+                   ON gp.gathering_id = gmc.gathering_id;

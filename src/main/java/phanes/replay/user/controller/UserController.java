@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.user.dto.user.request.UpdateMeRq;
-import phanes.replay.user.dto.user.request.UserPlayThemeRq;
 import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.service.UserService;
 
@@ -43,41 +42,32 @@ public class UserController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/schedule")
-    public Map<LocalDate, List<UserScheduleDTO>> mySchedule(@AuthenticationPrincipal Long userId) {
+    public Map<LocalDate, List<UserScheduleRs>> mySchedule(@AuthenticationPrincipal Long userId) {
         return userService.getMySchedule(userId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/theme")
-    public List<UserPlayThemeRq> myPlayTheme(@AuthenticationPrincipal Long userId) {
-        return userService.getMyPlayingTheme(userId);
-    }
-
-    @SecurityRequirement(name = "bearerAuth")
-    @PatchMapping("/me/theme")
-    public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @RequestBody UserPlayThemeRq theme) {
-        userService.updateThemeReview(userId, theme);
+    public List<UserVisitThemeRs> myVisitTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+        return userService.getMyVisitTheme(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/gathering")
     public List<UserParticipatingGatheringRs> myParticipatingGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        PageRequest pageRequest = PageRequest.of(offset, limit);
-        return userService.getMyParticipatingGathering(userId, pageRequest);
+        return userService.getMyParticipatingGathering(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/gathering/like")
     public List<UserLikeGatheringRs> myLikeGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        PageRequest pageRequest = PageRequest.of(offset, limit);
-        return userService.getMyLikeGathering(userId, pageRequest);
+        return userService.getMyLikeGathering(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/theme/like")
     public List<UserLikeThemeRs> myLikeTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        PageRequest pageRequest = PageRequest.of(offset, limit);
-        return userService.getMyLikeTheme(userId, pageRequest);
+        return userService.getMyLikeTheme(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")

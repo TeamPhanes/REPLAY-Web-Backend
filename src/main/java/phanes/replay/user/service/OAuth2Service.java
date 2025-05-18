@@ -3,7 +3,6 @@ package phanes.replay.user.service;
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import phanes.replay.security.JwtProvider;
@@ -11,7 +10,7 @@ import phanes.replay.user.domain.User;
 import phanes.replay.user.domain.enums.SocialType;
 import phanes.replay.user.dto.oauth.SecurityToken;
 import phanes.replay.user.dto.oauth.SocialProfile;
-import phanes.replay.user.repository.UserRepository;
+import phanes.replay.user.persistence.repository.UserRepository;
 import phanes.replay.user.strategy.SocialLoginStrategy;
 
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuth2Service {
