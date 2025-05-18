@@ -92,30 +92,3 @@ public class GatheringController {
     }
 
 }
-
-
-//    @PostMapping
-//    public ResponseEntity<?> createGathering(
-//            @Valid @RequestBody GatheringCreateRequest request,
-//            BindingResult bindingResult) {
-//
-//        // 검사
-//        if (bindingResult.hasErrors()) {
-//            Map<String, String> errors = new HashMap<>();
-//            errors.put("errors", "부적절한 요청입니다.");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-//        }
-//        // 서비스 호출
-//        try {
-//            String result = gatheringService.createGathering(request);
-//            // 성공 응답
-//            Map<String, String> success = new HashMap<>();
-//            success.put("message", result);
-//            return ResponseEntity.ok(success);
-//        } catch (Exception e) {
-//            // 실패 응답
-//            Map<String, String> errors = new HashMap<>();
-//            errors.put("errors", e.getMessage());
-//            return ResponseEntity.badRequest().body(errors);
-//        }
-//    }
