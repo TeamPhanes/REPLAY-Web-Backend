@@ -1,4 +1,4 @@
-package phanes.replay.user.strategy;
+package phanes.replay.user.strategy.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,6 +12,7 @@ import phanes.replay.user.domain.enums.SocialType;
 import phanes.replay.user.dto.oauth.KakaoProfileResponse;
 import phanes.replay.user.dto.oauth.KakaoTokenResponse;
 import phanes.replay.user.dto.oauth.SocialProfile;
+import phanes.replay.user.strategy.SocialLoginStrategy;
 
 @Component
 @RequiredArgsConstructor
