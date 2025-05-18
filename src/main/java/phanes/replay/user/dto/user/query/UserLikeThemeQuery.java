@@ -1,15 +1,15 @@
-package phanes.replay.theme.domain;
+package phanes.replay.user.dto.user.query;
 
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 import lombok.Getter;
-import org.hibernate.annotations.Immutable;
+import lombok.Setter;
 import phanes.replay.theme.domain.enums.Level;
 
-@Entity
 @Getter
-@Immutable
-@Table(name = "like_theme_summary")
-public class ThemeLikeView {
+@Setter
+public class UserLikeThemeQuery {
 
     @Id
     private Long userId;

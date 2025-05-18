@@ -67,8 +67,7 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/theme/like")
     public List<UserLikeThemeRs> myLikeTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        PageRequest pageRequest = PageRequest.of(offset, limit);
-        return userService.getMyLikeTheme(userId, pageRequest);
+        return userService.getMyLikeTheme(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")

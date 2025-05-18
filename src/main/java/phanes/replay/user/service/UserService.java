@@ -106,8 +106,8 @@ public class UserService {
         return userGatheringQueryMapper.findUserLikeGathering(userId, limit, offset).stream().map(userMapper::LikeGatheringViewToUserLikeGatheringDTO).toList();
     }
 
-    public List<UserLikeThemeRs> getMyLikeTheme(Long userId, Pageable pageable) {
-        return themeService.getUserLikeTheme(userId, pageable).stream().map(userMapper::ThemeLikeViewToUserLikeThemeDTO).toList();
+    public List<UserLikeThemeRs> getMyLikeTheme(Long userId, Integer limit, Integer offset) {
+        return userThemeQueryMapper.findUserLikeThemes(userId, limit, offset).stream().map(userMapper::ThemeLikeViewToUserLikeThemeDTO).toList();
     }
 
     public Map<LocalDate, List<UserScheduleDTO>> getMySchedule(Long userId) {

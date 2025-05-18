@@ -6,4 +6,12 @@
         LIMIT #{limit}
         OFFSET #{offset}
     </select>
+
+    <select id="findUserLikeThemes" resultType="phanes.replay.user.dto.user.query.UserLikeThemeQuery">
+        SELECT *
+        FROM theme_like_with_review_summary
+        WHERE user_id = #{userId}
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
 </mapper>
