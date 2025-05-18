@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import phanes.replay.gathering.dto.request.CreateGatheringRq;
 import phanes.replay.gathering.dto.request.GatheringRq;
 import phanes.replay.gathering.dto.response.GatheringRs;
-import phanes.replay.gathering.service.GatheringServiceImpl;
+import phanes.replay.gathering.service.GatheringService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.Map;
 @RequestMapping("/gathering")
 public class GatheringController {
 
-    private final GatheringServiceImpl gatheringService;
+    private final GatheringService gatheringService;
     @PostMapping
     public ResponseEntity<?> creatGathering(
             @RequestBody @Valid CreateGatheringRq request,
