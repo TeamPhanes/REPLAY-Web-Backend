@@ -48,8 +48,8 @@ public class UserController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/theme")
-    public List<UserVisitThemeRs> myVisitTheme(@AuthenticationPrincipal Long userId) {
-        return userService.getMyVisitTheme(userId);
+    public List<UserVisitThemeRs> myVisitTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+        return userService.getMyVisitTheme(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")

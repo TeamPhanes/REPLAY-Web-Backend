@@ -63,8 +63,8 @@ public class UserService {
         userQueryService.save(user);
     }
 
-    public List<UserVisitThemeRs> getMyVisitTheme(Long userId) {
-        List<UserVisitThemeQuery> userPlayingThemeList = userThemeQueryMapper.findUserVisitThemes(userId);
+    public List<UserVisitThemeRs> getMyVisitTheme(Long userId, Integer limit, Integer offset) {
+        Page<UserVisitThemeQuery> userPlayingThemeList = userThemeQueryMapper.findUserVisitThemes(userId, limit, offset);
         return userPlayingThemeList.stream().map(userMapper::toUserVisitThemeRs).toList();
     }
 

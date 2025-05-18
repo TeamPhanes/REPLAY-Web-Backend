@@ -3,5 +3,7 @@
         SELECT *
         FROM theme_visit_with_review
         WHERE user_id = #{userId}
+        LIMIT #{limit}
+        OFFSET #{offset}
     </select>
 </mapper>
