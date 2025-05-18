@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import phanes.replay.exception.UserNotFoundException;
 import phanes.replay.gathering.domain.*;
 import phanes.replay.gathering.service.GatheringCommentService;
 import phanes.replay.gathering.service.GatheringMemberService;
@@ -21,7 +20,6 @@ import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.user.request.UserPlayThemeRq;
 import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.mapper.UserMapper;
-import phanes.replay.user.repository.UserRepository;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -31,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserQueryService userQueryService;
     private final GatheringMemberService gatheringMemberService;
     private final GatheringCommentService gatheringCommentService;
     private final GatheringService gatheringService;
@@ -42,7 +40,7 @@ public class UserService {
     private final UserMapper userMapper;
 
     public UserRs getProfileUserInfo(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = userQueryService.findByUserId(userId);
         Long totalGathering = gatheringMemberService.getTotalGatheringCount(userId);
         Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(userId, Role.HOST);
         Long totalTheme = participatingThemeService.getTotalThemeCount(userId);
@@ -53,10 +51,10 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long userId, MultipartFile image, String nickname, String comment, Boolean emailMark, Boolean genderMark) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = userQueryService.findByUserId(userId);
         String imageUrl = image == null ? user.getProfileImage() : s3Service.uploadImage("user/" + UUID.randomUUID() + ".png", image);
         user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
-        userRepository.save(user);
+        userQueryService.save(user);
     }
 
     public List<UserPlayThemeRq> getMyPlayingTheme(Long userId) {
@@ -65,14 +63,14 @@ public class UserService {
     }
 
     public void updateThemeReview(Long userId, UserPlayThemeRq theme) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = userQueryService.findByUserId(userId);
         Review review = reviewService.getReviewById(theme.getReviewId(), user.getId());
         review.updateReview(theme.getMyRating(), theme.getHint(), theme.getNumberOfPlayer(), theme.getThemeReview(), theme.getLevelReview(), theme.getStoryReview(), theme.getReviewComment(), theme.getSuccess());
         reviewService.updateReview(review);
     }
 
     public OtherUserRs getUserByNickname(String nickname) {
-        User user = userRepository.findByNickname(nickname).orElseThrow(() -> new UserNotFoundException("user not found"));
+        User user = userQueryService.findByUsername(nickname);
         Long totalGathering = gatheringMemberService.getTotalGatheringCount(user.getId());
         Long totalMakeGathering = gatheringMemberService.getTotalMakeGatheringCount(user.getId(), Role.HOST);
         Long totalTheme = participatingThemeService.getTotalThemeCount(user.getId());
