@@ -36,14 +36,14 @@ public interface UserMapper {
     @Mapping(target = "gatheringName", source = "gathering.name")
     UserCommentRs toUserCommentRs(GatheringComment gatheringComment);
 
-    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(likeGatheringView.getGenres().split(\",\")))")
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(userLikeGatheringQuery.getGenres().split(\",\")))")
     UserLikeGatheringRs toUserLikeGatheringRs(UserLikeGatheringQuery userLikeGatheringQuery);
 
-    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(themeLikeView.getGenres().split(\",\")))")
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(userLikeThemeQuery.getGenres().split(\",\")))")
     UserLikeThemeRs toUserLikeThemeRs(UserLikeThemeQuery userLikeThemeQuery);
 
 
-    @Mapping(target = "time", expression = "java(gatheringScheduleView.getDateTime().toLocalTime())")
-    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(gatheringScheduleView.getGenres().split(\",\")))")
+    @Mapping(target = "time", expression = "java(userSchedule.getDateTime().toLocalTime())")
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(userSchedule.getGenres().split(\",\")))")
     UserScheduleRs toUserScheduleRs(UserSchedule userSchedule);
 }
