@@ -1,5 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="phanes.replay.user.persistence.mapper.UserThemeQueryMapper">
-    <select id="findUserVisitThemes" resultType="phanes.replay.user.dto.user.query.UserVisitThemeQuery">
+    <select id="findUserVisitThemes" resultType="UserVisitThemeQuery">
         SELECT *
         FROM theme_visit_with_review
         WHERE user_id = #{userId}
@@ -7,7 +11,7 @@
         OFFSET #{offset}
     </select>
 
-    <select id="findUserLikeThemes" resultType="phanes.replay.user.dto.user.query.UserLikeThemeQuery">
+    <select id="findUserLikeThemes" resultType="UserLikeThemeQuery">
         SELECT *
         FROM theme_like_with_review_summary
         WHERE user_id = #{userId}
