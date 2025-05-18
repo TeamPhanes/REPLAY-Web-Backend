@@ -1,12 +1,18 @@
-package phanes.replay.user.dto.user.query;
+package phanes.replay.theme.dto.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import phanes.replay.theme.domain.enums.Level;
 
+import java.util.List;
+
 @Getter
-@Setter
-public class UserLikeThemeQuery {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class ThemeRs {
 
     private Long themeId;
     private String address;
@@ -15,9 +21,10 @@ public class UserLikeThemeQuery {
     private String themeName;
     private String listImage;
     private Level level;
-    private String genres;
+    private List<String> genres;
     private Integer playtime;
     private Long reviewCount;
     private Double rating;
+    private Boolean isLiked;
     private Boolean isMarked;
 }

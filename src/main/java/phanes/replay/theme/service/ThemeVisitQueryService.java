@@ -2,7 +2,7 @@ package phanes.replay.theme.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import phanes.replay.theme.repository.ThemeVisitRepository;
+import phanes.replay.theme.persistence.repository.ThemeVisitRepository;
 
 @Service
 @RequiredArgsConstructor

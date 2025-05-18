@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import phanes.replay.user.dto.user.request.UpdateMeRq;
+import phanes.replay.user.dto.user.request.UserUpdateRq;
 import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.service.UserService;
 
@@ -31,8 +31,8 @@ public class UserController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PatchMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void updateMe(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid UpdateMeRq updateMeRq) {
-        userService.updateUser(userId, updateMeRq.getImage(), updateMeRq.getNickname(), updateMeRq.getComment(), Boolean.parseBoolean(updateMeRq.getEmailMark()), Boolean.parseBoolean(updateMeRq.getGenderMark()));
+    public void updateMe(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid UserUpdateRq userUpdateRq) {
+        userService.updateUser(userId, userUpdateRq.getImage(), userUpdateRq.getNickname(), userUpdateRq.getComment(), Boolean.parseBoolean(userUpdateRq.getEmailMark()), Boolean.parseBoolean(userUpdateRq.getGenderMark()));
     }
 
     @GetMapping("/{nickname}")

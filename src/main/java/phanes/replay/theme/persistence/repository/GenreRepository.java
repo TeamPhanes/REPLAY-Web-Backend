@@ -1,4 +1,4 @@
-package phanes.replay.theme.repository;
+package phanes.replay.theme.persistence.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import phanes.replay.theme.domain.Genre;

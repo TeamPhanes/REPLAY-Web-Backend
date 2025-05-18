@@ -1,6 +1,5 @@
 package phanes.replay.user.dto.user.query;
 
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 import phanes.replay.theme.domain.enums.Level;
@@ -11,8 +10,6 @@ import java.time.LocalDateTime;
 @Setter
 public class UserParticipantGatheringQuery {
 
-    @Id
-    private Long userId;
     private Long gatheringId;
     private String name;
     private String address;

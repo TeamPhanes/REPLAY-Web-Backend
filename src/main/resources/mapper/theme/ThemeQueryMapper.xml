@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="phanes.replay.user.persistence.mapper.UserGatheringQueryMapper">
+    <select id="findAllByKeywordAndAddress" resultType="phanes.replay.theme.dto.query.ThemeQuery">
+        SELECT *
+        FROM theme_list_with_review_and_liked_and_marked tl
+        <where>
+            user_id = #{userId}
+            <if test="city != null">AND city = #{city}</if>
+            <if test="state != null">AND state = #{state}</if>
+            <if test="keyword != null">AND tl.theme_name LIKE CONCAT('%', #{keyword}, '%')</if>
+            <if test="genre != null">
+                AND EXISTS (
+                SELECT 1
+                FROM genre g
+                WHERE g.theme_id = tl.theme_id
+                AND g.name = #{genre}
+                )
+            </if>
+        </where>
+        <choose>
+            <when test="sortBy == 'rating'">
+                ORDER BY rating DESC
+            </when>
+            <when test="sortBy == 'likes'">
+                ORDER BY like_count DESC
+            </when>
+            <when test="sortBy == 'reviews'">
+                ORDER BY review_count DESC
+            </when>
+            <otherwise>
+                ORDER BY id DESC
+            </otherwise>
+        </choose>
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+</mapper>

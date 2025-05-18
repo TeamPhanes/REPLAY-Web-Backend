@@ -1,28 +1,24 @@
-package phanes.replay.user.dto.user.query;
+package phanes.replay.theme.dto.query;
 
 import lombok.Getter;
 import lombok.Setter;
 import phanes.replay.theme.domain.enums.Level;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
-public class UserScheduleQuery {
+public class ThemeQuery {
 
-    private Long gatheringId;
-    private String name;
+    private Long themeId;
     private String address;
     private String spot;
     private String cafe;
-    private Long themeId;
     private String themeName;
     private String listImage;
-    private String genres;
     private Level level;
+    private String genres;
     private Integer playtime;
-    private LocalDateTime dateTime;
-    private Integer capacity;
-    private Integer participantCount;
+    private Long reviewCount;
+    private Double rating;
     private Boolean isLiked;
+    private Boolean isMarked;
 }

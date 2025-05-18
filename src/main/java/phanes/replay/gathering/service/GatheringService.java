@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringContent;
 import phanes.replay.gathering.domain.GatheringMember;
-import phanes.replay.gathering.dto.request.CreateGatheringRq;
+import phanes.replay.gathering.dto.request.GatheringCreateRq;
 import phanes.replay.gathering.dto.request.GatheringRq;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.repository.GatheringContentRepository;
@@ -19,8 +19,8 @@ import phanes.replay.gathering.repository.GatheringMemberRepository;
 import phanes.replay.gathering.repository.GatheringRepository;
 import phanes.replay.theme.domain.Genre;
 import phanes.replay.theme.domain.Theme;
-import phanes.replay.theme.repository.GenreRepository;
-import phanes.replay.theme.repository.ThemeRepository;
+import phanes.replay.theme.persistence.repository.GenreRepository;
+import phanes.replay.theme.persistence.repository.ThemeRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.persistence.repository.UserRepository;
 
@@ -42,7 +42,7 @@ public class GatheringService {
     private final GatheringMapper gatheringMapper;
 
     @Transactional
-    public void createGathering(CreateGatheringRq request, Long userId) {
+    public void createGathering(GatheringCreateRq request, Long userId) {
         // 엔티티 조회
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User Not Found"));
         if (user == null) {
