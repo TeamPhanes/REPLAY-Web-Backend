@@ -1,7 +1,6 @@
 package phanes.replay.user.dto.user.response;
 
 import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,8 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserParticipatingGatheringRs {
-    @JsonIgnore
-    private Long userId;
     private Long gatheringId;
     private String name;
     private String address;
