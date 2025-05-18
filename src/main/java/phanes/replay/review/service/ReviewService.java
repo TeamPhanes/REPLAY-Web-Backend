@@ -17,7 +17,7 @@ import phanes.replay.review.mapper.ReviewMapper;
 import phanes.replay.review.repository.ReviewImageRepository;
 import phanes.replay.review.repository.ReviewRepository;
 import phanes.replay.theme.domain.Theme;
-import phanes.replay.theme.service.ThemeService;
+import phanes.replay.theme.service.ThemeQueryService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
 
@@ -35,7 +35,7 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final UserQueryService userQueryService;
     private final ReviewQueryService reviewQueryService;
-    private final ThemeService themeService;
+    private final ThemeQueryService themeQueryService;
     private final S3Service s3Service;
     private final ReviewImageRepository reviewImageRepository;
 
@@ -53,7 +53,7 @@ public class ReviewService {
     @Transactional
     public void createReview(Long userId, ReviewCreateRq reviewCreateRq) {
         User user = userQueryService.findByUserId(userId);
-        Theme theme = themeService.getTheme(reviewCreateRq.getThemeId());
+        Theme theme = themeQueryService.getTheme(reviewCreateRq.getThemeId());
         Review review = Review.builder()
                 .content(reviewCreateRq.getContent())
                 .success(Boolean.parseBoolean(reviewCreateRq.getSuccess()))

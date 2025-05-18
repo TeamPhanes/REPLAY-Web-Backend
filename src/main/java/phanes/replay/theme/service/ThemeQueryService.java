@@ -8,7 +8,7 @@ import phanes.replay.theme.repository.ThemeRepository;
 
 @Service
 @RequiredArgsConstructor
-public class ThemeService {
+public class ThemeQueryService {
 
     private final ThemeRepository themeRepository;
 
