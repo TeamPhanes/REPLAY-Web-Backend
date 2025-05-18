@@ -42,7 +42,7 @@ public class UserController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/schedule")
-    public Map<LocalDate, List<UserScheduleDTO>> mySchedule(@AuthenticationPrincipal Long userId) {
+    public Map<LocalDate, List<UserScheduleRs>> mySchedule(@AuthenticationPrincipal Long userId) {
         return userService.getMySchedule(userId);
     }
 

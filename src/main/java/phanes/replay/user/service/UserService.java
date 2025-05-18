@@ -48,7 +48,7 @@ public class UserService {
         Long totalTheme = themeVisitQueryService.countByUserId(userId);
         Long successCount = reviewQueryService.countBySuccess(true);
         Long failCount = reviewQueryService.countBySuccess(false);
-        return userMapper.UserToUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
+        return userMapper.toUserRs(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
     @Transactional
@@ -71,14 +71,14 @@ public class UserService {
         Long totalTheme = themeVisitQueryService.countByUserId(user.getId());
         Long successCount = reviewQueryService.countBySuccess(true);
         Long failCount = reviewQueryService.countBySuccess(false);
-        return userMapper.UserToOtherUserDTO(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
+        return userMapper.toOtherUserRs(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
     public List<UserParticipatingGatheringRs> getMyParticipatingGathering(Long userId, Integer limit, Integer offset) {
         List<UserParticipantGatheringQuery> userParticipantGatheringQuery = userGatheringQueryMapper.findUserParticipantGathering(userId, limit, offset);
         Set<Long> gatheringIdList = userParticipantGatheringQuery.stream().map(UserParticipantGatheringQuery::getGatheringId).collect(Collectors.toSet());
         Map<Long, List<GatheringMember>> collect = gatheringMemberQueryService.getMemberList(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
-        List<UserParticipatingGatheringRs> myParticipatingGathering = userParticipantGatheringQuery.stream().map(userMapper::ParticipatingGatheringViewToParticipatingGatheringDTO).toList();
+        List<UserParticipatingGatheringRs> myParticipatingGathering = userParticipantGatheringQuery.stream().map(userMapper::toUserParticipatingGatheringRs).toList();
         myParticipatingGathering.forEach(pg ->
                 pg.setParticipants(
                         collect.get(pg.getGatheringId()).stream()
@@ -94,24 +94,22 @@ public class UserService {
     public Map<LocalDate, List<UserCommentRs>> getMyComment(Long userId, Pageable pageable) {
         Page<GatheringComment> myComment = gatheringCommentQueryService.getMyComment(userId, pageable);
         return myComment.stream()
-                .map(userMapper::GatheringCommentToUserCommentDTO)
+                .map(userMapper::toUserCommentRs)
                 .collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate(), LinkedHashMap::new, Collectors.toList()));
     }
 
     public List<UserLikeGatheringRs> getMyLikeGathering(Long userId, Integer limit, Integer offset) {
-        return userGatheringQueryMapper.findUserLikeGathering(userId, limit, offset).stream().map(userMapper::LikeGatheringViewToUserLikeGatheringDTO).toList();
+        return userGatheringQueryMapper.findUserLikeGathering(userId, limit, offset).stream().map(userMapper::toUserLikeGatheringRs).toList();
     }
 
     public List<UserLikeThemeRs> getMyLikeTheme(Long userId, Integer limit, Integer offset) {
-        return userThemeQueryMapper.findUserLikeThemes(userId, limit, offset).stream().map(userMapper::ThemeLikeViewToUserLikeThemeDTO).toList();
+        return userThemeQueryMapper.findUserLikeThemes(userId, limit, offset).stream().map(userMapper::toUserLikeThemeRs).toList();
     }
 
-    public Map<LocalDate, List<UserScheduleDTO>> getMySchedule(Long userId) {
+    public Map<LocalDate, List<UserScheduleRs>> getMySchedule(Long userId) {
         List<UserSchedule> userSchedule = userGatheringQueryMapper.findUserSchedule(userId);
-        return userSchedule
-                .stream()
+        return userSchedule.stream()
                 .collect(Collectors.groupingBy(gsv -> gsv.getDateTime().toLocalDate(),
-                        Collectors.mapping(userMapper::GatheringScheduleViewToUserScheduleDTO,
-                                Collectors.toList())));
+                        Collectors.mapping(userMapper::toUserScheduleRs, Collectors.toList())));
     }
 }

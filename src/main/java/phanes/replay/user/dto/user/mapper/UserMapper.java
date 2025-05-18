@@ -14,36 +14,36 @@ public interface UserMapper {
 
     @Mapping(source = "user.profileComment", target = "comment")
     @Mapping(source = "user.profileImage", target = "image")
-    UserRs UserToUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
+    UserRs toUserRs(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
 
     @Mapping(source = "user.profileComment", target = "comment")
     @Mapping(source = "user.profileImage", target = "image")
     @Mapping(target = "gender", expression = "java(user.getGenderMark() ? user.getGender() : \"\")")
     @Mapping(target = "email", expression = "java(user.getEmailMark() ? user.getEmail() : \"\")")
-    OtherUserRs UserToOtherUserDTO(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
+    OtherUserRs toOtherUserRs(User user, Long totalGathering, Long totalMakeGathering, Long totalTheme, Long successCount, Long failCount, List<String> representAchievement);
 
     @Mapping(source = "name", target = "themeName")
-    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingThemeView.getGenres().split(\",\")))")
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(userVisitThemeQuery.getGenres().split(\",\")))")
     @Mapping(source = "score", target = "myRating")
     @Mapping(source = "content", target = "reviewComment")
     UserVisitThemeRs toUserVisitThemeRs(UserVisitThemeQuery userVisitThemeQuery);
 
     @Mapping(target = "participants", ignore = true)
-    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(participatingGatheringView.getGenres().split(\",\")))")
-    UserParticipatingGatheringRs ParticipatingGatheringViewToParticipatingGatheringDTO(UserParticipantGatheringQuery userParticipantGatheringQuery);
+    @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(userParticipantGatheringQuery.getGenres().split(\",\")))")
+    UserParticipatingGatheringRs toUserParticipatingGatheringRs(UserParticipantGatheringQuery userParticipantGatheringQuery);
 
     @Mapping(target = "gatheringId", source = "gathering.id")
     @Mapping(target = "gatheringName", source = "gathering.name")
-    UserCommentRs GatheringCommentToUserCommentDTO(GatheringComment gatheringComment);
+    UserCommentRs toUserCommentRs(GatheringComment gatheringComment);
 
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(likeGatheringView.getGenres().split(\",\")))")
-    UserLikeGatheringRs LikeGatheringViewToUserLikeGatheringDTO(UserLikeGatheringQuery userLikeGatheringQuery);
+    UserLikeGatheringRs toUserLikeGatheringRs(UserLikeGatheringQuery userLikeGatheringQuery);
 
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(themeLikeView.getGenres().split(\",\")))")
-    UserLikeThemeRs ThemeLikeViewToUserLikeThemeDTO(UserLikeThemeQuery userLikeThemeQuery);
+    UserLikeThemeRs toUserLikeThemeRs(UserLikeThemeQuery userLikeThemeQuery);
 
 
     @Mapping(target = "time", expression = "java(gatheringScheduleView.getDateTime().toLocalTime())")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(gatheringScheduleView.getGenres().split(\",\")))")
-    UserScheduleDTO GatheringScheduleViewToUserScheduleDTO(UserSchedule userSchedule);
+    UserScheduleRs toUserScheduleRs(UserSchedule userSchedule);
 }
