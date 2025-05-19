@@ -108,7 +108,7 @@ CREATE TABLE gathering
     date_time          TIMESTAMP   NOT NULL,
     registration_start TIMESTAMP   NOT NULL,
     registration_end   TIMESTAMP   NOT NULL,
-    list_image         VARCHAR(200),
+    image              VARCHAR(200),
     created_at         TIMESTAMP,
     updated_at         TIMESTAMP,
     FOREIGN KEY (theme_id) REFERENCES theme (id)
@@ -130,6 +130,7 @@ CREATE TABLE gathering_content
     content      VARCHAR(255) DEFAULT '모임 소개글입니다',
     gathering_id BIGINT,
     price        VARCHAR(8),
+    image        VARCHAR(200),
     FOREIGN KEY (gathering_id) REFERENCES gathering (id)
 );
 

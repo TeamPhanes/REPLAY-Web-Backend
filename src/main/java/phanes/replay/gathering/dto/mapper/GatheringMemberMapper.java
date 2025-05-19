@@ -1,4 +1,4 @@
-package phanes.replay.gathering.mapper;
+package phanes.replay.gathering.dto.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

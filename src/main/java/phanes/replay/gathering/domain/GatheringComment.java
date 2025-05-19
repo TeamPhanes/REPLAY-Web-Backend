@@ -16,18 +16,12 @@ public class GatheringComment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Gathering gathering;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-
-    @Column
-    private String content; // 댓글내용
-
-    @Column
-    private Long parentId; // 부모 댓글
+    private String content;
+    private Long parentId;
 
     public void updateComment(String content) {
         this.content = content;

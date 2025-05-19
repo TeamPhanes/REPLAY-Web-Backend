@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import phanes.replay.gathering.domain.GatheringComment;
-import phanes.replay.gathering.repository.GatheringCommentRepository;
+import phanes.replay.gathering.persistence.repository.GatheringCommentRepository;
 
 @Service
 @RequiredArgsConstructor

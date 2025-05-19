@@ -1,31 +1,27 @@
-package phanes.replay.gathering.dto.response;
+package phanes.replay.gathering.dto.query;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 import phanes.replay.theme.domain.enums.Level;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class GatheringRs {
+@Setter
+public class GatheringQuery {
 
     private Long gatheringId;
     private String name;
+    private String listImage;
+    private String genres;
+    private Integer playtime;
     private String address;
     private String cafe;
     private String spot;
-    private String listImage;
-    private List<String> genres;
-    private Integer playtime;
+    private Level level;
     private LocalDateTime dateTime;
+    private LocalDateTime registrationEnd;
     private Integer capacity;
     private Integer participantCount;
-    private Level level;
     private Boolean isLiked;
 }
