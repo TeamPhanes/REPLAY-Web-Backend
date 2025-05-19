@@ -116,7 +116,8 @@ CREATE TABLE IF NOT EXISTS gathering_content
     id           BIGSERIAL PRIMARY KEY,
     content      VARCHAR(255) DEFAULT '모임 소개글입니다',
     gathering_id BIGINT REFERENCES gathering (id),
-    price        VARCHAR(8)
+    price        VARCHAR(8),
+    image        VARCHAR(200)
 );
 
 CREATE TABLE IF NOT EXISTS gathering_comment

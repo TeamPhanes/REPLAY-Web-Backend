@@ -130,6 +130,7 @@ CREATE TABLE gathering_content
     content      VARCHAR(255) DEFAULT '모임 소개글입니다',
     gathering_id BIGINT,
     price        VARCHAR(8),
+    image        VARCHAR(200),
     FOREIGN KEY (gathering_id) REFERENCES gathering (id)
 );
 
