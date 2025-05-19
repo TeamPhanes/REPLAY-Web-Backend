@@ -2,6 +2,7 @@ package phanes.replay.gathering.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import phanes.replay.exception.HostNotFoundException;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.persistence.repository.GatheringMemberRepository;
@@ -29,5 +30,9 @@ public class GatheringMemberQueryService {
 
     public void save(GatheringMember gatheringMember) {
         gatheringMemberRepository.save(gatheringMember);
+    }
+
+    public GatheringMember findHostByUserIdAndGatheringId(Long userId, Long gatheringId) {
+        return gatheringMemberRepository.findByUserIdAndGatheringIdAndRoleEquals(userId, gatheringId, Role.HOST).orElseThrow(() -> new HostNotFoundException("host not found"));
     }
 }

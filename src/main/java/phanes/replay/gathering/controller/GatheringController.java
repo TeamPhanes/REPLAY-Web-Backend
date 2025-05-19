@@ -2,10 +2,10 @@ package phanes.replay.gathering.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.gathering.dto.request.GatheringCreateRq;
+import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.service.GatheringService;
@@ -31,8 +31,13 @@ public class GatheringController {
         return gatheringService.getGatheringDetail(gatheringId);
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void createGathering(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid GatheringCreateRq gatheringCreateRq) {
+    @PostMapping
+    public void createGathering(@AuthenticationPrincipal Long userId, @RequestBody @Valid GatheringCreateRq gatheringCreateRq) {
         gatheringService.createGathering(userId, gatheringCreateRq);
+    }
+
+    @PatchMapping("/{gatheringId}")
+    public void updateGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId, @RequestBody @Valid GatheringUpdateRq gatheringUpdateRq) {
+        gatheringService.updateGathering(userId, gatheringId, gatheringUpdateRq);
     }
 }

@@ -9,6 +9,7 @@ import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.mapper.GatheringMapper;
 import phanes.replay.gathering.dto.request.GatheringCreateRq;
+import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.persistence.mapper.GatheringQueryMapper;
@@ -74,5 +75,15 @@ public class GatheringService {
         gatheringQueryService.save(gathering);
         gatheringContentQueryService.save(gatheringContent);
         gatheringMemberQueryService.save(gatheringMember);
+    }
+
+    public void updateGathering(Long userId, Long gatheringId, GatheringUpdateRq gatheringUpdateRq) {
+        GatheringMember hostGathering = gatheringMemberQueryService.findHostByUserIdAndGatheringId(userId, gatheringId);
+        Gathering gathering = hostGathering.getGathering();
+        GatheringContent gatheringContent = gatheringContentQueryService.findById(gatheringId);
+        gathering.updateGathering(gatheringUpdateRq);
+        gatheringContent.updateGatheringContent(gatheringUpdateRq);
+        gatheringQueryService.save(gathering);
+        gatheringContentQueryService.save(gatheringContent);
     }
 }
