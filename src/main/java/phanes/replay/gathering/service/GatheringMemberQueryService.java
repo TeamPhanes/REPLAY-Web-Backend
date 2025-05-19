@@ -26,4 +26,8 @@ public class GatheringMemberQueryService {
     public List<GatheringMember> getMemberList(Set<Long> gatheringIdList) {
         return gatheringMemberRepository.findAllByMember(gatheringIdList);
     }
+
+    public void save(GatheringMember gatheringMember) {
+        gatheringMemberRepository.save(gatheringMember);
+    }
 }

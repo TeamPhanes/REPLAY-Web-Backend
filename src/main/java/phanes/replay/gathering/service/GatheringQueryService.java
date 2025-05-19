@@ -15,4 +15,8 @@ public class GatheringQueryService {
     public Gathering findById(Long id) {
         return gatheringRepository.findById(id).orElseThrow(() -> new GatheringNotFoundException("Gathering Not Found"));
     }
+
+    public void save(Gathering gatheringContent) {
+        gatheringRepository.save(gatheringContent);
+    }
 }
