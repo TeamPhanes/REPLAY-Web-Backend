@@ -151,3 +151,23 @@ FROM theme_with_genres twg
          LEFT JOIN theme_like tl ON tl.theme_id = twg.id
          LEFT JOIN theme_visit tv ON tv.theme_id = twg.id AND tv.user_id = tl.user_id
          LEFT JOIN theme_like_count tlc ON tlc.theme_id = twg.id;
+
+CREATE OR REPLACE VIEW gathering_list_with_theme_and_participant_and_liked AS
+SELECT g.id AS gathering_id,
+       g.name,
+       twg.image AS list_image,
+       twg.genres,
+       twg.playtime,
+       twg.address,
+       twg.cafe,
+       twg.spot,
+       twg.level,
+       g.date_time,
+       g.registration_end,
+       g.capacity,
+       gmc.participant_count,
+       CASE WHEN gl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
+FROM gathering g
+         LEFT JOIN theme_with_genres twg ON g.theme_id = twg.id
+         LEFT JOIN gathering_like gl ON g.id = gl.gathering_id
+         LEFT JOIN gathering_member_count gmc on g.id = gmc.gathering_id
