@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS gathering
     date_time          TIMESTAMP   NOT NULL,
     registration_start TIMESTAMP   NOT NULL,
     registration_end   TIMESTAMP   NOT NULL,
-    list_image         VARCHAR(200),
+    image              VARCHAR(200),
     created_at         TIMESTAMP,
     updated_at         TIMESTAMP
 );
