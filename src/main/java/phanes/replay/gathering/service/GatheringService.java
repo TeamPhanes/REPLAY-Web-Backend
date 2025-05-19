@@ -86,4 +86,12 @@ public class GatheringService {
         gatheringQueryService.save(gathering);
         gatheringContentQueryService.save(gatheringContent);
     }
+
+    public void deleteGathering(Long userId, Long gatheringId) {
+        GatheringMember hostGathering = gatheringMemberQueryService.findHostByUserIdAndGatheringId(userId, gatheringId);
+        Gathering gathering = hostGathering.getGathering();
+        GatheringContent gatheringContent = gatheringContentQueryService.findById(gatheringId);
+        gatheringQueryService.delete(gathering);
+        gatheringContentQueryService.delete(gatheringContent);
+    }
 }

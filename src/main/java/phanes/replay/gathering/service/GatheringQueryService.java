@@ -19,4 +19,8 @@ public class GatheringQueryService {
     public void save(Gathering gatheringContent) {
         gatheringRepository.save(gatheringContent);
     }
+
+    public void delete(Gathering gathering) {
+        gatheringRepository.delete(gathering);
+    }
 }

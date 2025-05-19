@@ -40,4 +40,9 @@ public class GatheringController {
     public void updateGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId, @RequestBody @Valid GatheringUpdateRq gatheringUpdateRq) {
         gatheringService.updateGathering(userId, gatheringId, gatheringUpdateRq);
     }
+
+    @DeleteMapping("/{gatheringId}")
+    public void deleteGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        gatheringService.deleteGathering(userId, gatheringId);
+    }
 }

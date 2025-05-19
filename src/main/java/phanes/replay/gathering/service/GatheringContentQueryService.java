@@ -19,4 +19,8 @@ public class GatheringContentQueryService {
     public GatheringContent findById(Long gatheringId) {
         return gatheringContentRepository.findById(gatheringId).orElseThrow(() -> new GatheringNotFoundException("gathering not found"));
     }
+
+    public void delete(GatheringContent gatheringContent) {
+        gatheringContentRepository.delete(gatheringContent);
+    }
 }
