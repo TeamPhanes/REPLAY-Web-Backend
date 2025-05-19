@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import phanes.replay.exception.GatheringNotFoundException;
 import phanes.replay.gathering.domain.Gathering;
-import phanes.replay.gathering.repository.GatheringRepository;
+import phanes.replay.gathering.persistence.repository.GatheringRepository;
 
 @Service
 @RequiredArgsConstructor

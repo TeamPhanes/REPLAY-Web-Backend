@@ -1,36 +1,32 @@
 package phanes.replay.gathering.dto.response;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import phanes.replay.theme.domain.enums.Level;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class GatheringRs {
 
-    private Long gatheringId; // 모임 아이디
-    private String listImage; // 목록 이미지
-    private List<String> genres = new ArrayList<>(); // 장르
-    private Integer playtime; // 플레이 타임
-    private String roomEscapeName; // 방탈출테마 이름
-    private String name; // 모임 이름
-    private String spot; // 지점 이름
-    private String dateTime; // 모임 날짜
-    private Integer capacity; // 정원
-    private Integer participantCount; // 참여 인원
-    private String address; // 상세 주소
-    @Enumerated(EnumType.STRING)
-    @ColumnDefault("'NORMAL'")
-    private Level level; // 난이도
-    private Boolean isLiked; // 찜 여부
+    private Long gatheringId;
+    private String name;
+    private String address;
+    private String cafe;
+    private String spot;
+    private String listImage;
+    private List<String> genres;
+    private Integer playtime;
+    private String themeName;
+    private LocalDateTime dateTime;
+    private Integer capacity;
+    private Integer participantCount;
+    private Level level;
+    private Boolean isLiked;
 }

@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
+import phanes.replay.gathering.dto.mapper.GatheringMemberMapper;
 import phanes.replay.gathering.dto.response.GatheringMemberRs;
-import phanes.replay.gathering.mapper.GatheringMemberMapper;
-import phanes.replay.gathering.repository.GatheringMemberRepository;
+import phanes.replay.gathering.persistence.repository.GatheringMemberRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
 

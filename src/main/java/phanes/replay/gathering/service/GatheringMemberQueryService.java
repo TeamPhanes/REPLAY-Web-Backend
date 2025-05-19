@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
-import phanes.replay.gathering.repository.GatheringMemberRepository;
+import phanes.replay.gathering.persistence.repository.GatheringMemberRepository;
 
 import java.util.List;
 import java.util.Set;

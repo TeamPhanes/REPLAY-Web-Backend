@@ -10,7 +10,7 @@ import phanes.replay.comment.mapper.CommentMapper;
 import phanes.replay.exception.CommentNotFoundException;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringComment;
-import phanes.replay.gathering.repository.GatheringCommentRepository;
+import phanes.replay.gathering.persistence.repository.GatheringCommentRepository;
 import phanes.replay.gathering.service.GatheringQueryService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
