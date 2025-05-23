@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="phanes.replay.user.persistence.mapper.UserGatheringQueryMapper">
+<mapper namespace="phanes.replay.theme.persistence.mapper.ThemeQueryMapper">
     <select id="findAllByKeywordAndAddress" resultType="phanes.replay.theme.dto.query.ThemeQuery">
         SELECT *
         FROM theme_list_with_review_and_liked_and_marked tl
