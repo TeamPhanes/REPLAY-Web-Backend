@@ -163,7 +163,9 @@ SELECT g.id                               AS gathering_id,
        g.date_time,
        g.registration_end,
        g.capacity,
-       COALESCE(gmc.participant_count, 0) AS participant_count
+       COALESCE(gmc.participant_count, 0) AS participant_count,
+       twg.city,
+       twg.state
 FROM gathering g
          LEFT JOIN theme_with_genres twg ON g.theme_id = twg.id
          LEFT JOIN gathering_member_count gmc on g.id = gmc.gathering_id;

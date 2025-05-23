@@ -11,12 +11,12 @@
         <where>
             <if test="city != null">AND city = #{city}</if>
             <if test="state != null">AND state = #{state}</if>
-            <if test="keyword != null">AND tl.theme_name LIKE CONCAT('%', #{keyword}, '%')</if>
+            <if test="keyword != null">AND gltp.name LIKE CONCAT('%', #{keyword}, '%')</if>
             <if test="genre != null">
                 AND EXISTS (
                 SELECT 1
                 FROM genre g
-                WHERE g.theme_id = tl.theme_id
+                WHERE g.theme_id = gltp.theme_id
                 AND g.name = #{genre}
                 )
             </if>
