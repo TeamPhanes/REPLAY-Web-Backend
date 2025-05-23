@@ -150,10 +150,10 @@ FROM theme_with_genres twg
          LEFT JOIN theme_like_count tlc ON tlc.theme_id = twg.id;
 
 CREATE OR REPLACE VIEW gathering_list_with_theme_and_participant AS
-SELECT g.id      AS gathering_id,
+SELECT g.id                               AS gathering_id,
        g.name,
-       twg.id    AS theme_id,
-       twg.image AS list_image,
+       twg.id                             AS theme_id,
+       twg.image                          AS list_image,
        twg.genres,
        twg.playtime,
        twg.address,
@@ -163,7 +163,7 @@ SELECT g.id      AS gathering_id,
        g.date_time,
        g.registration_end,
        g.capacity,
-       gmc.participant_count
+       COALESCE(gmc.participant_count, 0) AS participant_count
 FROM gathering g
          LEFT JOIN theme_with_genres twg ON g.theme_id = twg.id
          LEFT JOIN gathering_member_count gmc on g.id = gmc.gathering_id;
