@@ -4,10 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="phanes.replay.gathering.persistence.mapper.GatheringQueryMapper">
     <select id="findAllByKeywordAndAddress" resultType="phanes.replay.gathering.dto.query.GatheringQuery">
-        SELECT *
-        FROM gathering_list_with_theme_and_participant_and_liked gl
+        SELECT gltp.*,
+        CASE WHEN gl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
+        FROM gathering_list_with_theme_and_participant gltp
+        LEFT JOIN gathering_like gl ON gltp.gathering_id = gl.gathering_id AND gl.user_id = #{userId}
         <where>
-            user_id = #{userId}
             <if test="city != null">AND city = #{city}</if>
             <if test="state != null">AND state = #{state}</if>
             <if test="keyword != null">AND tl.theme_name LIKE CONCAT('%', #{keyword}, '%')</if>

@@ -130,18 +130,18 @@ FROM gathering_participant gp
                    ON gp.gathering_id = gmc.gathering_id;
 
 CREATE OR REPLACE VIEW theme_list_with_review AS
-SELECT twg.id                                                    AS theme_id,
-       twg.name                                                  AS theme_name,
+SELECT twg.id                       AS theme_id,
+       twg.name                     AS theme_name,
        twg.address,
        twg.spot,
        twg.cafe,
        twg.level,
        twg.playtime,
-       twg.image                                                 AS list_image,
+       twg.image                    AS list_image,
        twg.genres,
-       COALESCE(rar.rating, 0)                                   AS rating,
-       COALESCE(rc.review_count, 0)                              AS review_count,
-       COALESCE(tlc.like_count, 0)                               AS like_count,
+       COALESCE(rar.rating, 0)      AS rating,
+       COALESCE(rc.review_count, 0) AS review_count,
+       COALESCE(tlc.like_count, 0)  AS like_count,
        twg.city,
        twg.state
 FROM theme_with_genres twg
@@ -149,10 +149,10 @@ FROM theme_with_genres twg
          LEFT JOIN review_count rc ON twg.id = rc.theme_id
          LEFT JOIN theme_like_count tlc ON tlc.theme_id = twg.id;
 
-CREATE OR REPLACE VIEW gathering_list_with_theme_and_participant_and_liked AS
-SELECT g.id AS gathering_id,
+CREATE OR REPLACE VIEW gathering_list_with_theme_and_participant AS
+SELECT g.id      AS gathering_id,
        g.name,
-       twg.id AS theme_id,
+       twg.id    AS theme_id,
        twg.image AS list_image,
        twg.genres,
        twg.playtime,
@@ -163,9 +163,7 @@ SELECT g.id AS gathering_id,
        g.date_time,
        g.registration_end,
        g.capacity,
-       gmc.participant_count,
-       CASE WHEN gl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
+       gmc.participant_count
 FROM gathering g
-LEFT JOIN theme_with_genres twg ON g.theme_id = twg.id
-LEFT JOIN gathering_like gl ON g.id = gl.gathering_id
-LEFT JOIN gathering_member_count gmc on g.id = gmc.gathering_id
+         LEFT JOIN theme_with_genres twg ON g.theme_id = twg.id
+         LEFT JOIN gathering_member_count gmc on g.id = gmc.gathering_id;
