@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        PUBLIC "-//myba
+        tis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="phanes.replay.user.persistence.mapper.UserGatheringQueryMapper">
+<mapper namespace="phanes.replay.theme.persistence.mapper.ThemeQueryMapper">
     <select id="findAllByKeywordAndAddress" resultType="phanes.replay.theme.dto.query.ThemeQuery">
-        SELECT *
-        FROM theme_list_with_review_and_liked_and_marked tl
+        SELECT tlr.*,
+            CASE WHEN tl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked,
+            CASE WHEN tv.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_marked
+        FROM theme_list_with_review tlr
+        LEFT JOIN theme_like tl ON tl.theme_id = tlr.theme_id AND tl.user_id = #{userId}
+        LEFT JOIN theme_visit tv ON tv.theme_id = tlr.theme_id AND tv.user_id = #{userId}
         <where>
-            user_id = #{userId}
             <if test="city != null">AND city = #{city}</if>
             <if test="state != null">AND state = #{state}</if>
-            <if test="keyword != null">AND tl.theme_name LIKE CONCAT('%', #{keyword}, '%')</if>
+            <if test="keyword != null">AND tlr.theme_name LIKE CONCAT('%', #{keyword}, '%')</if>
             <if test="genre != null">
                 AND EXISTS (
                 SELECT 1
                 FROM genre g
-                WHERE g.theme_id = tl.theme_id
+                WHERE g.theme_id = tlr.theme_id
                 AND g.name = #{genre}
                 )
             </if>
