@@ -10,6 +10,7 @@ import phanes.replay.gathering.dto.response.GatheringRs;
 @Mapper(componentModel = "spring")
 public interface GatheringMapper {
 
+    @Mapping(target = "participantCount", source = "participantCount", defaultValue = "0")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(gatheringQuery.getGenres().split(\",\")))")
     GatheringRs toGatheringRs(GatheringQuery gatheringQuery);
 
