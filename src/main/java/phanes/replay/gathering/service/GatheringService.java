@@ -38,8 +38,8 @@ public class GatheringService {
     private final UserQueryService userQueryService;
     private final GatheringMapper gatheringMapper;
 
-    public List<GatheringRs> getGatheringList(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime date, String genre, Integer limit, Integer offset) {
-        return gatheringQueryMapper.findAllByKeywordAndAddress(userId, sortBy, keyword, city, state, date, genre, limit, offset).stream()
+    public List<GatheringRs> getGatheringList(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset) {
+        return gatheringQueryMapper.findAllByKeywordAndAddress(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset).stream()
                 .map(gatheringMapper::toGatheringRs).toList();
     }
 

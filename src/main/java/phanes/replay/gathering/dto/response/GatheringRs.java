@@ -21,6 +21,7 @@ public class GatheringRs {
     private String cafe;
     private String spot;
     private String listImage;
+    private Long themeId;
     private List<String> genres;
     private Integer playtime;
     private LocalDateTime dateTime;

@@ -12,6 +12,7 @@ public class GatheringQuery {
 
     private Long gatheringId;
     private String name;
+    private Long themeId;
     private String listImage;
     private String genres;
     private Integer playtime;

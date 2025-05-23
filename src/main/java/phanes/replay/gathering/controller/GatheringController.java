@@ -21,9 +21,10 @@ public class GatheringController {
     private final GatheringService gatheringService;
 
     @GetMapping
-    public List<GatheringRs> gatheringList(@AuthenticationPrincipal Long userId, @RequestParam String sortBy, @RequestParam String keyword, @RequestParam String city, @RequestParam String state, @RequestParam LocalDateTime date, @RequestParam String genre, @RequestParam Integer limit, @RequestParam Integer offset) {
+    public List<GatheringRs> gatheringList(@AuthenticationPrincipal Long userId, @RequestParam String sortBy, @RequestParam String keyword, @RequestParam String city, @RequestParam String state, @RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate, @RequestParam String genre, @RequestParam Integer limit, @RequestParam Integer offset) {
         userId = userId == null ? 0L : userId;
-        return gatheringService.getGatheringList(userId, sortBy, keyword, city, state, date, genre, limit, offset);
+        startDate = startDate == null ? LocalDateTime.now() : startDate;
+        return gatheringService.getGatheringList(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset);
     }
 
     @GetMapping("/{gatheringId}")

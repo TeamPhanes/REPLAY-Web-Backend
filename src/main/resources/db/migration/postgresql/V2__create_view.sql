@@ -155,6 +155,7 @@ FROM theme_with_genres twg
 CREATE OR REPLACE VIEW gathering_list_with_theme_and_participant_and_liked AS
 SELECT g.id AS gathering_id,
        g.name,
+       twg.id AS theme_id,
        twg.image AS list_image,
        twg.genres,
        twg.playtime,
