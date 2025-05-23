@@ -141,7 +141,9 @@ SELECT twg.id                                                    AS theme_id,
        twg.genres,
        COALESCE(rar.rating, 0)                                   AS rating,
        COALESCE(rc.review_count, 0)                              AS review_count,
-       COALESCE(tlc.like_count, 0)                               AS like_count
+       COALESCE(tlc.like_count, 0)                               AS like_count,
+       twg.city,
+       twg.state
 FROM theme_with_genres twg
          LEFT JOIN review_avg_rating rar ON twg.id = rar.theme_id
          LEFT JOIN review_count rc ON twg.id = rc.theme_id
