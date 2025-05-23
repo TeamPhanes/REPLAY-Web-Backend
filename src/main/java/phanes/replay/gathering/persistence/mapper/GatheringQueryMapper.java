@@ -9,5 +9,5 @@ import java.util.List;
 @Mapper
 public interface GatheringQueryMapper {
 
-    List<GatheringQuery> findAllByKeywordAndAddress(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime date, String genre, Integer limit, Integer offset);
+    List<GatheringQuery> findAllByKeywordAndAddress(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset);
 }
