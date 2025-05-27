@@ -1,10 +1,16 @@
 package phanes.replay.common.dto.mapper;
 
-import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 import phanes.replay.common.dto.response.Page;
 
-@Mapper(componentModel = "spring")
-public interface PageMapper<T> {
+@Component
+public class PageMapper<T> {
 
-    Page<T> toPage(Long totalCount, Integer currentPage, T data);
+    public Page<T> toPage(Long totalCount, Integer currentPage, T data) {
+        return Page.<T>builder()
+                .totalCount(totalCount)
+                .currentPage(currentPage)
+                .data(data)
+                .build();
+    }
 }
