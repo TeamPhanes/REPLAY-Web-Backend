@@ -1,18 +1,21 @@
 package phanes.replay.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import phanes.replay.common.dto.mapper.PageMapper;
+import phanes.replay.common.dto.response.Page;
 import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.service.GatheringCommentQueryService;
+import phanes.replay.gathering.service.GatheringLikeQueryService;
 import phanes.replay.gathering.service.GatheringMemberQueryService;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.service.ReviewQueryService;
+import phanes.replay.theme.service.ThemeLikeQueryService;
 import phanes.replay.theme.service.ThemeVisitQueryService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.user.mapper.UserMapper;
@@ -31,15 +34,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserQueryService userQueryService;
-    private final GatheringMemberQueryService gatheringMemberQueryService;
-    private final UserThemeQueryMapper userThemeQueryMapper;
-    private final UserGatheringQueryMapper userGatheringQueryMapper;
     private final GatheringCommentQueryService gatheringCommentQueryService;
+    private final GatheringMemberQueryService gatheringMemberQueryService;
+    private final GatheringLikeQueryService gatheringLikeQueryService;
     private final ThemeVisitQueryService themeVisitQueryService;
+    private final ThemeLikeQueryService themeLikeQueryService;
     private final ReviewQueryService reviewQueryService;
-    private final S3Service s3Service;
+    private final UserQueryService userQueryService;
+    private final UserGatheringQueryMapper userGatheringQueryMapper;
+    private final UserThemeQueryMapper userThemeQueryMapper;
+    private final PageMapper<List<UserVisitThemeRs>> visitThemePageMapper;
+    private final PageMapper<List<UserParticipatingGatheringRs>> participatingGatheringPageMapper;
+    private final PageMapper<Map<LocalDate, List<UserCommentRs>>> commentPageMapper;
+    private final PageMapper<List<UserLikeGatheringRs>> likeGatheringPageMapper;
+    private final PageMapper<List<UserLikeThemeRs>> likeThemePageMapper;
     private final UserMapper userMapper;
+    private final S3Service s3Service;
 
     public UserRs getProfileUserInfo(Long userId) {
         User user = userQueryService.findByUserId(userId);
@@ -59,9 +69,11 @@ public class UserService {
         userQueryService.save(user);
     }
 
-    public List<UserVisitThemeRs> getMyVisitTheme(Long userId, Integer limit, Integer offset) {
+    public Page<List<UserVisitThemeRs>> getMyVisitTheme(Long userId, Integer limit, Integer offset) {
         List<UserVisitThemeQuery> userPlayingThemeList = userThemeQueryMapper.findUserVisitThemes(userId, limit, offset);
-        return userPlayingThemeList.stream().map(userMapper::toUserVisitThemeRs).toList();
+        Long totalCount = themeVisitQueryService.countByUserId(userId);
+        List<UserVisitThemeRs> data = userPlayingThemeList.stream().map(userMapper::toUserVisitThemeRs).toList();
+        return visitThemePageMapper.toPage(totalCount, offset, data);
     }
 
     public OtherUserRs getUserByNickname(String nickname) {
@@ -74,12 +86,12 @@ public class UserService {
         return userMapper.toOtherUserRs(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
-    public List<UserParticipatingGatheringRs> getMyParticipatingGathering(Long userId, Integer limit, Integer offset) {
+    public Page<List<UserParticipatingGatheringRs>> getMyParticipatingGathering(Long userId, Integer limit, Integer offset) {
         List<UserParticipantGatheringQuery> userParticipantGatheringQuery = userGatheringQueryMapper.findUserParticipantGathering(userId, limit, offset);
         Set<Long> gatheringIdList = userParticipantGatheringQuery.stream().map(UserParticipantGatheringQuery::getGatheringId).collect(Collectors.toSet());
         Map<Long, List<GatheringMember>> collect = gatheringMemberQueryService.getMemberList(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
-        List<UserParticipatingGatheringRs> myParticipatingGathering = userParticipantGatheringQuery.stream().map(userMapper::toUserParticipatingGatheringRs).toList();
-        myParticipatingGathering.forEach(pg ->
+        List<UserParticipatingGatheringRs> data = userParticipantGatheringQuery.stream().map(userMapper::toUserParticipatingGatheringRs).toList();
+        data.forEach(pg ->
                 pg.setParticipants(
                         collect.get(pg.getGatheringId()).stream()
                                 .map(gm -> UserParticipatingGatheringRs.ParticipatingUserDTO
@@ -88,22 +100,29 @@ public class UserService {
                                         .image(gm.getUser().getProfileImage())
                                         .build())
                                 .toList()));
-        return myParticipatingGathering;
+        Long totalCount = gatheringMemberQueryService.countByUserId(userId);
+        return participatingGatheringPageMapper.toPage(totalCount, offset, data);
     }
 
-    public Map<LocalDate, List<UserCommentRs>> getMyComment(Long userId, Pageable pageable) {
-        Page<GatheringComment> myComment = gatheringCommentQueryService.getMyComment(userId, pageable);
-        return myComment.stream()
+    public Page<Map<LocalDate, List<UserCommentRs>>> getMyComment(Long userId, Pageable pageable) {
+        List<GatheringComment> myComment = gatheringCommentQueryService.getMyComment(userId, pageable);
+        Long totalCount = gatheringCommentQueryService.countMyComment(userId);
+        LinkedHashMap<LocalDate, List<UserCommentRs>> data = myComment.stream()
                 .map(userMapper::toUserCommentRs)
                 .collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate(), LinkedHashMap::new, Collectors.toList()));
+        return commentPageMapper.toPage(totalCount, pageable.getPageNumber(), data);
     }
 
-    public List<UserLikeGatheringRs> getMyLikeGathering(Long userId, Integer limit, Integer offset) {
-        return userGatheringQueryMapper.findUserLikeGathering(userId, limit, offset).stream().map(userMapper::toUserLikeGatheringRs).toList();
+    public Page<List<UserLikeGatheringRs>> getMyLikeGathering(Long userId, Integer limit, Integer offset) {
+        List<UserLikeGatheringRs> data = userGatheringQueryMapper.findUserLikeGathering(userId, limit, offset).stream().map(userMapper::toUserLikeGatheringRs).toList();
+        Long totalCount = gatheringLikeQueryService.countMyLikeGathering(userId);
+        return likeGatheringPageMapper.toPage(totalCount, offset, data);
     }
 
-    public List<UserLikeThemeRs> getMyLikeTheme(Long userId, Integer limit, Integer offset) {
-        return userThemeQueryMapper.findUserLikeThemes(userId, limit, offset).stream().map(userMapper::toUserLikeThemeRs).toList();
+    public Page<List<UserLikeThemeRs>> getMyLikeTheme(Long userId, Integer limit, Integer offset) {
+        List<UserLikeThemeRs> data = userThemeQueryMapper.findUserLikeThemes(userId, limit, offset).stream().map(userMapper::toUserLikeThemeRs).toList();
+        Long totalCount = themeLikeQueryService.countMyLikeTheme(userId);
+        return likeThemePageMapper.toPage(totalCount, offset, data);
     }
 
     public Map<LocalDate, List<UserScheduleRs>> getMySchedule(Long userId) {

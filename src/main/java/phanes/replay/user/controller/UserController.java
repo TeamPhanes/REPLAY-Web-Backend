@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import phanes.replay.common.dto.response.Page;
 import phanes.replay.user.dto.user.request.UserUpdateRq;
 import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.service.UserService;
@@ -48,31 +49,31 @@ public class UserController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/theme")
-    public List<UserVisitThemeRs> myVisitTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+    public Page<List<UserVisitThemeRs>> myVisitTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         return userService.getMyVisitTheme(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/gathering")
-    public List<UserParticipatingGatheringRs> myParticipatingGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+    public Page<List<UserParticipatingGatheringRs>> myParticipatingGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         return userService.getMyParticipatingGathering(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/gathering/like")
-    public List<UserLikeGatheringRs> myLikeGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+    public Page<List<UserLikeGatheringRs>> myLikeGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         return userService.getMyLikeGathering(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/theme/like")
-    public List<UserLikeThemeRs> myLikeTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+    public Page<List<UserLikeThemeRs>> myLikeTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         return userService.getMyLikeTheme(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/comment")
-    public Map<LocalDate, List<UserCommentRs>> myComment(@AuthenticationPrincipal Long userId, @RequestParam("sortBy") String sortBy, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
+    public Page<Map<LocalDate, List<UserCommentRs>>> myComment(@AuthenticationPrincipal Long userId, @RequestParam("sortBy") String sortBy, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         Sort.Direction direction = "create".equals(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC;
         PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(direction, "createdAt"));
         return userService.getMyComment(userId, pageRequest);
