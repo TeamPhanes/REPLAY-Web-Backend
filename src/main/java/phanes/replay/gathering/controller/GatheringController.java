@@ -49,13 +49,13 @@ public class GatheringController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @PostMapping("/{gatheringId}")
+    @PostMapping("/{gatheringId}/like")
     public void gatheringLike(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringService.updateGatheringLike(userId, gatheringId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @DeleteMapping("/{gatheringId}")
+    @DeleteMapping("/{gatheringId}/like")
     public void gatheringUnlike(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringService.deleteGatheringLike(userId, gatheringId);
     }
