@@ -1,5 +1,6 @@
 package phanes.replay.theme.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +26,11 @@ public class ThemeController {
     @GetMapping("/{themeId}")
     public ThemeDetailRs themeDetail(@PathVariable Long themeId) {
         return themeService.getThemeDetail(themeId);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/{themeId}/like")
+    public void themeLike(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.updateThemeLike(userId, themeId);
     }
 }

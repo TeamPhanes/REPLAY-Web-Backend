@@ -2,6 +2,7 @@ package phanes.replay.theme.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import phanes.replay.theme.domain.ThemeLike;
 import phanes.replay.theme.persistence.repository.ThemeLikeRepository;
 
 @Service
@@ -12,5 +13,9 @@ public class ThemeLikeQueryService {
 
     public Long countMyLikeTheme(Long userId) {
         return themeLikeRepository.countByUserId(userId);
+    }
+
+    public void save(ThemeLike themeLike) {
+        themeLikeRepository.save(themeLike);
     }
 }
