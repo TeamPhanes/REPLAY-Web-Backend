@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringContent;
+import phanes.replay.gathering.domain.GatheringLike;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.mapper.GatheringMapper;
@@ -31,6 +32,7 @@ public class GatheringService {
     private final GatheringContentQueryService gatheringContentQueryService;
     private final GatheringMemberQueryService gatheringMemberQueryService;
     private final GatheringContentRepository gatheringContentRepository;
+    private final GatheringLikeQueryService gatheringLikeQueryService;
     private final ThemeContentQueryService themeContentQueryService;
     private final GatheringQueryService gatheringQueryService;
     private final GatheringQueryMapper gatheringQueryMapper;
@@ -93,5 +95,12 @@ public class GatheringService {
         GatheringContent gatheringContent = gatheringContentQueryService.findById(gatheringId);
         gatheringQueryService.delete(gathering);
         gatheringContentQueryService.delete(gatheringContent);
+    }
+
+    public void updateGatheringLike(Long userId, Long gatheringId) {
+        User user = userQueryService.findByUserId(userId);
+        Gathering gathering = gatheringQueryService.findById(gatheringId);
+        GatheringLike gatheringLike = GatheringLike.builder().user(user).gathering(gathering).build();
+        gatheringLikeQueryService.save(gatheringLike);
     }
 }

@@ -2,6 +2,7 @@ package phanes.replay.gathering.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import phanes.replay.gathering.domain.GatheringLike;
 import phanes.replay.gathering.persistence.repository.GatheringLikeRepository;
 
 @Service
@@ -12,5 +13,9 @@ public class GatheringLikeQueryService {
 
     public Long countMyLikeGathering(Long userId) {
         return gatheringLikeRepository.countByUserId(userId);
+    }
+
+    public void save(GatheringLike gatheringLike) {
+        gatheringLikeRepository.save(gatheringLike);
     }
 }
