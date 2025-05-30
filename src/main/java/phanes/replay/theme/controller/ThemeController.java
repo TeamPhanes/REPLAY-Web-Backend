@@ -33,4 +33,10 @@ public class ThemeController {
     public void themeLike(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
         themeService.updateThemeLike(userId, themeId);
     }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/{themeId}/like")
+    public void themeUnlike(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.deleteThemeLike(userId, themeId);
+    }
 }

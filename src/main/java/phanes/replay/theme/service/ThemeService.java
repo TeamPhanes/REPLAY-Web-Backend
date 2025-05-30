@@ -41,4 +41,9 @@ public class ThemeService {
         ThemeLike themeLike = ThemeLike.builder().user(user).theme(theme).build();
         themeLikeQueryService.save(themeLike);
     }
+
+    public void deleteThemeLike(Long userId, Long themeId) {
+        ThemeLike themeLike = themeLikeQueryService.findByUserIdAndThemeId(userId, themeId);
+        themeLikeQueryService.delete(themeLike);
+    }
 }

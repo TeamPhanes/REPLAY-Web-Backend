@@ -6,4 +6,5 @@ import phanes.replay.theme.domain.ThemeLike;
 public interface ThemeLikeRepository extends JpaRepository<ThemeLike, Long> {
 
     Long countByUserId(Long userId);
+    ThemeLike findByUserIdAndThemeId(Long userId, Long themeId);
 }

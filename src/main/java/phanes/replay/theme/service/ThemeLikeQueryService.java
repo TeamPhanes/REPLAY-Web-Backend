@@ -18,4 +18,12 @@ public class ThemeLikeQueryService {
     public void save(ThemeLike themeLike) {
         themeLikeRepository.save(themeLike);
     }
+
+    public ThemeLike findByUserIdAndThemeId(Long userId, Long themeId) {
+        return themeLikeRepository.findByUserIdAndThemeId(userId, themeId);
+    }
+
+    public void delete(ThemeLike themeLike) {
+        themeLikeRepository.delete(themeLike);
+    }
 }
