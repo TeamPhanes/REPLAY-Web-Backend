@@ -2,6 +2,7 @@ package phanes.replay.theme.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import phanes.replay.exception.LikeNotFoundException;
 import phanes.replay.theme.domain.ThemeLike;
 import phanes.replay.theme.persistence.repository.ThemeLikeRepository;
 
@@ -20,7 +21,7 @@ public class ThemeLikeQueryService {
     }
 
     public ThemeLike findByUserIdAndThemeId(Long userId, Long themeId) {
-        return themeLikeRepository.findByUserIdAndThemeId(userId, themeId);
+        return themeLikeRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new LikeNotFoundException("Theme Like Not Found"));
     }
 
     public void delete(ThemeLike themeLike) {
