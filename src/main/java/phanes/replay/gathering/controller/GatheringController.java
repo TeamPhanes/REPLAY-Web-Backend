@@ -53,4 +53,10 @@ public class GatheringController {
     public void gatheringLike(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringService.updateGatheringLike(userId, gatheringId);
     }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/{gatheringId}")
+    public void gatheringUnlike(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        gatheringService.deleteGatheringLike(userId, gatheringId);
+    }
 }

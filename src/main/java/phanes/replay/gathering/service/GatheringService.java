@@ -103,4 +103,9 @@ public class GatheringService {
         GatheringLike gatheringLike = GatheringLike.builder().user(user).gathering(gathering).build();
         gatheringLikeQueryService.save(gatheringLike);
     }
+
+    public void deleteGatheringLike(Long userId, Long gatheringId) {
+        GatheringLike gatheringLike = gatheringLikeQueryService.findByUserIdAndGatheringId(userId, gatheringId);
+        gatheringLikeQueryService.delete(gatheringLike);
+    }
 }
