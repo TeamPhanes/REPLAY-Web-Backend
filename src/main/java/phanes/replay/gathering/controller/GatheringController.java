@@ -1,5 +1,6 @@
 package phanes.replay.gathering.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,5 +46,17 @@ public class GatheringController {
     @DeleteMapping("/{gatheringId}")
     public void deleteGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringService.deleteGathering(userId, gatheringId);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/{gatheringId}/like")
+    public void gatheringLike(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        gatheringService.updateGatheringLike(userId, gatheringId);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/{gatheringId}/like")
+    public void gatheringUnlike(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        gatheringService.deleteGatheringLike(userId, gatheringId);
     }
 }
