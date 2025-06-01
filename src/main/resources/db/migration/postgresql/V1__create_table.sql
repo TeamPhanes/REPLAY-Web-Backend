@@ -58,7 +58,8 @@ CREATE TABLE IF NOT EXISTS review
     story_review     VARCHAR(5),
     theme_review     VARCHAR(5),
     created_at       TIMESTAMP,
-    updated_at       TIMESTAMP
+    updated_at       TIMESTAMP,
+    CONSTRAINT uq_review UNIQUE (theme_id, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS review_image
@@ -110,7 +111,8 @@ CREATE TABLE IF NOT EXISTS gathering_member
     id           BIGSERIAL PRIMARY KEY,
     role         VARCHAR(10),
     gathering_id BIGINT REFERENCES gathering (id),
-    user_id      BIGINT REFERENCES users (id)
+    user_id      BIGINT REFERENCES users (id),
+    CONSTRAINT uq_gathering_member UNIQUE (gathering_id, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS gathering_content
