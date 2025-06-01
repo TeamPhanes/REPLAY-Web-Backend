@@ -28,7 +28,7 @@ SELECT theme_id, COUNT(*) AS like_count
 FROM theme_like
 GROUP BY theme_id;
 
-CREATE OR REPLACE VIEW theme_visit_with_review AS
+CREATE OR REPLACE VIEW theme_visit_with_review_summary AS
 SELECT tv.user_id,
        twg.id                                                    AS theme_id,
        twg.address,
@@ -40,20 +40,10 @@ SELECT tv.user_id,
        twg.playtime,
        twg.genres,
        COALESCE(rar.rating, 0)                                   AS rating,
-       r.id                                                      AS review_id,
        COALESCE(rc.review_count, 0)                              AS review_count,
-       r.score,
-       r.hint,
-       r.number_of_player,
-       r.theme_review,
-       r.level_review,
-       r.story_review,
-       r.content,
-       r.success,
        CASE WHEN tl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
 FROM theme_visit tv
          JOIN theme_with_genres twg ON tv.theme_id = twg.id
-         LEFT JOIN review r ON twg.id = r.theme_id
          LEFT JOIN review_avg_rating rar ON twg.id = rar.theme_id
          LEFT JOIN review_count rc ON twg.id = rc.theme_id
          LEFT JOIN theme_like tl ON tv.user_id = tl.user_id AND twg.id = tl.theme_id;

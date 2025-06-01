@@ -4,9 +4,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="phanes.replay.user.persistence.mapper.UserThemeQueryMapper">
     <select id="findUserVisitThemes" resultType="phanes.replay.user.dto.user.query.UserVisitThemeQuery">
-        SELECT *
-        FROM theme_visit_with_review
-        WHERE user_id = #{userId}
+        SELECT tvrs.*,
+               r.id                                                      AS review_id,
+               r.score,
+               r.hint,
+               r.number_of_player,
+               r.theme_review,
+               r.level_review,
+               r.story_review,
+               r.content,
+               r.success
+        FROM theme_visit_with_review_summary tvrs
+                 LEFT JOIN review r ON tvrs.theme_id = r.theme_id and r.user_id = #{userId}
         LIMIT #{limit}
         OFFSET #{offset}
     </select>
