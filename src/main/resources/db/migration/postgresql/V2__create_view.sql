@@ -28,7 +28,7 @@ SELECT theme_id, COUNT(*) AS like_count
 FROM theme_like
 GROUP BY theme_id;
 
-CREATE OR REPLACE VIEW theme_visit_with_review AS
+CREATE OR REPLACE VIEW theme_visit_with_review_summary AS
 SELECT tv.user_id,
        twg.id                                                    AS theme_id,
        twg.address,
