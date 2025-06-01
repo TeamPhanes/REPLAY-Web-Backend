@@ -16,6 +16,7 @@
                r.success
         FROM theme_visit_with_review_summary tvrs
                  LEFT JOIN review r ON tvrs.theme_id = r.theme_id and r.user_id = #{userId}
+        WHERE tvrs.user_id = #{userId}
         LIMIT #{limit}
         OFFSET #{offset}
     </select>
