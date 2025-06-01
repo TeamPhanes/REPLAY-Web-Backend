@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import phanes.replay.common.dto.response.Page;
 import phanes.replay.gathering.dto.request.GatheringCreateRq;
 import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
@@ -22,7 +23,7 @@ public class GatheringController {
     private final GatheringService gatheringService;
 
     @GetMapping
-    public List<GatheringRs> gatheringList(@AuthenticationPrincipal Long userId, @RequestParam(defaultValue = "dateTime") String sortBy, @RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state, @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate, @RequestParam(required = false) String genre, @RequestParam Integer limit, @RequestParam Integer offset) {
+    public Page<List<GatheringRs>> gatheringList(@AuthenticationPrincipal Long userId, @RequestParam(defaultValue = "dateTime") String sortBy, @RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state, @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate, @RequestParam(required = false) String genre, @RequestParam Integer limit, @RequestParam Integer offset) {
         userId = userId == null ? 0L : userId;
         startDate = startDate == null ? LocalDateTime.now() : startDate;
         return gatheringService.getGatheringList(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset);

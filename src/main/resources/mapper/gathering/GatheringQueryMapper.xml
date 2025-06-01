@@ -45,4 +45,30 @@
         LIMIT #{limit}
         OFFSET #{offset}
     </select>
+    <select id="countByKeywordAndAddress" resultType="Long">
+        SELECT COUNT(*)
+        FROM gathering_list_with_theme_and_participant gltp
+        <where>
+            <if test="city != null">AND city = #{city}</if>
+            <if test="state != null">AND state = #{state}</if>
+            <if test="keyword != null">AND gltp.name LIKE CONCAT('%', #{keyword}, '%')</if>
+            <if test="genre != null">
+                AND EXISTS (
+                SELECT 1
+                FROM genre g
+                WHERE g.theme_id = gltp.theme_id
+                AND g.name = #{genre}
+                )
+            </if>
+            <if test="startDate != null">
+                AND date_time &gt;= #{startDate}
+            </if>
+            <if test="endDate != null">
+                AND date_time &lt;= #{endDate}
+            </if>
+            <if test="sortBy == 'registrationEnd'">
+                AND date_time &gt; NOW()
+            </if>
+        </where>
+    </select>
 </mapper>
