@@ -7,4 +7,6 @@ import phanes.replay.theme.domain.ThemeVisit;
 @Repository
 public interface ThemeVisitRepository extends JpaRepository<ThemeVisit, Long> {
     Long countByUserId(Long userId);
+
+    ThemeVisit findByUserIdAndThemeId(Long userId, Long themeId);
 }
