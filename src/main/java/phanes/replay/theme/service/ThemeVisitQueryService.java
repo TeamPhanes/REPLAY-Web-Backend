@@ -2,6 +2,7 @@ package phanes.replay.theme.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import phanes.replay.exception.ThemeVisitNotFoundException;
 import phanes.replay.theme.domain.ThemeVisit;
 import phanes.replay.theme.persistence.repository.ThemeVisitRepository;
 
@@ -20,7 +21,7 @@ public class ThemeVisitQueryService {
     }
 
     public ThemeVisit findByUserIdAndThemeId(Long userId, Long themeId) {
-        return themeVisitRepository.findByUserIdAndThemeId(userId, themeId);
+        return themeVisitRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new ThemeVisitNotFoundException("theme visit not found"));
     }
 
     public void delete(ThemeVisit themeVisit) {
