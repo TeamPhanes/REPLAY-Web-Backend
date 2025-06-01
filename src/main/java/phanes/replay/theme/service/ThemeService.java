@@ -2,6 +2,8 @@ package phanes.replay.theme.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import phanes.replay.common.dto.mapper.PageMapper;
+import phanes.replay.common.dto.response.Page;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.domain.ThemeLike;
 import phanes.replay.theme.dto.mapper.ThemeMapper;
@@ -19,16 +21,19 @@ public class ThemeService {
 
     private final ThemeContentQueryService themeContentQueryService;
     private final ThemeLikeQueryService themeLikeQueryService;
+    private final PageMapper<List<ThemeRs>> pageMapper;
     private final ThemeQueryService themeQueryService;
     private final UserQueryService userQueryService;
     private final ThemeQueryMapper themeQueryMapper;
     private final ThemeMapper themeMapper;
 
-    public List<ThemeRs> getThemeList(Long userId, String sortBy, String keyword, String city, String state, String genre, Integer limit, Integer offset) {
-        return themeQueryMapper.findAllByKeywordAndAddress(userId, sortBy, keyword, city, state, genre, limit, offset)
+    public Page<List<ThemeRs>> getThemeList(Long userId, String sortBy, String keyword, String city, String state, String genre, Integer limit, Integer offset) {
+        Long totalCount = themeQueryMapper.countByKeywordAndAddress(keyword, city, state, genre);
+        List<ThemeRs> data = themeQueryMapper.findAllByKeywordAndAddress(userId, sortBy, keyword, city, state, genre, limit, offset)
                 .stream()
                 .map(themeMapper::toThemeRs)
                 .toList();
+        return pageMapper.toPage(totalCount, offset, data);
     }
 
     public ThemeDetailRs getThemeDetail(Long themeId) {
