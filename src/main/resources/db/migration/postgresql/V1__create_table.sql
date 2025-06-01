@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS theme_like
 (
     id       BIGSERIAL PRIMARY KEY,
     theme_id BIGINT REFERENCES theme (id),
-    user_id  BIGINT REFERENCES users (id)
+    user_id  BIGINT REFERENCES users (id),
+    CONSTRAINT uq_theme_like UNIQUE (theme_id, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS theme_content
@@ -79,7 +80,8 @@ CREATE TABLE IF NOT EXISTS theme_visit
 (
     id       BIGSERIAL PRIMARY KEY,
     theme_id BIGINT REFERENCES theme (id),
-    user_id  BIGINT REFERENCES users (id)
+    user_id  BIGINT REFERENCES users (id),
+    CONSTRAINT uq_theme_visit UNIQUE (theme_id, user_id)
 );
 
 CREATE TABLE IF NOT EXISTS genre
@@ -135,5 +137,6 @@ CREATE TABLE IF NOT EXISTS gathering_like
 (
     id           BIGSERIAL PRIMARY KEY,
     gathering_id BIGINT REFERENCES gathering (id),
-    user_id      BIGINT REFERENCES users (id)
+    user_id      BIGINT REFERENCES users (id),
+    CONSTRAINT uq_gathering_like UNIQUE (gathering_id, user_id)
 );
