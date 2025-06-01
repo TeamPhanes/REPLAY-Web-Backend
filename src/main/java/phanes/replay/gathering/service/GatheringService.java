@@ -44,7 +44,7 @@ public class GatheringService {
     private final GatheringMapper gatheringMapper;
 
     public Page<List<GatheringRs>> getGatheringList(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset) {
-        Long totalCount = gatheringQueryMapper.countByKeywordAndAddress(keyword, city, state, startDate, endDate, genre);
+        Long totalCount = gatheringQueryMapper.countByKeywordAndAddress(sortBy, keyword, city, state, startDate, endDate, genre);
         List<GatheringRs> data = gatheringQueryMapper.findAllByKeywordAndAddress(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset).stream()
                 .map(gatheringMapper::toGatheringRs).toList();
         return pageMapper.toPage(totalCount, offset, data);
