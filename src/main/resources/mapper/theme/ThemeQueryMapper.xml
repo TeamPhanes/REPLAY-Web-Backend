@@ -41,4 +41,21 @@
         LIMIT #{limit}
         OFFSET #{offset}
     </select>
+    <select id="countByKeywordAndAddress" resultType="Long">
+        SELECT COUNT(*)
+        FROM theme_list_with_review tlr
+        <where>
+            <if test="city != null">AND city = #{city}</if>
+            <if test="state != null">AND state = #{state}</if>
+            <if test="keyword != null">AND tlr.theme_name LIKE CONCAT('%', #{keyword}, '%')</if>
+            <if test="genre != null">
+                AND EXISTS (
+                SELECT 1
+                FROM genre g
+                WHERE g.theme_id = tlr.theme_id
+                AND g.name = #{genre}
+                )
+            </if>
+        </where>
+    </select>
 </mapper>

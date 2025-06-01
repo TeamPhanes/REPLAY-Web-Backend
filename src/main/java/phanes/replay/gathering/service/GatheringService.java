@@ -3,6 +3,8 @@ package phanes.replay.gathering.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import phanes.replay.common.dto.mapper.PageMapper;
+import phanes.replay.common.dto.response.Page;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringContent;
 import phanes.replay.gathering.domain.GatheringLike;
@@ -36,13 +38,16 @@ public class GatheringService {
     private final ThemeContentQueryService themeContentQueryService;
     private final GatheringQueryService gatheringQueryService;
     private final GatheringQueryMapper gatheringQueryMapper;
+    private final PageMapper<List<GatheringRs>> pageMapper;
     private final ThemeQueryService themeQueryService;
     private final UserQueryService userQueryService;
     private final GatheringMapper gatheringMapper;
 
-    public List<GatheringRs> getGatheringList(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset) {
-        return gatheringQueryMapper.findAllByKeywordAndAddress(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset).stream()
+    public Page<List<GatheringRs>> getGatheringList(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset) {
+        Long totalCount = gatheringQueryMapper.countByKeywordAndAddress(keyword, city, state, startDate, endDate, genre);
+        List<GatheringRs> data = gatheringQueryMapper.findAllByKeywordAndAddress(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset).stream()
                 .map(gatheringMapper::toGatheringRs).toList();
+        return pageMapper.toPage(totalCount, offset, data);
     }
 
     public GatheringDetailRs getGatheringDetail(Long gatheringId) {
