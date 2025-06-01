@@ -40,4 +40,16 @@ public class ThemeController {
     public void themeUnlike(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
         themeService.deleteThemeLike(userId, themeId);
     }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/{themeId}/visit")
+    public void themeVisit(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.updateThemeVisit(userId, themeId);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/{themeId}/visit")
+    public void themeUnVisit(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.deleteThemeVisit(userId, themeId);
+    }
 }

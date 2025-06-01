@@ -6,6 +6,7 @@ import phanes.replay.common.dto.mapper.PageMapper;
 import phanes.replay.common.dto.response.Page;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.domain.ThemeLike;
+import phanes.replay.theme.domain.ThemeVisit;
 import phanes.replay.theme.dto.mapper.ThemeMapper;
 import phanes.replay.theme.dto.response.ThemeDetailRs;
 import phanes.replay.theme.dto.response.ThemeRs;
@@ -26,6 +27,7 @@ public class ThemeService {
     private final UserQueryService userQueryService;
     private final ThemeQueryMapper themeQueryMapper;
     private final ThemeMapper themeMapper;
+    private final ThemeVisitQueryService themeVisitQueryService;
 
     public Page<List<ThemeRs>> getThemeList(Long userId, String sortBy, String keyword, String city, String state, String genre, Integer limit, Integer offset) {
         Long totalCount = themeQueryMapper.countByKeywordAndAddress(keyword, city, state, genre);
@@ -50,5 +52,17 @@ public class ThemeService {
     public void deleteThemeLike(Long userId, Long themeId) {
         ThemeLike themeLike = themeLikeQueryService.findByUserIdAndThemeId(userId, themeId);
         themeLikeQueryService.delete(themeLike);
+    }
+
+    public void updateThemeVisit(Long userId, Long themeId) {
+        User user = userQueryService.findByUserId(userId);
+        Theme theme = themeQueryService.getTheme(themeId);
+        ThemeVisit themeVisit = ThemeVisit.builder().user(user).theme(theme).build();
+        themeVisitQueryService.save(themeVisit);
+    }
+
+    public void deleteThemeVisit(Long userId, Long themeId) {
+        ThemeVisit themeVisit = themeVisitQueryService.findByUserIdAndThemeId(userId, themeId);
+        themeVisitQueryService.delete(themeVisit);
     }
 }
