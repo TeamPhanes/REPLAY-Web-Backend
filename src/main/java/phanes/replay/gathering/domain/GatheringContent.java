@@ -21,6 +21,7 @@ public class GatheringContent {
     private Gathering gathering;
     private String content;
     private String price;
+    private Boolean isIndividual;
     private String image;
 
     public void updateGatheringContent(GatheringUpdateRq gatheringUpdateRq) {

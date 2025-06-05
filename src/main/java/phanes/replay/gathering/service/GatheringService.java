@@ -72,6 +72,7 @@ public class GatheringService {
                 .gathering(gathering)
                 .content(gatheringCreateRq.getContent())
                 .price(gatheringCreateRq.getPrice())
+                .isIndividual(gatheringCreateRq.getIsIndividual())
                 .image(themeContent.getImage())
                 .build();
         GatheringMember gatheringMember = GatheringMember.builder()
