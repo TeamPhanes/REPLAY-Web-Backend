@@ -126,11 +126,12 @@ CREATE TABLE gathering_member
 
 CREATE TABLE gathering_content
 (
-    id           IDENTITY PRIMARY KEY,
-    content      VARCHAR(255) DEFAULT '모임 소개글입니다',
-    gathering_id BIGINT,
-    price        VARCHAR(8),
-    image        VARCHAR(200),
+    id            IDENTITY PRIMARY KEY,
+    content       VARCHAR(255) DEFAULT '모임 소개글입니다',
+    gathering_id  BIGINT,
+    price         VARCHAR(8),
+    is_individual BOOLEAN,
+    image         VARCHAR(200),
     FOREIGN KEY (gathering_id) REFERENCES gathering (id)
 );
 
