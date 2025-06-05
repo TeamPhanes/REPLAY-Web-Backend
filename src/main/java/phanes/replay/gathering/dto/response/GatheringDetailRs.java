@@ -14,5 +14,6 @@ public class GatheringDetailRs {
     private Long gatheringId;
     private String detailImage;
     private Long price;
+    private Boolean isIndividual;
     private String content;
 }
