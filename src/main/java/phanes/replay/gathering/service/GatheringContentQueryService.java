@@ -2,6 +2,7 @@ package phanes.replay.gathering.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import phanes.replay.exception.GatheringContentNotFoundException;
 import phanes.replay.exception.GatheringNotFoundException;
 import phanes.replay.gathering.domain.GatheringContent;
 import phanes.replay.gathering.persistence.repository.GatheringContentRepository;
@@ -21,7 +22,7 @@ public class GatheringContentQueryService {
     }
 
     public GatheringContent findByGatheringIdWithGathering(Long gatheringId) {
-        return gatheringContentRepository.findByGatheringIdWithGathering(gatheringId).orElseThrow(() -> new GatheringNotFoundException("gathering content not found"));
+        return gatheringContentRepository.findByGatheringIdWithGathering(gatheringId).orElseThrow(() -> new GatheringContentNotFoundException("gathering content not found"));
     }
 
     public void delete(GatheringContent gatheringContent) {
