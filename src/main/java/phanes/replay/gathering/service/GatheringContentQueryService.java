@@ -16,7 +16,7 @@ public class GatheringContentQueryService {
         gatheringContentRepository.save(gatheringContent);
     }
 
-    public GatheringContent findById(Long gatheringId) {
+    public GatheringContent findByGatheringId(Long gatheringId) {
         return gatheringContentRepository.findById(gatheringId).orElseThrow(() -> new GatheringNotFoundException("gathering not found"));
     }
 

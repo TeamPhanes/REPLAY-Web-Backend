@@ -86,7 +86,7 @@ public class GatheringService {
     public void updateGathering(Long userId, Long gatheringId, GatheringUpdateRq gatheringUpdateRq) {
         GatheringMember hostGathering = gatheringMemberQueryService.findHostByUserIdAndGatheringId(userId, gatheringId);
         Gathering gathering = hostGathering.getGathering();
-        GatheringContent gatheringContent = gatheringContentQueryService.findById(gatheringId);
+        GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
         gathering.updateGathering(gatheringUpdateRq);
         gatheringContent.updateGatheringContent(gatheringUpdateRq);
         gatheringQueryService.save(gathering);
@@ -96,7 +96,7 @@ public class GatheringService {
     public void deleteGathering(Long userId, Long gatheringId) {
         GatheringMember hostGathering = gatheringMemberQueryService.findHostByUserIdAndGatheringId(userId, gatheringId);
         Gathering gathering = hostGathering.getGathering();
-        GatheringContent gatheringContent = gatheringContentQueryService.findById(gatheringId);
+        GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
         gatheringQueryService.delete(gathering);
         gatheringContentQueryService.delete(gatheringContent);
     }
