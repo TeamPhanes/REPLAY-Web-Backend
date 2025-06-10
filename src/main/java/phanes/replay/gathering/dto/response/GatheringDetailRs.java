@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @NoArgsConstructor
@@ -16,4 +18,6 @@ public class GatheringDetailRs {
     private Long price;
     private Boolean isIndividual;
     private String content;
+    private LocalDateTime registrationStart;
+    private LocalDateTime registrationEnd;
 }

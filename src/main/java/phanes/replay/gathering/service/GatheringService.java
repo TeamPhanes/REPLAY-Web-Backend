@@ -16,7 +16,6 @@ import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.persistence.mapper.GatheringQueryMapper;
-import phanes.replay.gathering.persistence.repository.GatheringContentRepository;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.domain.ThemeContent;
 import phanes.replay.theme.service.ThemeContentQueryService;
@@ -33,7 +32,6 @@ public class GatheringService {
 
     private final GatheringContentQueryService gatheringContentQueryService;
     private final GatheringMemberQueryService gatheringMemberQueryService;
-    private final GatheringContentRepository gatheringContentRepository;
     private final GatheringLikeQueryService gatheringLikeQueryService;
     private final ThemeContentQueryService themeContentQueryService;
     private final GatheringQueryService gatheringQueryService;
@@ -51,7 +49,7 @@ public class GatheringService {
     }
 
     public GatheringDetailRs getGatheringDetail(Long gatheringId) {
-        return gatheringMapper.toGatheringDetailRs(gatheringContentRepository.findByGatheringId(gatheringId));
+        return gatheringMapper.toGatheringDetailRs(gatheringContentQueryService.findByGatheringIdWithGathering(gatheringId));
     }
 
     @Transactional

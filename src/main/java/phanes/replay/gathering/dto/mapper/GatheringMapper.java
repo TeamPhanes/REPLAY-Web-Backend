@@ -14,7 +14,9 @@ public interface GatheringMapper {
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(gatheringQuery.getGenres().split(\",\")))")
     GatheringRs toGatheringRs(GatheringQuery gatheringQuery);
 
+    @Mapping(target = "registrationStart", source = "gathering.registrationStart")
+    @Mapping(target = "registrationEnd", source = "gathering.registrationEnd")
     @Mapping(target = "gatheringId", source = "gathering.id")
     @Mapping(target = "detailImage", source = "image")
-    GatheringDetailRs toGatheringDetailRs(GatheringContent byGatheringId);
+    GatheringDetailRs toGatheringDetailRs(GatheringContent gatheringContent);
 }

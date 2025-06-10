@@ -20,6 +20,10 @@ public class GatheringContentQueryService {
         return gatheringContentRepository.findById(gatheringId).orElseThrow(() -> new GatheringNotFoundException("gathering not found"));
     }
 
+    public GatheringContent findByGatheringIdWithGathering(Long gatheringId) {
+        return gatheringContentRepository.findByGatheringIdWithGathering(gatheringId).orElseThrow(() -> new GatheringNotFoundException("gathering content not found"));
+    }
+
     public void delete(GatheringContent gatheringContent) {
         gatheringContentRepository.delete(gatheringContent);
     }
