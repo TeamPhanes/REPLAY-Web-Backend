@@ -18,6 +18,7 @@ public class GatheringUpdateRq {
     private String name;
     private String content;
     private String price;
+    private Boolean isIndividual;
     private LocalDateTime dateTime;
     @Min(value = 2, message = "모집 인원은 최소 2명 이상이어야 합니다.")
     private Integer capacity;

@@ -27,5 +27,6 @@ public class GatheringContent {
     public void updateGatheringContent(GatheringUpdateRq gatheringUpdateRq) {
         this.content = gatheringUpdateRq.getContent();
         this.price = gatheringUpdateRq.getPrice();
+        this.isIndividual = gatheringUpdateRq.getIsIndividual();
     }
 }
