@@ -7,10 +7,7 @@ import phanes.replay.common.dto.mapper.PageMapper;
 import phanes.replay.common.dto.response.Page;
 import phanes.replay.exception.HostNotFoundException;
 import phanes.replay.exception.IllegalAccessException;
-import phanes.replay.gathering.domain.Gathering;
-import phanes.replay.gathering.domain.GatheringContent;
-import phanes.replay.gathering.domain.GatheringLike;
-import phanes.replay.gathering.domain.GatheringMember;
+import phanes.replay.gathering.domain.*;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.mapper.GatheringMapper;
 import phanes.replay.gathering.dto.request.GatheringCreateRq;
@@ -34,6 +31,7 @@ import java.util.Objects;
 public class GatheringService {
 
     private final GatheringContentQueryService gatheringContentQueryService;
+    private final GatheringCommentQueryService gatheringCommentQueryService;
     private final GatheringMemberQueryService gatheringMemberQueryService;
     private final GatheringLikeQueryService gatheringLikeQueryService;
     private final ThemeContentQueryService themeContentQueryService;
@@ -105,6 +103,8 @@ public class GatheringService {
         }
         GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
         List<GatheringLike> gatheringLikeList = gatheringLikeQueryService.findAllByGatheringId(gatheringId);
+        List<GatheringComment> gatheringCommentList = gatheringCommentQueryService.findAllByGatheringId(gatheringId);
+        gatheringCommentQueryService.deleteAll(gatheringCommentList);
         gatheringLikeQueryService.deleteAll(gatheringLikeList);
         gatheringMemberQueryService.deleteAll(gatheringMemberList);
         gatheringContentQueryService.delete(gatheringContent);
