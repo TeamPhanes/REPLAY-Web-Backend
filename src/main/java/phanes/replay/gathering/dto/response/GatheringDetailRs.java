@@ -14,7 +14,10 @@ import java.time.LocalDateTime;
 public class GatheringDetailRs {
 
     private Long gatheringId;
+    private String name;
     private String detailImage;
+    private Integer capacity;
+    private LocalDateTime dateTime;
     private Long price;
     private Boolean isIndividual;
     private String content;
