@@ -96,6 +96,7 @@ public class GatheringService {
         gatheringContentQueryService.save(gatheringContent);
     }
 
+    @Transactional
     public void deleteGathering(Long userId, Long gatheringId) {
         List<GatheringMember> gatheringMemberList = gatheringMemberQueryService.findAllByGatheringIdWithUserAndGathering(gatheringId);
         GatheringMember host = findHost(gatheringMemberList);
@@ -103,6 +104,8 @@ public class GatheringService {
             throw new IllegalAccessException("Only the host can delete a gathering");
         }
         GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
+        List<GatheringLike> gatheringLikeList = gatheringLikeQueryService.findAllByGatheringId(gatheringId);
+        gatheringLikeQueryService.deleteAll(gatheringLikeList);
         gatheringMemberQueryService.deleteAll(gatheringMemberList);
         gatheringContentQueryService.delete(gatheringContent);
         gatheringQueryService.delete(host.getGathering());
