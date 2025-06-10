@@ -22,14 +22,14 @@ public class GatheringMemberController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @PostMapping
-    public void addMember(@AuthenticationPrincipal Long userId, @RequestParam Long gatheringId) {
+    @PostMapping("/{gatheringId}")
+    public void addMember(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringMemberService.addMember(userId, gatheringId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
-    @DeleteMapping
-    public void deleteMember(@AuthenticationPrincipal Long userId, @RequestParam Long gatheringId) {
+    @DeleteMapping("/{gatheringId}")
+    public void deleteMember(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringMemberService.deleteMember(userId, gatheringId);
     }
 }
