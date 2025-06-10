@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.common.dto.mapper.PageMapper;
 import phanes.replay.common.dto.response.Page;
+import phanes.replay.exception.HostNotFoundException;
+import phanes.replay.exception.IllegalAccessException;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringContent;
 import phanes.replay.gathering.domain.GatheringLike;
@@ -25,6 +27,7 @@ import phanes.replay.user.service.UserQueryService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -94,11 +97,19 @@ public class GatheringService {
     }
 
     public void deleteGathering(Long userId, Long gatheringId) {
-        GatheringMember hostGathering = gatheringMemberQueryService.findHostByUserIdAndGatheringId(userId, gatheringId);
-        Gathering gathering = hostGathering.getGathering();
+        List<GatheringMember> gatheringMemberList = gatheringMemberQueryService.findAllByGatheringIdWithUserAndGathering(gatheringId);
+        GatheringMember host = findHost(gatheringMemberList);
+        if(!Objects.equals(userId, host.getUser().getId())) {
+            throw new IllegalAccessException("Only the host can delete a gathering");
+        }
         GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
-        gatheringQueryService.delete(gathering);
+        gatheringMemberQueryService.deleteAll(gatheringMemberList);
         gatheringContentQueryService.delete(gatheringContent);
+        gatheringQueryService.delete(host.getGathering());
+    }
+
+    private GatheringMember findHost(List<GatheringMember> gatheringMemberList) {
+        return gatheringMemberList.stream().filter(gm -> gm.getRole().equals(Role.HOST)).findFirst().orElseThrow(() -> new HostNotFoundException("Host not found"));
     }
 
     public void updateGatheringLike(Long userId, Long gatheringId) {

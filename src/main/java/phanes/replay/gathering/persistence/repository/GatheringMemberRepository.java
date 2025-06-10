@@ -19,6 +19,8 @@ public interface GatheringMemberRepository extends JpaRepository<GatheringMember
     List<GatheringMember> findAllByMember(Set<Long> gatheringIdList);
     @Query("SELECT gm FROM GatheringMember gm JOIN gm.user u WHERE gm.gathering.id = :gatheringId")
     List<GatheringMember> findAllByGatheringIdWithUser(Long gatheringId);
+    @Query("SELECT gm FROM GatheringMember gm JOIN gm.user u JOIN gm.gathering g WHERE gm.gathering.id = :gatheringId")
+    List<GatheringMember> findAllByGatheringIdWithUserAndGathering(Long gatheringId);
     GatheringMember findByUserIdAndGatheringId(Long userId, Long gatheringId);
     @Query("SELECT gm FROM GatheringMember gm JOIN gm.gathering WHERE gm.user.id = :userId and gm.gathering.id = :gatheringId and gm.role = :role")
     Optional<GatheringMember> findByUserIdAndGatheringIdAndRoleEquals(Long userId, Long gatheringId, Role role);
