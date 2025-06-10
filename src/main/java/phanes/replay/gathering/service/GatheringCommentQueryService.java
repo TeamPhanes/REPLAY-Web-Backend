@@ -21,4 +21,13 @@ public class GatheringCommentQueryService {
     public Long countMyComment(Long userId) {
         return gatheringCommentRepository.countByUserId(userId);
     }
+
+    public List<GatheringComment> findAllByGatheringId(Long gatheringId) {
+        return gatheringCommentRepository.findAllByGatheringId(gatheringId);
+    }
+
+
+    public void deleteAll(List<GatheringComment> gatheringCommentList) {
+        gatheringCommentRepository.deleteAll(gatheringCommentList);
+    }
 }

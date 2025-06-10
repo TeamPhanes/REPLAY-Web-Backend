@@ -5,10 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.common.dto.mapper.PageMapper;
 import phanes.replay.common.dto.response.Page;
-import phanes.replay.gathering.domain.Gathering;
-import phanes.replay.gathering.domain.GatheringContent;
-import phanes.replay.gathering.domain.GatheringLike;
-import phanes.replay.gathering.domain.GatheringMember;
+import phanes.replay.exception.HostNotFoundException;
+import phanes.replay.exception.IllegalAccessException;
+import phanes.replay.gathering.domain.*;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.mapper.GatheringMapper;
 import phanes.replay.gathering.dto.request.GatheringCreateRq;
@@ -16,7 +15,6 @@ import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.persistence.mapper.GatheringQueryMapper;
-import phanes.replay.gathering.persistence.repository.GatheringContentRepository;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.domain.ThemeContent;
 import phanes.replay.theme.service.ThemeContentQueryService;
@@ -26,14 +24,15 @@ import phanes.replay.user.service.UserQueryService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class GatheringService {
 
     private final GatheringContentQueryService gatheringContentQueryService;
+    private final GatheringCommentQueryService gatheringCommentQueryService;
     private final GatheringMemberQueryService gatheringMemberQueryService;
-    private final GatheringContentRepository gatheringContentRepository;
     private final GatheringLikeQueryService gatheringLikeQueryService;
     private final ThemeContentQueryService themeContentQueryService;
     private final GatheringQueryService gatheringQueryService;
@@ -51,7 +50,7 @@ public class GatheringService {
     }
 
     public GatheringDetailRs getGatheringDetail(Long gatheringId) {
-        return gatheringMapper.toGatheringDetailRs(gatheringContentRepository.findByGatheringId(gatheringId));
+        return gatheringMapper.toGatheringDetailRs(gatheringContentQueryService.findByGatheringIdWithGathering(gatheringId));
     }
 
     @Transactional
@@ -88,19 +87,32 @@ public class GatheringService {
     public void updateGathering(Long userId, Long gatheringId, GatheringUpdateRq gatheringUpdateRq) {
         GatheringMember hostGathering = gatheringMemberQueryService.findHostByUserIdAndGatheringId(userId, gatheringId);
         Gathering gathering = hostGathering.getGathering();
-        GatheringContent gatheringContent = gatheringContentQueryService.findById(gatheringId);
+        GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
         gathering.updateGathering(gatheringUpdateRq);
         gatheringContent.updateGatheringContent(gatheringUpdateRq);
         gatheringQueryService.save(gathering);
         gatheringContentQueryService.save(gatheringContent);
     }
 
+    @Transactional
     public void deleteGathering(Long userId, Long gatheringId) {
-        GatheringMember hostGathering = gatheringMemberQueryService.findHostByUserIdAndGatheringId(userId, gatheringId);
-        Gathering gathering = hostGathering.getGathering();
-        GatheringContent gatheringContent = gatheringContentQueryService.findById(gatheringId);
-        gatheringQueryService.delete(gathering);
+        List<GatheringMember> gatheringMemberList = gatheringMemberQueryService.findAllByGatheringIdWithUserAndGathering(gatheringId);
+        GatheringMember host = findHost(gatheringMemberList);
+        if(!Objects.equals(userId, host.getUser().getId())) {
+            throw new IllegalAccessException("Only the host can delete a gathering");
+        }
+        GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
+        List<GatheringLike> gatheringLikeList = gatheringLikeQueryService.findAllByGatheringId(gatheringId);
+        List<GatheringComment> gatheringCommentList = gatheringCommentQueryService.findAllByGatheringId(gatheringId);
+        gatheringCommentQueryService.deleteAll(gatheringCommentList);
+        gatheringLikeQueryService.deleteAll(gatheringLikeList);
+        gatheringMemberQueryService.deleteAll(gatheringMemberList);
         gatheringContentQueryService.delete(gatheringContent);
+        gatheringQueryService.delete(host.getGathering());
+    }
+
+    private GatheringMember findHost(List<GatheringMember> gatheringMemberList) {
+        return gatheringMemberList.stream().filter(gm -> gm.getRole().equals(Role.HOST)).findFirst().orElseThrow(() -> new HostNotFoundException("Host not found"));
     }
 
     public void updateGatheringLike(Long userId, Long gatheringId) {

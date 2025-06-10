@@ -35,4 +35,12 @@ public class GatheringMemberQueryService {
     public GatheringMember findHostByUserIdAndGatheringId(Long userId, Long gatheringId) {
         return gatheringMemberRepository.findByUserIdAndGatheringIdAndRoleEquals(userId, gatheringId, Role.HOST).orElseThrow(() -> new HostNotFoundException("host not found"));
     }
+
+    public List<GatheringMember> findAllByGatheringIdWithUserAndGathering(Long gatheringId) {
+        return gatheringMemberRepository.findAllByGatheringIdWithUserAndGathering(gatheringId);
+    }
+
+    public void deleteAll(List<GatheringMember> gatheringMemberList) {
+        gatheringMemberRepository.deleteAll(gatheringMemberList);
+    }
 }

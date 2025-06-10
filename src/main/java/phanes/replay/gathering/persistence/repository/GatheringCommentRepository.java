@@ -17,4 +17,5 @@ public interface GatheringCommentRepository extends JpaRepository<GatheringComme
     List<GatheringComment> findByGatheringId(Long gatheringId, Pageable pageable);
     Optional<GatheringComment> findByIdAndGatheringIdAndUserId(Long commentId, Long gatheringId, Long userId);
     Long countByUserId(Long userId);
+    List<GatheringComment> findAllByGatheringId(Long gatheringId);
 }

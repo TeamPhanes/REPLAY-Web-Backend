@@ -6,6 +6,8 @@ import phanes.replay.exception.LikeNotFoundException;
 import phanes.replay.gathering.domain.GatheringLike;
 import phanes.replay.gathering.persistence.repository.GatheringLikeRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class GatheringLikeQueryService {
@@ -26,5 +28,13 @@ public class GatheringLikeQueryService {
 
     public void delete(GatheringLike gatheringLike) {
         gatheringLikeRepository.delete(gatheringLike);
+    }
+
+    public List<GatheringLike> findAllByGatheringId(Long gatheringId) {
+        return gatheringLikeRepository.findAllByGatheringId(gatheringId);
+    }
+
+    public void deleteAll(List<GatheringLike> gatheringLikeList) {
+        gatheringLikeRepository.deleteAll(gatheringLikeList);
     }
 }

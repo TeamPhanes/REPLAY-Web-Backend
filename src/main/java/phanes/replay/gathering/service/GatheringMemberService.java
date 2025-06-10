@@ -23,7 +23,7 @@ public class GatheringMemberService {
     private final GatheringQueryService gatheringQueryService;
 
     public List<GatheringMemberRs> getMemberList(Long gatheringId) {
-        return gatheringMemberRepository.findAllByGatheringId(gatheringId).stream().map(gatheringMemberMapper::toGatheringRs).toList();
+        return gatheringMemberRepository.findAllByGatheringIdWithUser(gatheringId).stream().map(gatheringMemberMapper::toGatheringRs).toList();
     }
 
     public void addMember(Long userId, Long gatheringId) {
