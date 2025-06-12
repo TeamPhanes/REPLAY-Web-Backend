@@ -2,6 +2,7 @@ package phanes.replay.review.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import phanes.replay.review.domain.Review;
@@ -14,7 +15,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Optional<Review> findByIdAndUserId(Long id, Long userId);
 
-    @Query("SELECT r FROM Review r JOIN r.user WHERE r.theme.id = :themeId")
+    @EntityGraph(attributePaths = {"user", "images", "theme"})
     Page<Review> findAllByThemeId(Long themeId, Pageable pageable);
 
     @Query("SELECT r FROM Review r JOIN r.user JOIN r.theme WHERE r.id = :reviewId and r.theme.id = :themeId and r.user.id = :userId")
