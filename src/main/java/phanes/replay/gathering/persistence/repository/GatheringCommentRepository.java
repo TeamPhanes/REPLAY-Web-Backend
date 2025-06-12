@@ -13,7 +13,7 @@ public interface GatheringCommentRepository extends JpaRepository<GatheringComme
 
     @Query("SELECT gc FROM GatheringComment gc JOIN gc.gathering WHERE gc.user.id = :userId")
     List<GatheringComment> findByUserId(@Param("userId") Long userId, Pageable pageable);
-    @Query("SELECT gc FROM GatheringComment gc JOIN gc.user WHERE gc.gathering.id = :gatheringId ORDER BY gc.createdAt ASC")
+    @Query("SELECT gc FROM GatheringComment gc JOIN FETCH gc.user u JOIN FETCH gc.gathering g WHERE g.id = :gatheringId ORDER BY gc.createdAt ASC")
     List<GatheringComment> findByGatheringId(Long gatheringId, Pageable pageable);
     Optional<GatheringComment> findByIdAndGatheringIdAndUserId(Long commentId, Long gatheringId, Long userId);
     Long countByUserId(Long userId);
