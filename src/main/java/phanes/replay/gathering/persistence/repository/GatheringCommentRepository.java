@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface GatheringCommentRepository extends JpaRepository<GatheringComment, Long> {
 
-    @Query("SELECT gc FROM GatheringComment gc JOIN gc.gathering WHERE gc.user.id = :userId")
+    @Query("SELECT gc FROM GatheringComment gc JOIN FETCH gc.gathering g JOIN FETCH gc.user u WHERE gc.user.id = :userId")
     List<GatheringComment> findByUserId(@Param("userId") Long userId, Pageable pageable);
     @Query("SELECT gc FROM GatheringComment gc JOIN FETCH gc.user u JOIN FETCH gc.gathering g WHERE g.id = :gatheringId ORDER BY gc.createdAt ASC")
     List<GatheringComment> findByGatheringId(Long gatheringId, Pageable pageable);
