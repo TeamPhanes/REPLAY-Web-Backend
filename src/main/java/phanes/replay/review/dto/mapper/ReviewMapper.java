@@ -1,4 +1,4 @@
-package phanes.replay.review.mapper;
+package phanes.replay.review.dto.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

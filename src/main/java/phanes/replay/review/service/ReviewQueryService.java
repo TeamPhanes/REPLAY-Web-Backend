@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import phanes.replay.exception.ReviewNotFountException;
 import phanes.replay.review.domain.Review;
-import phanes.replay.review.repository.ReviewRepository;
+import phanes.replay.review.persistence.repository.ReviewRepository;
 
 @Service
 @RequiredArgsConstructor
