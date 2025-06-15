@@ -12,6 +12,8 @@ import java.util.List;
 public interface UserGatheringQueryMapper {
 
     List<UserParticipantGatheringQuery> findUserParticipantGathering(@Param("userId") Long userId, @Param("limit") Integer limit, @Param("offset") Integer offset);
+
     List<UserLikeGatheringQuery> findUserLikeGathering(@Param("userId") Long userId, @Param("limit") Integer limit, @Param("offset") Integer offset);
+
     List<UserScheduleQuery> findUserSchedule(Long userId);
 }

@@ -98,7 +98,7 @@ public class GatheringService {
     public void deleteGathering(Long userId, Long gatheringId) {
         List<GatheringMember> gatheringMemberList = gatheringMemberQueryService.findAllByGatheringIdWithUserAndGathering(gatheringId);
         GatheringMember host = findHost(gatheringMemberList);
-        if(!Objects.equals(userId, host.getUser().getId())) {
+        if (!Objects.equals(userId, host.getUser().getId())) {
             throw new IllegalAccessException("Only the host can delete a gathering");
         }
         GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
