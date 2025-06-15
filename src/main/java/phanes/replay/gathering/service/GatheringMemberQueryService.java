@@ -20,7 +20,7 @@ public class GatheringMemberQueryService {
         return gatheringMemberRepository.countByUserId(userId);
     }
 
-    public Long countByUserIdAndRole(Long userId, Role role) {
+    public Long countByUserIdAndRoleEquals(Long userId, Role role) {
         return gatheringMemberRepository.countByUserIdAndRoleEquals(userId, role);
     }
 

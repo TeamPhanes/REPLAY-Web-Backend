@@ -12,7 +12,7 @@ public class ThemeLikeQueryService {
 
     private final ThemeLikeRepository themeLikeRepository;
 
-    public Long countMyLikeTheme(Long userId) {
+    public Long countByUserId(Long userId) {
         return themeLikeRepository.countByUserId(userId);
     }
 

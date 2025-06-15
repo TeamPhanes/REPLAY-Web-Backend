@@ -56,7 +56,7 @@ public class UserService {
     public UserRs getProfileUserInfo(Long userId) {
         User user = userQueryService.findById(userId);
         Long totalGathering = gatheringMemberQueryService.countByUserId(userId);
-        Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRole(userId, Role.HOST);
+        Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRoleEquals(userId, Role.HOST);
         Long totalTheme = themeVisitQueryService.countByUserId(userId);
         Long successCount = reviewQueryService.countBySuccess(true);
         Long failCount = reviewQueryService.countBySuccess(false);
@@ -85,7 +85,7 @@ public class UserService {
     public OtherUserRs getUserByNickname(String nickname) {
         User user = userQueryService.findByNickname(nickname);
         Long totalGathering = gatheringMemberQueryService.countByUserId(user.getId());
-        Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRole(user.getId(), Role.HOST);
+        Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRoleEquals(user.getId(), Role.HOST);
         Long totalTheme = themeVisitQueryService.countByUserId(user.getId());
         Long successCount = reviewQueryService.countBySuccess(true);
         Long failCount = reviewQueryService.countBySuccess(false);
@@ -112,7 +112,7 @@ public class UserService {
 
     public Page<Map<LocalDate, List<UserCommentRs>>> getMyComment(Long userId, Pageable pageable) {
         List<GatheringComment> myComment = gatheringCommentQueryService.getMyComment(userId, pageable);
-        Long totalCount = gatheringCommentQueryService.countMyComment(userId);
+        Long totalCount = gatheringCommentQueryService.countByUserId(userId);
         LinkedHashMap<LocalDate, List<UserCommentRs>> data = myComment.stream()
                 .map(userMapper::toUserCommentRs)
                 .collect(Collectors.groupingBy(uc -> uc.getCreatedAt().toLocalDate(), LinkedHashMap::new, Collectors.toList()));
@@ -121,13 +121,13 @@ public class UserService {
 
     public Page<List<UserLikeGatheringRs>> getMyLikeGathering(Long userId, Integer limit, Integer offset) {
         List<UserLikeGatheringRs> data = userGatheringQueryMapper.findUserLikeGathering(userId, limit, offset).stream().map(userMapper::toUserLikeGatheringRs).toList();
-        Long totalCount = gatheringLikeQueryService.countMyLikeGathering(userId);
+        Long totalCount = gatheringLikeQueryService.countByUserId(userId);
         return likeGatheringPageMapper.toPage(totalCount, offset, data);
     }
 
     public Page<List<UserLikeThemeRs>> getMyLikeTheme(Long userId, Integer limit, Integer offset) {
         List<UserLikeThemeRs> data = userThemeQueryMapper.findUserLikeThemes(userId, limit, offset).stream().map(userMapper::toUserLikeThemeRs).toList();
-        Long totalCount = themeLikeQueryService.countMyLikeTheme(userId);
+        Long totalCount = themeLikeQueryService.countByUserId(userId);
         return likeThemePageMapper.toPage(totalCount, offset, data);
     }
 

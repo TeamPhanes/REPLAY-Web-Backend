@@ -18,7 +18,7 @@ public class GatheringCommentQueryService {
         return gatheringCommentRepository.findByUserId(userId, pageable);
     }
 
-    public Long countMyComment(Long userId) {
+    public Long countByUserId(Long userId) {
         return gatheringCommentRepository.countByUserId(userId);
     }
 
