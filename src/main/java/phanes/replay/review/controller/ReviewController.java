@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import phanes.replay.common.dto.response.Page;
 import phanes.replay.review.dto.request.ReviewCreateRq;
 import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.review.dto.response.ReviewRatingRs;
@@ -22,7 +23,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public List<ReviewRs> reviewList(@RequestParam Long themeId, @RequestParam Integer limit, @RequestParam Integer offset) {
+    public Page<List<ReviewRs>> reviewList(@RequestParam Long themeId, @RequestParam Integer limit, @RequestParam Integer offset) {
         PageRequest pageRequest = PageRequest.of(offset, limit);
         return reviewService.getReviewByThemeId(themeId, pageRequest);
     }

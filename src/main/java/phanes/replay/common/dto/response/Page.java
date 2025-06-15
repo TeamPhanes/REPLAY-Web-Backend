@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class Page<T> {
 
     private Long totalCount;
-    private Integer currentPage;
+    private Long currentPage;
     private T data;
 }
