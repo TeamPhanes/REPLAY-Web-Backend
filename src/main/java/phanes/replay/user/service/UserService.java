@@ -36,20 +36,20 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final GatheringCommentQueryService gatheringCommentQueryService;
-    private final GatheringMemberQueryService gatheringMemberQueryService;
-    private final GatheringLikeQueryService gatheringLikeQueryService;
-    private final ThemeVisitQueryService themeVisitQueryService;
-    private final ThemeLikeQueryService themeLikeQueryService;
-    private final ReviewQueryService reviewQueryService;
-    private final UserQueryService userQueryService;
-    private final UserGatheringQueryMapper userGatheringQueryMapper;
-    private final UserThemeQueryMapper userThemeQueryMapper;
-    private final PageMapper<List<UserVisitThemeRs>> visitThemePageMapper;
     private final PageMapper<List<UserParticipatingGatheringRs>> participatingGatheringPageMapper;
     private final PageMapper<Map<LocalDate, List<UserCommentRs>>> commentPageMapper;
     private final PageMapper<List<UserLikeGatheringRs>> likeGatheringPageMapper;
+    private final GatheringCommentQueryService gatheringCommentQueryService;
+    private final GatheringMemberQueryService gatheringMemberQueryService;
+    private final PageMapper<List<UserVisitThemeRs>> visitThemePageMapper;
     private final PageMapper<List<UserLikeThemeRs>> likeThemePageMapper;
+    private final GatheringLikeQueryService gatheringLikeQueryService;
+    private final UserGatheringQueryMapper userGatheringQueryMapper;
+    private final ThemeVisitQueryService themeVisitQueryService;
+    private final ThemeLikeQueryService themeLikeQueryService;
+    private final UserThemeQueryMapper userThemeQueryMapper;
+    private final ReviewQueryService reviewQueryService;
+    private final UserQueryService userQueryService;
     private final UserMapper userMapper;
     private final S3Service s3Service;
 
