@@ -14,7 +14,7 @@ public class GatheringLikeQueryService {
 
     private final GatheringLikeRepository gatheringLikeRepository;
 
-    public Long countMyLikeGathering(Long userId) {
+    public Long countByUserId(Long userId) {
         return gatheringLikeRepository.countByUserId(userId);
     }
 
