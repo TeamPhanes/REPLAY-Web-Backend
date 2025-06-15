@@ -45,6 +45,6 @@ public class Review extends BaseTimeEntity {
         this.levelReview = reviewUpdateRq.getLevelReview();
         this.storyReview = reviewUpdateRq.getStoryReview();
         this.success = reviewUpdateRq.getSuccess();
-        this.content = reviewUpdateRq.getReviewComment();
+        this.content = reviewUpdateRq.getContent();
     }
 }
