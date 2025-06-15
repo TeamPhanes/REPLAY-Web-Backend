@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface GatheringContentRepository extends JpaRepository<GatheringContent, Long> {
 
-    @Query("SELECT GC FROM GatheringContent GC JOIN GC.gathering WHERE GC.gathering.id = :gatheringId")
+    @Query("SELECT GC FROM GatheringContent GC JOIN FETCH GC.gathering WHERE GC.gathering.id = :gatheringId")
     Optional<GatheringContent> findByGatheringIdWithGathering(Long gatheringId);
 }
