@@ -49,16 +49,16 @@ public class ThemeService {
         themeLikeQueryService.save(themeLike);
     }
 
-    public void deleteThemeLike(Long userId, Long themeId) {
-        ThemeLike themeLike = themeLikeQueryService.findByUserIdAndThemeId(userId, themeId);
-        themeLikeQueryService.delete(themeLike);
-    }
-
     public void updateThemeVisit(Long userId, Long themeId) {
         User user = userQueryService.findById(userId);
         Theme theme = themeQueryService.findById(themeId);
         ThemeVisit themeVisit = ThemeVisit.builder().user(user).theme(theme).build();
         themeVisitQueryService.save(themeVisit);
+    }
+
+    public void deleteThemeLike(Long userId, Long themeId) {
+        ThemeLike themeLike = themeLikeQueryService.findByUserIdAndThemeId(userId, themeId);
+        themeLikeQueryService.delete(themeLike);
     }
 
     public void deleteThemeVisit(Long userId, Long themeId) {

@@ -12,16 +12,16 @@ public class ThemeLikeQueryService {
 
     private final ThemeLikeRepository themeLikeRepository;
 
+    public ThemeLike findByUserIdAndThemeId(Long userId, Long themeId) {
+        return themeLikeRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new LikeNotFoundException(String.format("Theme Like Not Found - user: %d, theme: %d", userId, themeId)));
+    }
+
     public Long countByUserId(Long userId) {
         return themeLikeRepository.countByUserId(userId);
     }
 
     public void save(ThemeLike themeLike) {
         themeLikeRepository.save(themeLike);
-    }
-
-    public ThemeLike findByUserIdAndThemeId(Long userId, Long themeId) {
-        return themeLikeRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new LikeNotFoundException(String.format("Theme Like Not Found - user: %d, theme: %d", userId, themeId)));
     }
 
     public void delete(ThemeLike themeLike) {

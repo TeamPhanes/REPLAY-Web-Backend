@@ -94,11 +94,18 @@ public class GatheringService {
         gatheringContentQueryService.save(gatheringContent);
     }
 
+    public void updateGatheringLike(Long userId, Long gatheringId) {
+        User user = userQueryService.findById(userId);
+        Gathering gathering = gatheringQueryService.findById(gatheringId);
+        GatheringLike gatheringLike = GatheringLike.builder().user(user).gathering(gathering).build();
+        gatheringLikeQueryService.save(gatheringLike);
+    }
+
     @Transactional
     public void deleteGathering(Long userId, Long gatheringId) {
         List<GatheringMember> gatheringMemberList = gatheringMemberQueryService.findAllByGatheringIdWithUserAndGathering(gatheringId);
         GatheringMember host = findHost(gatheringMemberList);
-        if(!Objects.equals(userId, host.getUser().getId())) {
+        if (!Objects.equals(userId, host.getUser().getId())) {
             throw new IllegalAccessException("Only the host can delete a gathering");
         }
         GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
@@ -113,13 +120,6 @@ public class GatheringService {
 
     private GatheringMember findHost(List<GatheringMember> gatheringMemberList) {
         return gatheringMemberList.stream().filter(gm -> gm.getRole().equals(Role.HOST)).findFirst().orElseThrow(() -> new HostNotFoundException("Host not found"));
-    }
-
-    public void updateGatheringLike(Long userId, Long gatheringId) {
-        User user = userQueryService.findById(userId);
-        Gathering gathering = gatheringQueryService.findById(gatheringId);
-        GatheringLike gatheringLike = GatheringLike.builder().user(user).gathering(gathering).build();
-        gatheringLikeQueryService.save(gatheringLike);
     }
 
     public void deleteGatheringLike(Long userId, Long gatheringId) {

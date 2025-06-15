@@ -12,17 +12,17 @@ import phanes.replay.config.properties.*;
 @EnableFeignClients
 @SpringBootApplication
 @EnableConfigurationProperties({
-		DomainProperties.class,
-		JwtProperties.class,
-		NaverProperties.class,
-		GoogleProperties.class,
-		KakaoProperties.class,
-		S3Properties.class
+        DomainProperties.class,
+        JwtProperties.class,
+        NaverProperties.class,
+        GoogleProperties.class,
+        KakaoProperties.class,
+        S3Properties.class
 })
 @MapperScan("phanes.replay.**.persistence.mapper")
 public class ReplayApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ReplayApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ReplayApplication.class, args);
+    }
 }

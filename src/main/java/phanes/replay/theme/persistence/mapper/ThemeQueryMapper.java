@@ -9,5 +9,6 @@ import java.util.List;
 public interface ThemeQueryMapper {
 
     Long countByKeywordAndAddress(String keyword, String city, String state, String genre);
+
     List<ThemeQuery> findAllByKeywordAndAddress(Long userId, String sortBy, String keyword, String city, String state, String genre, Integer limit, Integer offset);
 }

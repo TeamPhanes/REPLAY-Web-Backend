@@ -5,6 +5,8 @@ import phanes.replay.user.dto.oauth.SocialProfile;
 
 public interface SocialLoginStrategy {
     String getSocialUrl(String state);
+
     SocialType getSocialType();
+
     SocialProfile getProfile(String code, String state);
 }

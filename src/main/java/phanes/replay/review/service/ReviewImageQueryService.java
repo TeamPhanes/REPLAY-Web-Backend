@@ -11,7 +11,6 @@ public class ReviewImageQueryService {
 
     private final ReviewImageRepository reviewImageRepository;
 
-
     public void save(ReviewImage reviewImage) {
         reviewImageRepository.save(reviewImage);
     }

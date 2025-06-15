@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface GatheringLikeRepository extends JpaRepository<GatheringLike, Long> {
 
     Long countByUserId(Long userId);
+
     @Query("SELECT gl FROM GatheringLike gl JOIN FETCH gl.user u JOIN FETCH gl.gathering g WHERE u.id = :userId AND g.id = :gatheringId")
     Optional<GatheringLike> findByUserIdAndGatheringId(Long userId, Long gatheringId);
 

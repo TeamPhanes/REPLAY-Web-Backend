@@ -38,7 +38,7 @@ public class Review extends BaseTimeEntity {
     private List<ReviewImage> images;
 
     public void updateReview(ReviewUpdateRq reviewUpdateRq) {
-        this.score = reviewUpdateRq.getMyRating();
+        this.score = reviewUpdateRq.getRating();
         this.hint = reviewUpdateRq.getHint();
         this.numberOfPlayer = reviewUpdateRq.getNumberOfPlayer();
         this.themeReview = reviewUpdateRq.getThemeReview();

@@ -30,15 +30,15 @@ public class UserController {
         return userService.getProfileUserInfo(userId);
     }
 
+    @GetMapping("/{nickname}")
+    public OtherUserRs getOtherUser(@PathVariable String nickname) {
+        return userService.getUserByNickname(nickname);
+    }
+
     @SecurityRequirement(name = "bearerAuth")
     @PatchMapping(value = "/me", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateMe(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid UserUpdateRq userUpdateRq) {
         userService.updateUser(userId, userUpdateRq.getImage(), userUpdateRq.getNickname(), userUpdateRq.getComment(), Boolean.parseBoolean(userUpdateRq.getEmailMark()), Boolean.parseBoolean(userUpdateRq.getGenderMark()));
-    }
-
-    @GetMapping("/{nickname}")
-    public OtherUserRs getOtherUser(@PathVariable String nickname) {
-        return userService.getUserByNickname(nickname);
     }
 
     @SecurityRequirement(name = "bearerAuth")

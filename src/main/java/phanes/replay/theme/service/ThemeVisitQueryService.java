@@ -12,16 +12,16 @@ public class ThemeVisitQueryService {
 
     private final ThemeVisitRepository themeVisitRepository;
 
+    public ThemeVisit findByUserIdAndThemeId(Long userId, Long themeId) {
+        return themeVisitRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new ThemeVisitNotFoundException(String.format("Theme visit not found - user: %d, theme: %d", userId, themeId)));
+    }
+
     public Long countByUserId(Long userId) {
         return themeVisitRepository.countByUserId(userId);
     }
 
     public void save(ThemeVisit themeVisit) {
         themeVisitRepository.save(themeVisit);
-    }
-
-    public ThemeVisit findByUserIdAndThemeId(Long userId, Long themeId) {
-        return themeVisitRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new ThemeVisitNotFoundException(String.format("Theme visit not found - user: %d, theme: %d", userId, themeId)));
     }
 
     public void delete(ThemeVisit themeVisit) {

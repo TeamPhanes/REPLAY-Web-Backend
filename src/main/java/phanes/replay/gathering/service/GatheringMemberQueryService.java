@@ -16,6 +16,10 @@ public class GatheringMemberQueryService {
 
     private final GatheringMemberRepository gatheringMemberRepository;
 
+    public List<GatheringMember> findAllByMember(Set<Long> gatheringIdList) {
+        return gatheringMemberRepository.findAllByMember(gatheringIdList);
+    }
+
     public Long countByUserId(Long userId) {
         return gatheringMemberRepository.countByUserId(userId);
     }
@@ -24,35 +28,31 @@ public class GatheringMemberQueryService {
         return gatheringMemberRepository.countByUserIdAndRoleEquals(userId, role);
     }
 
-    public List<GatheringMember> getMemberList(Set<Long> gatheringIdList) {
-        return gatheringMemberRepository.findAllByMember(gatheringIdList);
+    public List<GatheringMember> findAllByGatheringIdWithUserAndGathering(Long gatheringId) {
+        return gatheringMemberRepository.findAllByGatheringId(gatheringId);
     }
 
-    public void save(GatheringMember gatheringMember) {
-        gatheringMemberRepository.save(gatheringMember);
+    public List<GatheringMember> findAllByGatheringIdWithUser(Long gatheringId) {
+        return gatheringMemberRepository.findAllByGatheringId(gatheringId);
     }
 
     public GatheringMember findHostByUserIdAndGatheringId(Long userId, Long gatheringId) {
         return gatheringMemberRepository.findByUserIdAndGatheringIdAndRoleEquals(userId, gatheringId, Role.HOST).orElseThrow(() -> new HostNotFoundException("host not found"));
     }
 
-    public List<GatheringMember> findAllByGatheringIdWithUserAndGathering(Long gatheringId) {
-        return gatheringMemberRepository.findAllByGatheringIdWithUserAndGathering(gatheringId);
-    }
-
-    public void deleteAll(List<GatheringMember> gatheringMemberList) {
-        gatheringMemberRepository.deleteAll(gatheringMemberList);
-    }
-
-    public List<GatheringMember> findAllByGatheringIdWithUser(Long gatheringId) {
-        return gatheringMemberRepository.findAllByGatheringIdWithUser(gatheringId);
-    }
-
     public GatheringMember findByUserIdAndGatheringId(Long userId, Long gatheringId) {
         return gatheringMemberRepository.findByUserIdAndGatheringId(userId, gatheringId);
     }
 
+    public void save(GatheringMember gatheringMember) {
+        gatheringMemberRepository.save(gatheringMember);
+    }
+
     public void delete(GatheringMember member) {
         gatheringMemberRepository.delete(member);
+    }
+
+    public void deleteAll(List<GatheringMember> gatheringMemberList) {
+        gatheringMemberRepository.deleteAll(gatheringMemberList);
     }
 }

@@ -39,13 +39,6 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final S3Service s3Service;
 
-    public void updateThemeReview(Long userId, Long reviewId, ReviewUpdateRq reviewUpdateRq) {
-        User user = userQueryService.findById(userId);
-        Review review = reviewQueryService.findByIdAndUserId(reviewId, user.getId());
-        review.updateReview(reviewUpdateRq);
-        reviewQueryService.save(review);
-    }
-
     public Page<List<ReviewRs>> getReviewByThemeId(Long themeId, Pageable pageable) {
         Long totalCount = reviewQueryService.countByThemeId(themeId);
         List<ReviewRs> data = reviewQueryService.findAllByThemeId(themeId, pageable).stream().map(reviewMapper::ReviewToReviewDTO).toList();
@@ -89,6 +82,13 @@ public class ReviewService {
                 throw new ImageUploadFailException("image upload failed", e);
             }
         }
+    }
+
+    public void updateThemeReview(Long userId, Long reviewId, ReviewUpdateRq reviewUpdateRq) {
+        User user = userQueryService.findById(userId);
+        Review review = reviewQueryService.findByIdAndUserId(reviewId, user.getId());
+        review.updateReview(reviewUpdateRq);
+        reviewQueryService.save(review);
     }
 
     public void deleteReview(Long userId, Long reviewId, Long themeId) {
