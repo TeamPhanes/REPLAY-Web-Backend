@@ -21,13 +21,13 @@ import java.util.List;
 public class ThemeService {
 
     private final ThemeContentQueryService themeContentQueryService;
+    private final ThemeVisitQueryService themeVisitQueryService;
     private final ThemeLikeQueryService themeLikeQueryService;
     private final PageMapper<List<ThemeRs>> pageMapper;
     private final ThemeQueryService themeQueryService;
     private final UserQueryService userQueryService;
     private final ThemeQueryMapper themeQueryMapper;
     private final ThemeMapper themeMapper;
-    private final ThemeVisitQueryService themeVisitQueryService;
 
     public Page<List<ThemeRs>> getThemeList(Long userId, String sortBy, String keyword, String city, String state, String genre, Integer limit, Integer offset) {
         Long totalCount = themeQueryMapper.countByKeywordAndAddress(keyword, city, state, genre);

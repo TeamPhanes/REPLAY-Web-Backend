@@ -1,10 +1,14 @@
 package phanes.replay.review.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import phanes.replay.exception.ReviewNotFountException;
 import phanes.replay.review.domain.Review;
 import phanes.replay.review.persistence.repository.ReviewRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,5 +26,29 @@ public class ReviewQueryService {
 
     public void save(Review review) {
         reviewRepository.save(review);
+    }
+
+    public Long countByThemeId(Long themeId) {
+        return reviewRepository.countByThemeId(themeId);
+    }
+
+    public Page<Review> findAllByThemeId(Long themeId, Pageable pageable) {
+        return reviewRepository.findAllByThemeId(themeId, pageable);
+    }
+
+    public Review findByReviewIdAndThemeIdAndUserId(Long reviewId, Long themeId, Long userId) {
+        return reviewRepository.findByReviewIdAndThemeIdAndUserId(reviewId, themeId, userId).orElseThrow(() -> new ReviewNotFountException(String.format("user: %d, theme: %d, review: %d not found", userId, themeId, reviewId)));
+    }
+
+    public void delete(Review review) {
+        reviewRepository.delete(review);
+    }
+
+    public Object[][] findCountAndAverageByThemeId(Long themeId) {
+        return reviewRepository.findCountAndAverageByThemeId(themeId);
+    }
+
+    public List<Object[]> countAllByThemeId(Long themeId) {
+        return reviewRepository.countAllByThemeId(themeId);
     }
 }

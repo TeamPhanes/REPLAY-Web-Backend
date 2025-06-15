@@ -43,4 +43,16 @@ public class GatheringMemberQueryService {
     public void deleteAll(List<GatheringMember> gatheringMemberList) {
         gatheringMemberRepository.deleteAll(gatheringMemberList);
     }
+
+    public List<GatheringMember> findAllByGatheringIdWithUser(Long gatheringId) {
+        return gatheringMemberRepository.findAllByGatheringIdWithUser(gatheringId);
+    }
+
+    public GatheringMember findByUserIdAndGatheringId(Long userId, Long gatheringId) {
+        return gatheringMemberRepository.findByUserIdAndGatheringId(userId, gatheringId);
+    }
+
+    public void delete(GatheringMember member) {
+        gatheringMemberRepository.delete(member);
+    }
 }
