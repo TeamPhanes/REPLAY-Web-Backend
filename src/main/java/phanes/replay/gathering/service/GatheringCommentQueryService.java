@@ -7,6 +7,7 @@ import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.persistence.repository.GatheringCommentRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +30,21 @@ public class GatheringCommentQueryService {
 
     public void deleteAll(List<GatheringComment> gatheringCommentList) {
         gatheringCommentRepository.deleteAll(gatheringCommentList);
+    }
+
+    public List<GatheringComment> findByGatheringId(Long gatheringId, Pageable pageable) {
+        return gatheringCommentRepository.findByGatheringId(gatheringId, pageable);
+    }
+
+    public void save(GatheringComment gatheringComment) {
+        gatheringCommentRepository.save(gatheringComment);
+    }
+
+    public Optional<GatheringComment> findByIdAndGatheringIdAndUserId(Long commentId, Long gatheringId, Long userId) {
+        return gatheringCommentRepository.findByIdAndGatheringIdAndUserId(commentId, gatheringId, userId);
+    }
+
+    public void delete(GatheringComment comment) {
+        gatheringCommentRepository.delete(comment);
     }
 }
