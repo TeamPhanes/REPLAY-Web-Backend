@@ -70,22 +70,24 @@ public class ReviewService {
                 .build();
         reviewQueryService.save(review);
 
-        List<String> uploadImageList = new ArrayList<>();
-        try {
-            for (MultipartFile image : reviewCreateRq.getImages()) {
-                String uploadImage = s3Service.uploadImage("review/" + UUID.randomUUID() + ".png", image);
-                uploadImageList.add(uploadImage);
-                ReviewImage reviewImage = ReviewImage.builder()
-                        .url(uploadImage)
-                        .review(review)
-                        .build();
-                reviewImageQueryService.save(reviewImage);
+        if (reviewCreateRq.getImages() != null) {
+            List<String> uploadImageList = new ArrayList<>();
+            try {
+                for (MultipartFile image : reviewCreateRq.getImages()) {
+                    String uploadImage = s3Service.uploadImage("review/" + UUID.randomUUID() + ".png", image);
+                    uploadImageList.add(uploadImage);
+                    ReviewImage reviewImage = ReviewImage.builder()
+                            .url(uploadImage)
+                            .review(review)
+                            .build();
+                    reviewImageQueryService.save(reviewImage);
+                }
+            } catch (Exception e) {
+                for (String uploadImage : uploadImageList) {
+                    s3Service.deleteImage("replay", uploadImage);
+                }
+                throw new ImageUploadFailException("image upload failed", e);
             }
-        } catch (Exception e) {
-            for (String uploadImage : uploadImageList) {
-                s3Service.deleteImage("replay", uploadImage);
-            }
-            throw new ImageUploadFailException("image upload failed", e);
         }
     }
 
