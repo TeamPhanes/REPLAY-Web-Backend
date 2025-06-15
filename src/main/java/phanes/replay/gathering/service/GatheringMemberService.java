@@ -27,7 +27,7 @@ public class GatheringMemberService {
     }
 
     public void addMember(Long userId, Long gatheringId) {
-        User user = userQueryService.findByUserId(userId);
+        User user = userQueryService.findById(userId);
         Gathering gathering = gatheringQueryService.findById(gatheringId);
         GatheringMember member = GatheringMember.builder()
                 .user(user)

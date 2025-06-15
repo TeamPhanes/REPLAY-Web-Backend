@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.exception.ReviewNotFountException;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.domain.Review;
@@ -40,7 +41,7 @@ public class ReviewService {
     private final ReviewImageRepository reviewImageRepository;
 
     public void updateThemeReview(Long userId, Long reviewId, ReviewUpdateRq reviewUpdateRq) {
-        User user = userQueryService.findByUserId(userId);
+        User user = userQueryService.findById(userId);
         Review review = reviewQueryService.findByIdAndUserId(reviewId, user.getId());
         review.updateReview(reviewUpdateRq);
         reviewQueryService.save(review);
@@ -52,8 +53,8 @@ public class ReviewService {
 
     @Transactional
     public void createReview(Long userId, ReviewCreateRq reviewCreateRq) {
-        User user = userQueryService.findByUserId(userId);
-        Theme theme = themeQueryService.getTheme(reviewCreateRq.getThemeId());
+        User user = userQueryService.findById(userId);
+        Theme theme = themeQueryService.findById(reviewCreateRq.getThemeId());
         Review review = Review.builder()
                 .content(reviewCreateRq.getContent())
                 .success(Boolean.parseBoolean(reviewCreateRq.getSuccess()))
@@ -83,11 +84,12 @@ public class ReviewService {
             for (String uploadImage : uploadImageList) {
                 s3Service.deleteImage("replay", uploadImage);
             }
+            throw new ImageUploadFailException("image upload failed", e);
         }
     }
 
     public void deleteReview(Long userId, Long reviewId, Long themeId) {
-        Review review = reviewRepository.findByReviewIdAndThemeIdAndUserId(reviewId, themeId, userId).orElseThrow(() -> new ReviewNotFountException("review not found"));
+        Review review = reviewRepository.findByReviewIdAndThemeIdAndUserId(reviewId, themeId, userId).orElseThrow(() -> new ReviewNotFountException(String.format("user: %d, theme: %d, review: %d not found", userId, themeId, reviewId)));
         reviewRepository.delete(review);
     }
 

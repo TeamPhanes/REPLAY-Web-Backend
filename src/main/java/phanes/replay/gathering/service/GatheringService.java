@@ -55,9 +55,9 @@ public class GatheringService {
 
     @Transactional
     public void createGathering(Long userId, GatheringCreateRq gatheringCreateRq) {
-        User user = userQueryService.findByUserId(userId);
-        Theme theme = themeQueryService.getTheme(gatheringCreateRq.getThemeId());
-        ThemeContent themeContent = themeContentQueryService.findById(gatheringCreateRq.getThemeId());
+        User user = userQueryService.findById(userId);
+        Theme theme = themeQueryService.findById(gatheringCreateRq.getThemeId());
+        ThemeContent themeContent = themeContentQueryService.findByThemeId(gatheringCreateRq.getThemeId());
         Gathering gathering = Gathering.builder()
                 .theme(theme)
                 .name(gatheringCreateRq.getName())
@@ -116,7 +116,7 @@ public class GatheringService {
     }
 
     public void updateGatheringLike(Long userId, Long gatheringId) {
-        User user = userQueryService.findByUserId(userId);
+        User user = userQueryService.findById(userId);
         Gathering gathering = gatheringQueryService.findById(gatheringId);
         GatheringLike gatheringLike = GatheringLike.builder().user(user).gathering(gathering).build();
         gatheringLikeQueryService.save(gatheringLike);

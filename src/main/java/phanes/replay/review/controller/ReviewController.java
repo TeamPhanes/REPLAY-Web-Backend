@@ -35,7 +35,7 @@ public class ReviewController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PatchMapping("/{reviewId}")
-    public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @RequestBody ReviewUpdateRq reviewUpdateRq) {
+    public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @ModelAttribute ReviewUpdateRq reviewUpdateRq) {
         reviewService.updateThemeReview(userId, reviewId, reviewUpdateRq);
     }
 

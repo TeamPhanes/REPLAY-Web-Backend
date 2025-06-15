@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.common.dto.mapper.PageMapper;
 import phanes.replay.common.dto.response.Page;
+import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
@@ -26,6 +27,7 @@ import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.persistence.mapper.UserGatheringQueryMapper;
 import phanes.replay.user.persistence.mapper.UserThemeQueryMapper;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,7 +54,7 @@ public class UserService {
     private final S3Service s3Service;
 
     public UserRs getProfileUserInfo(Long userId) {
-        User user = userQueryService.findByUserId(userId);
+        User user = userQueryService.findById(userId);
         Long totalGathering = gatheringMemberQueryService.countByUserId(userId);
         Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRole(userId, Role.HOST);
         Long totalTheme = themeVisitQueryService.countByUserId(userId);
@@ -63,9 +65,13 @@ public class UserService {
 
     @Transactional
     public void updateUser(Long userId, MultipartFile image, String nickname, String comment, Boolean emailMark, Boolean genderMark) {
-        User user = userQueryService.findByUserId(userId);
-        String imageUrl = image == null ? user.getProfileImage() : s3Service.uploadImage("user/" + UUID.randomUUID() + ".png", image);
-        user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
+        User user = userQueryService.findById(userId);
+        try {
+            String imageUrl = image == null ? user.getProfileImage() : s3Service.uploadImage("user/" + UUID.randomUUID() + ".png", image);
+            user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
+        } catch (IOException e) {
+            throw new ImageUploadFailException("Image upload fail", e);
+        }
         userQueryService.save(user);
     }
 
@@ -77,7 +83,7 @@ public class UserService {
     }
 
     public OtherUserRs getUserByNickname(String nickname) {
-        User user = userQueryService.findByUsername(nickname);
+        User user = userQueryService.findByNickname(nickname);
         Long totalGathering = gatheringMemberQueryService.countByUserId(user.getId());
         Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRole(user.getId(), Role.HOST);
         Long totalTheme = themeVisitQueryService.countByUserId(user.getId());
