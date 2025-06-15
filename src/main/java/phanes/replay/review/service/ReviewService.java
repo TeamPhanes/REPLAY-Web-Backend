@@ -5,6 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import phanes.replay.common.dto.mapper.PageMapper;
+import phanes.replay.common.dto.response.Page;
 import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.exception.ReviewNotFountException;
 import phanes.replay.image.service.S3Service;
@@ -39,6 +41,7 @@ public class ReviewService {
     private final ThemeQueryService themeQueryService;
     private final S3Service s3Service;
     private final ReviewImageRepository reviewImageRepository;
+    private final PageMapper<List<ReviewRs>> pageMapper;
 
     public void updateThemeReview(Long userId, Long reviewId, ReviewUpdateRq reviewUpdateRq) {
         User user = userQueryService.findById(userId);
@@ -47,8 +50,10 @@ public class ReviewService {
         reviewQueryService.save(review);
     }
 
-    public List<ReviewRs> getReviewByThemeId(Long themeId, Pageable pageable) {
-        return reviewRepository.findAllByThemeId(themeId, pageable).stream().map(reviewMapper::ReviewToReviewDTO).toList();
+    public Page<List<ReviewRs>> getReviewByThemeId(Long themeId, Pageable pageable) {
+        Long totalCount = reviewRepository.countByThemeId(themeId);
+        List<ReviewRs> data = reviewRepository.findAllByThemeId(themeId, pageable).stream().map(reviewMapper::ReviewToReviewDTO).toList();
+        return pageMapper.toPage(totalCount, pageable.getOffset(), data);
     }
 
     @Transactional

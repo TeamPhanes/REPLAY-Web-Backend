@@ -26,4 +26,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT r.score, COUNT(*) AS count FROM Review r JOIN r.theme t WHERE t.id = :themeId GROUP BY r.score ORDER BY r.score DESC")
     List<Object[]> countAllByThemeId(Long themeId);
+
+    Long countByThemeId(Long themeId);
 }
