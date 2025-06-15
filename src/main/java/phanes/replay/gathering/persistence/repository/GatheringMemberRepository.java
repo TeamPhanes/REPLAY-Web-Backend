@@ -15,11 +15,11 @@ public interface GatheringMemberRepository extends JpaRepository<GatheringMember
 
     Long countByUserId(Long userId);
     Long countByUserIdAndRoleEquals(Long userId, Role role);
-    @Query("SELECT gm FROM GatheringMember gm JOIN gm.user u JOIN gm.gathering g WHERE gm.gathering.id IN :gatheringIdList")
+    @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.user u JOIN FETCH gm.gathering g WHERE gm.gathering.id IN :gatheringIdList")
     List<GatheringMember> findAllByMember(Set<Long> gatheringIdList);
     @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.user u WHERE gm.gathering.id = :gatheringId")
     List<GatheringMember> findAllByGatheringIdWithUser(Long gatheringId);
-    @Query("SELECT gm FROM GatheringMember gm JOIN gm.user u JOIN gm.gathering g WHERE gm.gathering.id = :gatheringId")
+    @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.user u JOIN FETCH gm.gathering g WHERE gm.gathering.id = :gatheringId")
     List<GatheringMember> findAllByGatheringIdWithUserAndGathering(Long gatheringId);
     GatheringMember findByUserIdAndGatheringId(Long userId, Long gatheringId);
     @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.gathering g JOIN FETCH gm.user u WHERE u.id = :userId and g.id = :gatheringId and gm.role = :role")
