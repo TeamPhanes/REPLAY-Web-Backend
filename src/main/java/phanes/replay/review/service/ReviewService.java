@@ -39,9 +39,9 @@ public class ReviewService {
     private final S3Service s3Service;
     private final ReviewImageRepository reviewImageRepository;
 
-    public void updateThemeReview(Long userId, ReviewUpdateRq reviewUpdateRq) {
+    public void updateThemeReview(Long userId, Long reviewId, ReviewUpdateRq reviewUpdateRq) {
         User user = userQueryService.findByUserId(userId);
-        Review review = reviewQueryService.findByIdAndUserId(reviewUpdateRq.getId(), user.getId());
+        Review review = reviewQueryService.findByIdAndUserId(reviewId, user.getId());
         review.updateReview(reviewUpdateRq);
         reviewQueryService.save(review);
     }
