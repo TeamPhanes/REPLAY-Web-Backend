@@ -1,4 +1,4 @@
-package phanes.replay.review.repository;
+package phanes.replay.review.persistence.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

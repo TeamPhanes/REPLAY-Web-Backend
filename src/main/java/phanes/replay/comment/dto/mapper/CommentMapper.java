@@ -1,4 +1,4 @@
-package phanes.replay.comment.mapper;
+package phanes.replay.comment.dto.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
