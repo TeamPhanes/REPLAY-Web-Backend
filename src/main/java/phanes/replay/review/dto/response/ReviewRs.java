@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ReviewRs {
 
+    private Long id;
     private String content;
     private List<String> images;
     private Double rating;
