@@ -93,6 +93,8 @@ public class ReviewService {
 
     public void deleteReview(Long userId, Long reviewId, Long themeId) {
         Review review = reviewQueryService.findByReviewIdAndThemeIdAndUserId(reviewId, themeId, userId);
+        List<ReviewImage> reviewImageList = reviewImageQueryService.findByReviewId(reviewId);
+        reviewImageQueryService.deleteAll(reviewImageList);
         reviewQueryService.delete(review);
     }
 
