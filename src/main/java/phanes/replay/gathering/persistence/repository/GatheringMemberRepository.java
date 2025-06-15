@@ -20,11 +20,8 @@ public interface GatheringMemberRepository extends JpaRepository<GatheringMember
     @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.user u JOIN FETCH gm.gathering g WHERE gm.gathering.id IN :gatheringIdList")
     List<GatheringMember> findAllByMember(Set<Long> gatheringIdList);
 
-    @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.user u WHERE gm.gathering.id = :gatheringId")
-    List<GatheringMember> findAllByGatheringIdWithUser(Long gatheringId);
-
-    @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.user u JOIN FETCH gm.gathering g WHERE gm.gathering.id = :gatheringId")
-    List<GatheringMember> findAllByGatheringIdWithUserAndGathering(Long gatheringId);
+    @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.user u JOIN FETCH gm.gathering g WHERE g.id = :gatheringId")
+    List<GatheringMember> findAllByGatheringId(Long gatheringId);
 
     GatheringMember findByUserIdAndGatheringId(Long userId, Long gatheringId);
 

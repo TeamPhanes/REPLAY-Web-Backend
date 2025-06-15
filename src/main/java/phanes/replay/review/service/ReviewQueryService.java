@@ -20,28 +20,20 @@ public class ReviewQueryService {
         return reviewRepository.countBySuccess(success);
     }
 
-    public Review findByIdAndUserId(Long id, Long userId) {
-        return reviewRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ReviewNotFountException(String.format("Review  not found - user: %d, review: %d", userId, id)));
-    }
-
-    public void save(Review review) {
-        reviewRepository.save(review);
-    }
-
-    public Long countByThemeId(Long themeId) {
-        return reviewRepository.countByThemeId(themeId);
-    }
-
     public Page<Review> findAllByThemeId(Long themeId, Pageable pageable) {
         return reviewRepository.findAllByThemeId(themeId, pageable);
+    }
+
+    public Review findByIdAndUserId(Long id, Long userId) {
+        return reviewRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ReviewNotFountException(String.format("Review  not found - user: %d, review: %d", userId, id)));
     }
 
     public Review findByReviewIdAndThemeIdAndUserId(Long reviewId, Long themeId, Long userId) {
         return reviewRepository.findByReviewIdAndThemeIdAndUserId(reviewId, themeId, userId).orElseThrow(() -> new ReviewNotFountException(String.format("user: %d, theme: %d, review: %d not found", userId, themeId, reviewId)));
     }
 
-    public void delete(Review review) {
-        reviewRepository.delete(review);
+    public Long countByThemeId(Long themeId) {
+        return reviewRepository.countByThemeId(themeId);
     }
 
     public Object[][] findCountAndAverageByThemeId(Long themeId) {
@@ -50,5 +42,13 @@ public class ReviewQueryService {
 
     public List<Object[]> countAllByThemeId(Long themeId) {
         return reviewRepository.countAllByThemeId(themeId);
+    }
+
+    public void save(Review review) {
+        reviewRepository.save(review);
+    }
+
+    public void delete(Review review) {
+        reviewRepository.delete(review);
     }
 }

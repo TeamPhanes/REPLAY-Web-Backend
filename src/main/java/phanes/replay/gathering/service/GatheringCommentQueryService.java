@@ -15,36 +15,35 @@ public class GatheringCommentQueryService {
 
     private final GatheringCommentRepository gatheringCommentRepository;
 
-    public List<GatheringComment> getMyComment(Long userId, Pageable pageable) {
+    public List<GatheringComment> findByUserId(Long userId, Pageable pageable) {
         return gatheringCommentRepository.findByUserId(userId, pageable);
-    }
-
-    public Long countByUserId(Long userId) {
-        return gatheringCommentRepository.countByUserId(userId);
     }
 
     public List<GatheringComment> findAllByGatheringId(Long gatheringId) {
         return gatheringCommentRepository.findAllByGatheringId(gatheringId);
     }
 
-
-    public void deleteAll(List<GatheringComment> gatheringCommentList) {
-        gatheringCommentRepository.deleteAll(gatheringCommentList);
-    }
-
     public List<GatheringComment> findByGatheringId(Long gatheringId, Pageable pageable) {
         return gatheringCommentRepository.findByGatheringId(gatheringId, pageable);
-    }
-
-    public void save(GatheringComment gatheringComment) {
-        gatheringCommentRepository.save(gatheringComment);
     }
 
     public Optional<GatheringComment> findByIdAndGatheringIdAndUserId(Long commentId, Long gatheringId, Long userId) {
         return gatheringCommentRepository.findByIdAndGatheringIdAndUserId(commentId, gatheringId, userId);
     }
 
+    public Long countByUserId(Long userId) {
+        return gatheringCommentRepository.countByUserId(userId);
+    }
+
+    public void save(GatheringComment gatheringComment) {
+        gatheringCommentRepository.save(gatheringComment);
+    }
+
     public void delete(GatheringComment comment) {
         gatheringCommentRepository.delete(comment);
+    }
+
+    public void deleteAll(List<GatheringComment> gatheringCommentList) {
+        gatheringCommentRepository.deleteAll(gatheringCommentList);
     }
 }

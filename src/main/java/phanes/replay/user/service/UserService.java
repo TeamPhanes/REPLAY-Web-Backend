@@ -63,6 +63,16 @@ public class UserService {
         return userMapper.toUserRs(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
+    public OtherUserRs getUserByNickname(String nickname) {
+        User user = userQueryService.findByNickname(nickname);
+        Long totalGathering = gatheringMemberQueryService.countByUserId(user.getId());
+        Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRoleEquals(user.getId(), Role.HOST);
+        Long totalTheme = themeVisitQueryService.countByUserId(user.getId());
+        Long successCount = reviewQueryService.countBySuccess(true);
+        Long failCount = reviewQueryService.countBySuccess(false);
+        return userMapper.toOtherUserRs(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
+    }
+
     @Transactional
     public void updateUser(Long userId, MultipartFile image, String nickname, String comment, Boolean emailMark, Boolean genderMark) {
         User user = userQueryService.findById(userId);
@@ -82,20 +92,10 @@ public class UserService {
         return visitThemePageMapper.toPage(totalCount, offset, data);
     }
 
-    public OtherUserRs getUserByNickname(String nickname) {
-        User user = userQueryService.findByNickname(nickname);
-        Long totalGathering = gatheringMemberQueryService.countByUserId(user.getId());
-        Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRoleEquals(user.getId(), Role.HOST);
-        Long totalTheme = themeVisitQueryService.countByUserId(user.getId());
-        Long successCount = reviewQueryService.countBySuccess(true);
-        Long failCount = reviewQueryService.countBySuccess(false);
-        return userMapper.toOtherUserRs(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
-    }
-
     public Page<List<UserParticipatingGatheringRs>> getMyParticipatingGathering(Long userId, Integer limit, Integer offset) {
         List<UserParticipantGatheringQuery> userParticipantGatheringQuery = userGatheringQueryMapper.findUserParticipantGathering(userId, limit, offset);
         Set<Long> gatheringIdList = userParticipantGatheringQuery.stream().map(UserParticipantGatheringQuery::getGatheringId).collect(Collectors.toSet());
-        Map<Long, List<GatheringMember>> collect = gatheringMemberQueryService.getMemberList(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
+        Map<Long, List<GatheringMember>> collect = gatheringMemberQueryService.findAllByMember(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
         List<UserParticipatingGatheringRs> data = userParticipantGatheringQuery.stream().map(userMapper::toUserParticipatingGatheringRs).toList();
         data.forEach(pg ->
                 pg.setParticipants(
@@ -111,7 +111,7 @@ public class UserService {
     }
 
     public Page<Map<LocalDate, List<UserCommentRs>>> getMyComment(Long userId, Pageable pageable) {
-        List<GatheringComment> myComment = gatheringCommentQueryService.getMyComment(userId, pageable);
+        List<GatheringComment> myComment = gatheringCommentQueryService.findByUserId(userId, pageable);
         Long totalCount = gatheringCommentQueryService.countByUserId(userId);
         LinkedHashMap<LocalDate, List<UserCommentRs>> data = myComment.stream()
                 .map(userMapper::toUserCommentRs)

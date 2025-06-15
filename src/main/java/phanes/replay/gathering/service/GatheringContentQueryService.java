@@ -13,16 +13,16 @@ public class GatheringContentQueryService {
 
     private final GatheringContentRepository gatheringContentRepository;
 
-    public void save(GatheringContent gatheringContent) {
-        gatheringContentRepository.save(gatheringContent);
-    }
-
     public GatheringContent findByGatheringId(Long gatheringId) {
         return gatheringContentRepository.findById(gatheringId).orElseThrow(() -> new GatheringNotFoundException("gathering not found"));
     }
 
     public GatheringContent findByGatheringIdWithGathering(Long gatheringId) {
         return gatheringContentRepository.findByGatheringIdWithGathering(gatheringId).orElseThrow(() -> new GatheringContentNotFoundException("gathering content not found"));
+    }
+
+    public void save(GatheringContent gatheringContent) {
+        gatheringContentRepository.save(gatheringContent);
     }
 
     public void delete(GatheringContent gatheringContent) {

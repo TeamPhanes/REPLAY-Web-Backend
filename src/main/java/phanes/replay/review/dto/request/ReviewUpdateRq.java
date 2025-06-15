@@ -13,7 +13,7 @@ public class ReviewUpdateRq {
 
     private String content;
     private List<MultipartFile> images;
-    private Double myRating;
+    private Double rating;
     private Integer hint;
     private Integer numberOfPlayer;
     private String themeReview;

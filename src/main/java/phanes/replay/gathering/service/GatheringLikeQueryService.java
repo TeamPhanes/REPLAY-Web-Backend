@@ -14,6 +14,14 @@ public class GatheringLikeQueryService {
 
     private final GatheringLikeRepository gatheringLikeRepository;
 
+    public List<GatheringLike> findAllByGatheringId(Long gatheringId) {
+        return gatheringLikeRepository.findAllByGatheringId(gatheringId);
+    }
+
+    public GatheringLike findByUserIdAndGatheringId(Long userId, Long gatheringId) {
+        return gatheringLikeRepository.findByUserIdAndGatheringId(userId, gatheringId).orElseThrow(() -> new LikeNotFoundException("Gathering Like not found"));
+    }
+
     public Long countByUserId(Long userId) {
         return gatheringLikeRepository.countByUserId(userId);
     }
@@ -22,16 +30,8 @@ public class GatheringLikeQueryService {
         gatheringLikeRepository.save(gatheringLike);
     }
 
-    public GatheringLike findByUserIdAndGatheringId(Long userId, Long gatheringId) {
-        return gatheringLikeRepository.findByUserIdAndGatheringId(userId, gatheringId).orElseThrow(() -> new LikeNotFoundException("Gathering Like not found"));
-    }
-
     public void delete(GatheringLike gatheringLike) {
         gatheringLikeRepository.delete(gatheringLike);
-    }
-
-    public List<GatheringLike> findAllByGatheringId(Long gatheringId) {
-        return gatheringLikeRepository.findAllByGatheringId(gatheringId);
     }
 
     public void deleteAll(List<GatheringLike> gatheringLikeList) {
