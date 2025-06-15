@@ -21,9 +21,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r FROM Review r JOIN FETCH r.user u JOIN FETCH r.theme t WHERE r.id = :reviewId and t.id = :themeId and u.id = :userId")
     Optional<Review> findByReviewIdAndThemeIdAndUserId(Long reviewId, Long themeId, Long userId);
 
-    @Query("SELECT COUNT(r), AVG(r.score) FROM Review r JOIN FETCH r.theme t WHERE t.id = :themeId")
+    @Query("SELECT COUNT(r), AVG(r.score) FROM Review r JOIN r.theme t WHERE t.id = :themeId")
     Object[][] findCountAndAverageByThemeId(Long themeId);
 
-    @Query("SELECT r.score, COUNT(*) AS count FROM Review r JOIN FETCH r.theme t WHERE t.id = :themeId GROUP BY r.score ORDER BY r.score DESC")
+    @Query("SELECT r.score, COUNT(*) AS count FROM Review r JOIN r.theme t WHERE t.id = :themeId GROUP BY r.score ORDER BY r.score DESC")
     List<Object[]> countAllByThemeId(Long themeId);
 }
