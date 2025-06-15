@@ -7,7 +7,6 @@ import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.mapper.GatheringMemberMapper;
 import phanes.replay.gathering.dto.response.GatheringMemberRs;
-import phanes.replay.gathering.persistence.repository.GatheringMemberRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
 
@@ -17,13 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GatheringMemberService {
 
-    private final GatheringMemberRepository gatheringMemberRepository;
+    private final GatheringMemberQueryService gatheringMemberQueryService;
     private final GatheringMemberMapper gatheringMemberMapper;
-    private final UserQueryService userQueryService;
     private final GatheringQueryService gatheringQueryService;
+    private final UserQueryService userQueryService;
 
     public List<GatheringMemberRs> getMemberList(Long gatheringId) {
-        return gatheringMemberRepository.findAllByGatheringIdWithUser(gatheringId).stream().map(gatheringMemberMapper::toGatheringRs).toList();
+        return gatheringMemberQueryService.findAllByGatheringIdWithUser(gatheringId).stream().map(gatheringMemberMapper::toGatheringRs).toList();
     }
 
     public void addMember(Long userId, Long gatheringId) {
@@ -34,11 +33,11 @@ public class GatheringMemberService {
                 .gathering(gathering)
                 .role(Role.MEMBER)
                 .build();
-        gatheringMemberRepository.save(member);
+        gatheringMemberQueryService.save(member);
     }
 
     public void deleteMember(Long userId, Long gatheringId) {
-        GatheringMember member = gatheringMemberRepository.findByUserIdAndGatheringId(userId, gatheringId);
-        gatheringMemberRepository.delete(member);
+        GatheringMember member = gatheringMemberQueryService.findByUserIdAndGatheringId(userId, gatheringId);
+        gatheringMemberQueryService.delete(member);
     }
 }
