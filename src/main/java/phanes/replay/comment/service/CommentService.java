@@ -38,7 +38,7 @@ public class CommentService {
     }
 
     public void createComment(Long userId, Long gatheringId, CommentCreateRq commentCreateRq) {
-        User user = userQueryService.findByUserId(userId);
+        User user = userQueryService.findById(userId);
         Gathering gathering = gatheringQueryService.findById(gatheringId);
         commentRepository.save(GatheringComment.builder()
                 .user(user)
@@ -49,13 +49,13 @@ public class CommentService {
     }
 
     public void updateComment(Long userId, Long commentId, Long gatheringId, String content) {
-        GatheringComment comment = commentRepository.findByIdAndGatheringIdAndUserId(commentId, gatheringId, userId).orElseThrow(() -> new CommentNotFoundException("comment not found"));
+        GatheringComment comment = commentRepository.findByIdAndGatheringIdAndUserId(commentId, gatheringId, userId).orElseThrow(() -> new CommentNotFoundException(String.format("user: %d, gathering: %d, comment: %d not found", userId, gatheringId, commentId)));
         comment.updateComment(content);
         commentRepository.save(comment);
     }
 
     public void deleteComment(Long userId, Long commentId, Long gatheringId) {
-        GatheringComment comment = commentRepository.findByIdAndGatheringIdAndUserId(commentId, gatheringId, userId).orElseThrow(() -> new CommentNotFoundException("comment not found"));
+        GatheringComment comment = commentRepository.findByIdAndGatheringIdAndUserId(commentId, gatheringId, userId).orElseThrow(() -> new CommentNotFoundException(String.format("user: %d, gathering: %d, comment: %d not found", userId, gatheringId, commentId)));
         commentRepository.delete(comment);
     }
 }

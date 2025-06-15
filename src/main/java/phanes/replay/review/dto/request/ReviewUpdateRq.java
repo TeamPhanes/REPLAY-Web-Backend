@@ -1,5 +1,6 @@
 package phanes.replay.review.dto.request;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,5 +19,6 @@ public class ReviewUpdateRq {
     private String themeReview;
     private String levelReview;
     private String storyReview;
+    @Pattern(regexp = "true|false")
     private Boolean success;
 }

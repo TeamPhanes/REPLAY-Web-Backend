@@ -21,7 +21,7 @@ public class ThemeVisitQueryService {
     }
 
     public ThemeVisit findByUserIdAndThemeId(Long userId, Long themeId) {
-        return themeVisitRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new ThemeVisitNotFoundException("theme visit not found"));
+        return themeVisitRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new ThemeVisitNotFoundException(String.format("Theme visit not found - user: %d, theme: %d", userId, themeId)));
     }
 
     public void delete(ThemeVisit themeVisit) {

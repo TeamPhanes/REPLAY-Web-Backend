@@ -12,12 +12,12 @@ public class UserQueryService {
 
     private final UserRepository userRepository;
 
-    public User findByUserId(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(String.format("User not found - user: %d", id)));
     }
 
-    public User findByUsername(String nickname) {
-        return userRepository.findByNickname(nickname).orElseThrow(() -> new UserNotFoundException("user not found"));
+    public User findByNickname(String nickname) {
+        return userRepository.findByNickname(nickname).orElseThrow(() -> new UserNotFoundException(String.format("User not found - user: %s", nickname)));
     }
 
     public void save(User user) {

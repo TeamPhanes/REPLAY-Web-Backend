@@ -12,7 +12,7 @@ public class ThemeQueryService {
 
     private final ThemeRepository themeRepository;
 
-    public Theme getTheme(Long themeId) {
-        return themeRepository.findById(themeId).orElseThrow(() -> new ThemeNotFoundException("theme not found"));
+    public Theme findById(Long themeId) {
+        return themeRepository.findById(themeId).orElseThrow(() -> new ThemeNotFoundException(String.format("Theme not found - theme %d", themeId)));
     }
 }

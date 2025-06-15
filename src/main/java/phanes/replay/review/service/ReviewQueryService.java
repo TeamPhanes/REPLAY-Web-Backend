@@ -17,7 +17,7 @@ public class ReviewQueryService {
     }
 
     public Review findByIdAndUserId(Long id, Long userId) {
-        return reviewRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ReviewNotFountException("review not found"));
+        return reviewRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ReviewNotFountException(String.format("Review  not found - user: %d, review: %d", userId, id)));
     }
 
     public void save(Review review) {

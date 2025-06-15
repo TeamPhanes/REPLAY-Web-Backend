@@ -21,7 +21,7 @@ public class ThemeLikeQueryService {
     }
 
     public ThemeLike findByUserIdAndThemeId(Long userId, Long themeId) {
-        return themeLikeRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new LikeNotFoundException("Theme Like Not Found"));
+        return themeLikeRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new LikeNotFoundException(String.format("Theme Like Not Found - user: %d, theme: %d", userId, themeId)));
     }
 
     public void delete(ThemeLike themeLike) {

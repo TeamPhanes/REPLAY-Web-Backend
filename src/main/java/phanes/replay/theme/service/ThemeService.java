@@ -39,12 +39,12 @@ public class ThemeService {
     }
 
     public ThemeDetailRs getThemeDetail(Long themeId) {
-        return themeMapper.toThemeDetailRs(themeContentQueryService.findById(themeId));
+        return themeMapper.toThemeDetailRs(themeContentQueryService.findByThemeId(themeId));
     }
 
     public void updateThemeLike(Long userId, Long themeId) {
-        User user = userQueryService.findByUserId(userId);
-        Theme theme = themeQueryService.getTheme(themeId);
+        User user = userQueryService.findById(userId);
+        Theme theme = themeQueryService.findById(themeId);
         ThemeLike themeLike = ThemeLike.builder().user(user).theme(theme).build();
         themeLikeQueryService.save(themeLike);
     }
@@ -55,8 +55,8 @@ public class ThemeService {
     }
 
     public void updateThemeVisit(Long userId, Long themeId) {
-        User user = userQueryService.findByUserId(userId);
-        Theme theme = themeQueryService.getTheme(themeId);
+        User user = userQueryService.findById(userId);
+        Theme theme = themeQueryService.findById(themeId);
         ThemeVisit themeVisit = ThemeVisit.builder().user(user).theme(theme).build();
         themeVisitQueryService.save(themeVisit);
     }
