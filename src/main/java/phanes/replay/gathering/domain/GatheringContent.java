@@ -20,7 +20,7 @@ public class GatheringContent {
     @ManyToOne(fetch = FetchType.LAZY)
     private Gathering gathering;
     private String content;
-    private String price;
+    private Long price;
     private Boolean isIndividual;
     private String image;
 

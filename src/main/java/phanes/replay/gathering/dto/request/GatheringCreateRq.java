@@ -17,7 +17,7 @@ public class GatheringCreateRq {
 
     private String name;
     private String content;
-    private String price;
+    private Long price;
     private Boolean isIndividual;
     private Long themeId;
     private LocalDateTime dateTime;
