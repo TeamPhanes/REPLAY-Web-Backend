@@ -1,8 +1,6 @@
 package phanes.replay.review.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import phanes.replay.exception.ReviewNotFountException;
 import phanes.replay.review.domain.Review;
@@ -18,10 +16,6 @@ public class ReviewQueryService {
 
     public Long countBySuccess(Boolean success) {
         return reviewRepository.countBySuccess(success);
-    }
-
-    public Page<Review> findAllByThemeId(Long themeId, Pageable pageable) {
-        return reviewRepository.findAllByThemeId(themeId, pageable);
     }
 
     public Review findByIdAndUserId(Long id, Long userId) {
@@ -50,5 +44,9 @@ public class ReviewQueryService {
 
     public void delete(Review review) {
         reviewRepository.delete(review);
+    }
+
+    public Review findById(Long reviewId) {
+        return reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFountException(String.format("Review  not found - reviewId: %d", reviewId)));
     }
 }

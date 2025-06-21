@@ -63,6 +63,14 @@ CREATE TABLE IF NOT EXISTS review
     CONSTRAINT uq_review UNIQUE (theme_id, user_id)
 );
 
+CREATE TABLE IF NOT EXISTS review_like
+(
+    id               BIGSERIAL PRIMARY KEY,
+    review_id         BIGINT REFERENCES review (id),
+    user_id          BIGINT REFERENCES users (id),
+    CONSTRAINT uq_review_like UNIQUE (review_id, user_id)
+);
+
 CREATE TABLE IF NOT EXISTS refresh_token
 (
     id          BIGSERIAL PRIMARY KEY,

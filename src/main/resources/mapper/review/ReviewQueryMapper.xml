@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//myba
+        tis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="phanes.replay.review.persistence.mapper.ReviewQueryMapper">
+    <select id="findAllByThemeId" resultType="phanes.replay.review.dto.query.ReviewQuery">
+        SELECT r.*,
+               u.nickname,
+               u.profile_image,
+               COALESCE(rlc.like_count, 0) AS like_count,
+               CASE WHEN rl.id IS NULL THEN FALSE ELSE TRUE END AS is_liked
+        FROM review r
+                 LEFT JOIN review_like_count rlc ON rlc.review_id = r.id
+                 LEFT JOIN review_like rl ON rl.review_id = r.id AND rl.user_id = #{userId}
+                 LEFT JOIN users u ON r.user_id = u.id
+        WHERE r.theme_id = #{themeId}
+        ORDER BY r.created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+</mapper>

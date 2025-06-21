@@ -23,6 +23,11 @@ SELECT theme_id,
 FROM review
 GROUP BY theme_id;
 
+CREATE OR REPLACE VIEW review_like_count AS
+SELECT review_id, COUNT(*) AS like_count
+FROM review_like
+GROUP BY review_id;
+
 CREATE OR REPLACE VIEW theme_like_count AS
 SELECT theme_id, COUNT(*) AS like_count
 FROM theme_like

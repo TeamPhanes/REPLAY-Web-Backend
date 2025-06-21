@@ -1,18 +1,19 @@
 package phanes.replay.review.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.common.dto.mapper.PageMapper;
 import phanes.replay.common.dto.response.Page;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.domain.Review;
+import phanes.replay.review.domain.ReviewLike;
 import phanes.replay.review.dto.mapper.ReviewMapper;
 import phanes.replay.review.dto.request.ReviewCreateRq;
 import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.review.dto.response.ReviewRatingRs;
 import phanes.replay.review.dto.response.ReviewRs;
+import phanes.replay.review.persistence.mapper.ReviewQueryMapper;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.service.ThemeQueryService;
 import phanes.replay.user.domain.User;
@@ -28,17 +29,22 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReviewService {
 
+    private final ReviewLikeQueryService reviewLikeQueryService;
     private final ReviewQueryService reviewQueryService;
     private final PageMapper<List<ReviewRs>> pageMapper;
+    private final ReviewQueryMapper reviewQueryMapper;
     private final ThemeQueryService themeQueryService;
     private final UserQueryService userQueryService;
     private final ReviewMapper reviewMapper;
     private final S3Service s3Service;
 
-    public Page<List<ReviewRs>> getReviewByThemeId(Long themeId, Pageable pageable) {
+    public Page<List<ReviewRs>> getReviewByThemeId(Long userId, Long themeId, Integer limit, Integer offset) {
         Long totalCount = reviewQueryService.countByThemeId(themeId);
-        List<ReviewRs> data = reviewQueryService.findAllByThemeId(themeId, pageable).stream().map(reviewMapper::ReviewToReviewDTO).toList();
-        return pageMapper.toPage(totalCount, pageable.getOffset(), data);
+        List<ReviewRs> data = reviewQueryMapper.findAllByThemeId(userId, themeId, limit, offset)
+                .stream()
+                .map(reviewMapper::ReviewToReviewDTO)
+                .toList();
+        return pageMapper.toPage(totalCount, offset, data);
     }
 
     @Transactional
@@ -97,5 +103,17 @@ public class ReviewService {
             scores.add(scoreMap.getOrDefault(i, 0L));
         }
         return scores;
+    }
+
+    public void reviewLike(Long userId, Long reviewId) {
+        User user = userQueryService.findById(userId);
+        Review review = reviewQueryService.findById(reviewId);
+        ReviewLike reviewLike = ReviewLike.builder().user(user).review(review).build();
+        reviewLikeQueryService.save(reviewLike);
+    }
+
+    public void reviewUnLike(Long userId, Long reviewId) {
+        ReviewLike reviewLike = reviewLikeQueryService.findByReviewIdAndUserId(reviewId, userId);
+        reviewLikeQueryService.delete(reviewLike);
     }
 }

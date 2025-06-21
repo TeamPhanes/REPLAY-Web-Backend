@@ -3,7 +3,6 @@ package phanes.replay.review.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.common.dto.response.Page;
@@ -22,16 +21,23 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping
-    public Page<List<ReviewRs>> reviewList(@RequestParam Long themeId, @RequestParam Integer limit, @RequestParam Integer offset) {
-        PageRequest pageRequest = PageRequest.of(offset, limit);
-        return reviewService.getReviewByThemeId(themeId, pageRequest);
+    public Page<List<ReviewRs>> reviewList(@AuthenticationPrincipal Long userId, @RequestParam Long themeId, @RequestParam Integer limit, @RequestParam Integer offset) {
+        userId = userId == null ? 0L : userId;
+        return reviewService.getReviewByThemeId(userId, themeId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping
     public void createReview(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid ReviewCreateRq reviewCreateRq) {
         reviewService.createReview(userId, reviewCreateRq);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/{reviewId}/like")
+    public void reviewLike(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
+        reviewService.reviewLike(userId, reviewId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
@@ -44,6 +50,12 @@ public class ReviewController {
     @DeleteMapping("/{reviewId}")
     public void deleteReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @RequestParam Long themeId) {
         reviewService.deleteReview(userId, reviewId, themeId);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/{reviewId}/like")
+    public void reviewUnLike(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
+        reviewService.reviewUnLike(userId, reviewId);
     }
 
     @GetMapping("/rating")
