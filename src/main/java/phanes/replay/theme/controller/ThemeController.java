@@ -31,8 +31,8 @@ public class ThemeController {
     }
 
     @GetMapping("/search")
-    public List<ThemeSearchRs> themeSearchList(@RequestParam(required = false) String keyword, @RequestParam(required = false) String city) {
-        return themeService.getThemeSearchList(keyword, city);
+    public List<ThemeSearchRs> themeSearchList(@RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state) {
+        return themeService.getThemeSearchList(keyword, city, state);
     }
 
     @SecurityRequirement(name = "bearerAuth")
