@@ -54,9 +54,9 @@ CREATE TABLE IF NOT EXISTS review
     theme_id         BIGINT REFERENCES theme (id),
     user_id          BIGINT REFERENCES users (id),
     number_of_player INT,
-    level_review     VARCHAR(5),
-    story_review     VARCHAR(5),
-    theme_review     VARCHAR(5),
+    level_review     VARCHAR(6),
+    story_review     VARCHAR(6),
+    theme_review     VARCHAR(6),
     created_at       TIMESTAMP,
     updated_at       TIMESTAMP,
     CONSTRAINT uq_review UNIQUE (theme_id, user_id)
