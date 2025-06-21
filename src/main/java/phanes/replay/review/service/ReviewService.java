@@ -4,13 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.common.dto.mapper.PageMapper;
 import phanes.replay.common.dto.response.Page;
-import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.domain.Review;
-import phanes.replay.review.domain.ReviewImage;
 import phanes.replay.review.dto.mapper.ReviewMapper;
 import phanes.replay.review.dto.request.ReviewCreateRq;
 import phanes.replay.review.dto.request.ReviewUpdateRq;
@@ -31,7 +28,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReviewService {
 
-    private final ReviewImageQueryService reviewImageQueryService;
     private final ReviewQueryService reviewQueryService;
     private final PageMapper<List<ReviewRs>> pageMapper;
     private final ThemeQueryService themeQueryService;
@@ -49,8 +45,10 @@ public class ReviewService {
     public void createReview(Long userId, ReviewCreateRq reviewCreateRq) {
         User user = userQueryService.findById(userId);
         Theme theme = themeQueryService.findById(reviewCreateRq.getThemeId());
+        String uploadImage = reviewCreateRq.getImage() == null ? null : s3Service.uploadImage("review/" + UUID.randomUUID() + ".png", reviewCreateRq.getImage());
         Review review = Review.builder()
                 .content(reviewCreateRq.getContent())
+                .image(uploadImage)
                 .success(Boolean.parseBoolean(reviewCreateRq.getSuccess()))
                 .score(reviewCreateRq.getRating())
                 .hint(reviewCreateRq.getHint())
@@ -62,26 +60,6 @@ public class ReviewService {
                 .theme(theme)
                 .build();
         reviewQueryService.save(review);
-
-        if (reviewCreateRq.getImages() != null) {
-            List<String> uploadImageList = new ArrayList<>();
-            try {
-                for (MultipartFile image : reviewCreateRq.getImages()) {
-                    String uploadImage = s3Service.uploadImage("review/" + UUID.randomUUID() + ".png", image);
-                    uploadImageList.add(uploadImage);
-                    ReviewImage reviewImage = ReviewImage.builder()
-                            .url(uploadImage)
-                            .review(review)
-                            .build();
-                    reviewImageQueryService.save(reviewImage);
-                }
-            } catch (Exception e) {
-                for (String uploadImage : uploadImageList) {
-                    s3Service.deleteImage("replay", uploadImage);
-                }
-                throw new ImageUploadFailException("image upload failed", e);
-            }
-        }
     }
 
     public void updateThemeReview(Long userId, Long reviewId, ReviewUpdateRq reviewUpdateRq) {
@@ -93,8 +71,6 @@ public class ReviewService {
 
     public void deleteReview(Long userId, Long reviewId, Long themeId) {
         Review review = reviewQueryService.findByReviewIdAndThemeIdAndUserId(reviewId, themeId, userId);
-        List<ReviewImage> reviewImageList = reviewImageQueryService.findByReviewId(reviewId);
-        reviewImageQueryService.deleteAll(reviewImageList);
         reviewQueryService.delete(review);
     }
 

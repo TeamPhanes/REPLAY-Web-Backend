@@ -15,7 +15,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Optional<Review> findByIdAndUserId(Long id, Long userId);
 
-    @EntityGraph(attributePaths = {"user", "images", "theme"})
+    @EntityGraph(attributePaths = {"user", "theme"})
     Page<Review> findAllByThemeId(Long themeId, Pageable pageable);
 
     @Query("SELECT r FROM Review r JOIN FETCH r.user u JOIN FETCH r.theme t WHERE r.id = :reviewId and t.id = :themeId and u.id = :userId")

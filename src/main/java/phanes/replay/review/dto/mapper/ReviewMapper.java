@@ -12,6 +12,5 @@ public interface ReviewMapper {
     @Mapping(target = "playUser", source = "numberOfPlayer")
     @Mapping(target = "user.name", source = "user.nickname")
     @Mapping(target = "user.image", source = "user.profileImage")
-    @Mapping(target = "images", expression = "java(review.getImages().isEmpty() ? java.util.Collections.emptyList() : review.getImages().stream().map(phanes.replay.review.domain.ReviewImage::getUrl).toList())")
     ReviewRs ReviewToReviewDTO(Review review);
 }

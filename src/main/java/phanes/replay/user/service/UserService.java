@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.common.dto.mapper.PageMapper;
 import phanes.replay.common.dto.response.Page;
-import phanes.replay.exception.ImageUploadFailException;
 import phanes.replay.gathering.domain.GatheringComment;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
@@ -27,7 +26,6 @@ import phanes.replay.user.dto.user.response.*;
 import phanes.replay.user.persistence.mapper.UserGatheringQueryMapper;
 import phanes.replay.user.persistence.mapper.UserThemeQueryMapper;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -76,12 +74,8 @@ public class UserService {
     @Transactional
     public void updateUser(Long userId, MultipartFile image, String nickname, String comment, Boolean emailMark, Boolean genderMark) {
         User user = userQueryService.findById(userId);
-        try {
-            String imageUrl = image == null ? user.getProfileImage() : s3Service.uploadImage("user/" + UUID.randomUUID() + ".png", image);
-            user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
-        } catch (IOException e) {
-            throw new ImageUploadFailException("Image upload fail", e);
-        }
+        String imageUrl = image == null ? user.getProfileImage() : s3Service.uploadImage("user/" + UUID.randomUUID() + ".png", image);
+        user.updateUserInfo(imageUrl, nickname, comment, emailMark, genderMark);
         userQueryService.save(user);
     }
 
