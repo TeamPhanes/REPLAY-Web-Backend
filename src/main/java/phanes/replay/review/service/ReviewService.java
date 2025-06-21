@@ -63,8 +63,7 @@ public class ReviewService {
     }
 
     public void updateThemeReview(Long userId, Long reviewId, ReviewUpdateRq reviewUpdateRq) {
-        User user = userQueryService.findById(userId);
-        Review review = reviewQueryService.findByIdAndUserId(reviewId, user.getId());
+        Review review = reviewQueryService.findByIdAndUserId(reviewId, userId);
         review.updateReview(reviewUpdateRq);
         reviewQueryService.save(review);
     }

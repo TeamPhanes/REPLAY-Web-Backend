@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Long countBySuccess(Boolean success);
 
+    @EntityGraph(attributePaths = {"user", "theme"})
     Optional<Review> findByIdAndUserId(Long id, Long userId);
 
     @EntityGraph(attributePaths = {"user", "theme"})
