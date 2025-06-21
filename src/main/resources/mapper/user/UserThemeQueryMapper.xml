@@ -5,8 +5,9 @@
 <mapper namespace="phanes.replay.user.persistence.mapper.UserThemeQueryMapper">
     <select id="findUserVisitThemes" resultType="phanes.replay.user.dto.user.query.UserVisitThemeQuery">
         SELECT tvrs.*,
-               r.id                                                      AS review_id,
+               r.id    AS review_id,
                r.score,
+               r.image AS review_image,
                r.hint,
                r.number_of_player,
                r.theme_review,
@@ -17,8 +18,7 @@
         FROM theme_visit_with_review_summary tvrs
                  LEFT JOIN review r ON tvrs.theme_id = r.theme_id and r.user_id = #{userId}
         WHERE tvrs.user_id = #{userId}
-        LIMIT #{limit}
-        OFFSET #{offset}
+        LIMIT #{limit} OFFSET #{offset}
     </select>
 
     <select id="findUserLikeThemes" resultType="phanes.replay.user.dto.user.query.UserLikeThemeQuery">

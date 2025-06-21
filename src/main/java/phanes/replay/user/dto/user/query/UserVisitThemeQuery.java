@@ -20,6 +20,7 @@ public class UserVisitThemeQuery {
     private Long reviewId;
     private Long reviewCount;
     private Double score;
+    private String reviewImage;
     private Integer hint;
     private Integer numberOfPlayer;
     private String themeReview;

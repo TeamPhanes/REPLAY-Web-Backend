@@ -26,6 +26,7 @@ public class UserVisitThemeRs {
     private Long reviewId;
     private Integer reviewCount;
     private Double myRating;
+    private String reviewImage;
     private Integer hint;
     private Integer numberOfPlayer;
     private String themeReview;
