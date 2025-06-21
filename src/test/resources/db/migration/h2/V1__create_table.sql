@@ -66,6 +66,15 @@ CREATE TABLE review
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
+CREATE TABLE review_like
+(
+    id               IDENTITY PRIMARY KEY,
+    review_id         BIGINT,
+    user_id          BIGINT,
+    FOREIGN KEY (review_id) REFERENCES review (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
 CREATE TABLE refresh_token
 (
     id          IDENTITY PRIMARY KEY,
