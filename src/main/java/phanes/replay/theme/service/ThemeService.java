@@ -10,6 +10,7 @@ import phanes.replay.theme.domain.ThemeVisit;
 import phanes.replay.theme.dto.mapper.ThemeMapper;
 import phanes.replay.theme.dto.response.ThemeDetailRs;
 import phanes.replay.theme.dto.response.ThemeRs;
+import phanes.replay.theme.dto.response.ThemeSearchRs;
 import phanes.replay.theme.persistence.mapper.ThemeQueryMapper;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
@@ -40,6 +41,13 @@ public class ThemeService {
 
     public ThemeDetailRs getThemeDetail(Long themeId) {
         return themeMapper.toThemeDetailRs(themeContentQueryService.findByThemeId(themeId));
+    }
+
+    public List<ThemeSearchRs> getThemeSearchList(String keyword, String city) {
+        return themeQueryMapper.findAllByKeywordAndCity(keyword, city)
+                .stream()
+                .map(themeMapper::toThemeSearchRs)
+                .toList();
     }
 
     public void updateThemeLike(Long userId, Long themeId) {

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import phanes.replay.common.dto.response.Page;
 import phanes.replay.theme.dto.response.ThemeDetailRs;
 import phanes.replay.theme.dto.response.ThemeRs;
+import phanes.replay.theme.dto.response.ThemeSearchRs;
 import phanes.replay.theme.service.ThemeService;
 
 import java.util.List;
@@ -27,6 +28,11 @@ public class ThemeController {
     @GetMapping("/{themeId}")
     public ThemeDetailRs themeDetail(@PathVariable Long themeId) {
         return themeService.getThemeDetail(themeId);
+    }
+
+    @GetMapping("/search")
+    public List<ThemeSearchRs> themeSearchList(@RequestParam(required = false) String keyword, @RequestParam(required = false) String city) {
+        return themeService.getThemeSearchList(keyword, city);
     }
 
     @SecurityRequirement(name = "bearerAuth")
