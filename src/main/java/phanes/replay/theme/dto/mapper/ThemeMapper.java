@@ -4,8 +4,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import phanes.replay.theme.domain.ThemeContent;
 import phanes.replay.theme.dto.query.ThemeQuery;
+import phanes.replay.theme.dto.query.ThemeSearchQuery;
 import phanes.replay.theme.dto.response.ThemeDetailRs;
 import phanes.replay.theme.dto.response.ThemeRs;
+import phanes.replay.theme.dto.response.ThemeSearchRs;
 
 @Mapper(componentModel = "spring")
 public interface ThemeMapper {
@@ -17,4 +19,6 @@ public interface ThemeMapper {
     @Mapping(target = "themeId", source = "theme.id")
     @Mapping(target = "detailImage", source = "image")
     ThemeDetailRs toThemeDetailRs(ThemeContent themeContent);
+
+    ThemeSearchRs toThemeSearchRs(ThemeSearchQuery theme);
 }
