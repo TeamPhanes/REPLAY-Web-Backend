@@ -43,8 +43,8 @@ public class ThemeService {
         return themeMapper.toThemeDetailRs(themeContentQueryService.findByThemeId(themeId));
     }
 
-    public List<ThemeSearchRs> getThemeSearchList(String keyword, String city) {
-        return themeQueryMapper.findAllByKeywordAndCity(keyword, city)
+    public List<ThemeSearchRs> getThemeSearchList(String keyword, String city, String state) {
+        return themeQueryMapper.findAllByKeywordAndCityAndState(keyword, city, state)
                 .stream()
                 .map(themeMapper::toThemeSearchRs)
                 .toList();

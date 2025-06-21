@@ -13,5 +13,5 @@ public interface ThemeQueryMapper {
 
     List<ThemeQuery> findAllByKeywordAndAddress(Long userId, String sortBy, String keyword, String city, String state, String genre, Integer limit, Integer offset);
 
-    List<ThemeSearchQuery> findAllByKeywordAndCity(String keyword, String city);
+    List<ThemeSearchQuery> findAllByKeywordAndCityAndState(String keyword, String city, String state);
 }

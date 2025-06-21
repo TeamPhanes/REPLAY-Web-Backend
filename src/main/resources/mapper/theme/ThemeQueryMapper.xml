@@ -58,11 +58,12 @@
             </if>
         </where>
     </select>
-    <select id="findAllByKeywordAndCity" resultType="phanes.replay.theme.dto.query.ThemeSearchQuery">
+    <select id="findAllByKeywordAndCityAndState" resultType="phanes.replay.theme.dto.query.ThemeSearchQuery">
         SELECT t.id, t.name, t.cafe, t.spot
         FROM Theme t
         <where>
             <if test="city != null">AND city = #{city}</if>
+            <if test="state != null">AND city = #{state}</if>
             <if test="keyword != null">AND tlr.theme_name LIKE CONCAT('%', #{keyword}, '%')</if>
         </where>
     </select>
