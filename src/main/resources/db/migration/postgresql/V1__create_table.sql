@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS review
 (
     id               BIGSERIAL PRIMARY KEY,
     content          VARCHAR(255),
+    image            VARCHAR(255),
     hint             INT,
     score            double precision,
     success          BOOLEAN,
@@ -60,13 +61,6 @@ CREATE TABLE IF NOT EXISTS review
     created_at       TIMESTAMP,
     updated_at       TIMESTAMP,
     CONSTRAINT uq_review UNIQUE (theme_id, user_id)
-);
-
-CREATE TABLE IF NOT EXISTS review_image
-(
-    id        BIGSERIAL PRIMARY KEY,
-    url       VARCHAR(200),
-    review_id BIGINT REFERENCES review (id)
 );
 
 CREATE TABLE IF NOT EXISTS refresh_token

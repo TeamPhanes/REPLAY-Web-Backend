@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class ReviewCreateRq {
@@ -16,7 +14,7 @@ public class ReviewCreateRq {
     private Double rating;
     @Pattern(regexp = "true|false")
     private String success;
-    private List<MultipartFile> images;
+    private MultipartFile image;
     private Integer hint;
     private Integer numberOfPlayer;
     private String themeReview;

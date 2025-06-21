@@ -10,8 +10,6 @@ import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.user.domain.User;
 
-import java.util.List;
-
 @Entity
 @Getter
 @Builder
@@ -23,6 +21,7 @@ public class Review extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
+    private String image;
     private Boolean success;
     private Double score;
     private Integer hint;
@@ -34,8 +33,6 @@ public class Review extends BaseTimeEntity {
     private User user;
     @ManyToOne
     private Theme theme;
-    @OneToMany(mappedBy = "review")
-    private List<ReviewImage> images;
 
     public void updateReview(ReviewUpdateRq reviewUpdateRq) {
         this.score = reviewUpdateRq.getRating();
