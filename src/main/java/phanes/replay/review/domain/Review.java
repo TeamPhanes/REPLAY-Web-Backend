@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.common.domain.BaseTimeEntity;
-import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.user.domain.User;
 
@@ -34,14 +33,18 @@ public class Review extends BaseTimeEntity {
     @ManyToOne
     private Theme theme;
 
-    public void updateReview(ReviewUpdateRq reviewUpdateRq) {
-        this.score = reviewUpdateRq.getRating();
-        this.hint = reviewUpdateRq.getHint();
-        this.numberOfPlayer = reviewUpdateRq.getNumberOfPlayer();
-        this.themeReview = reviewUpdateRq.getThemeReview();
-        this.levelReview = reviewUpdateRq.getLevelReview();
-        this.storyReview = reviewUpdateRq.getStoryReview();
-        this.success = reviewUpdateRq.getSuccess();
-        this.content = reviewUpdateRq.getContent();
+    public void updateReview(Double rating, Integer hint, Integer numberOfPlayer, String themeReview, String levelReview, String storyReview, Boolean success, String content) {
+        this.score = rating;
+        this.hint = hint;
+        this.numberOfPlayer = numberOfPlayer;
+        this.themeReview = themeReview;
+        this.levelReview = levelReview;
+        this.storyReview = storyReview;
+        this.success = success;
+        this.content = content;
+    }
+
+    public void updateImage(String image) {
+        this.image = image;
     }
 }

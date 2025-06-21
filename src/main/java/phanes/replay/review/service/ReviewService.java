@@ -11,6 +11,7 @@ import phanes.replay.review.domain.ReviewLike;
 import phanes.replay.review.dto.mapper.ReviewMapper;
 import phanes.replay.review.dto.request.ReviewCreateRq;
 import phanes.replay.review.dto.request.ReviewUpdateRq;
+import phanes.replay.review.dto.request.ReviewUpdateWithImageRq;
 import phanes.replay.review.dto.response.ReviewRatingRs;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.persistence.mapper.ReviewQueryMapper;
@@ -68,9 +69,31 @@ public class ReviewService {
         reviewQueryService.save(review);
     }
 
+    public void updateThemeReviewWithImage(Long userId, Long reviewId, ReviewUpdateWithImageRq reviewUpdateWithImageRq) {
+        Review review = reviewQueryService.findByIdAndUserId(reviewId, userId);
+        String uploadImage = reviewUpdateWithImageRq.getImage() == null ? null : s3Service.uploadImage("review/" + UUID.randomUUID() + ".png", reviewUpdateWithImageRq.getImage());
+        review.updateReview(reviewUpdateWithImageRq.getRating(),
+                reviewUpdateWithImageRq.getHint(),
+                reviewUpdateWithImageRq.getNumberOfPlayer(),
+                reviewUpdateWithImageRq.getThemeReview(),
+                reviewUpdateWithImageRq.getLevelReview(),
+                reviewUpdateWithImageRq.getStoryReview(),
+                reviewUpdateWithImageRq.getSuccess(),
+                reviewUpdateWithImageRq.getContent());
+        review.updateImage(uploadImage);
+        reviewQueryService.save(review);
+    }
+
     public void updateThemeReview(Long userId, Long reviewId, ReviewUpdateRq reviewUpdateRq) {
         Review review = reviewQueryService.findByIdAndUserId(reviewId, userId);
-        review.updateReview(reviewUpdateRq);
+        review.updateReview(reviewUpdateRq.getRating(),
+                reviewUpdateRq.getHint(),
+                reviewUpdateRq.getNumberOfPlayer(),
+                reviewUpdateRq.getThemeReview(),
+                reviewUpdateRq.getLevelReview(),
+                reviewUpdateRq.getStoryReview(),
+                reviewUpdateRq.getSuccess(),
+                reviewUpdateRq.getContent());
         reviewQueryService.save(review);
     }
 
