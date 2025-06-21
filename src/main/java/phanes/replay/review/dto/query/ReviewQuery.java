@@ -19,7 +19,7 @@ public class ReviewQuery {
     private String themeReview;
     private String levelReview;
     private String storyReview;
-    private Long likeCount;
+    private Long totalLikes;
     private Boolean isLiked;
     private String nickname;
     private String profileImage;

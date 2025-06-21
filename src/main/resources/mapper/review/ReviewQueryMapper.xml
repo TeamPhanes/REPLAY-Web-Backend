@@ -8,7 +8,7 @@
         SELECT r.*,
                u.nickname,
                u.profile_image,
-               COALESCE(rlc.like_count, 0) AS like_count,
+               COALESCE(rlc.like_count, 0) AS total_likes,
                CASE WHEN rl.id IS NULL THEN FALSE ELSE TRUE END AS is_liked
         FROM review r
                  LEFT JOIN review_like_count rlc ON rlc.review_id = r.id
