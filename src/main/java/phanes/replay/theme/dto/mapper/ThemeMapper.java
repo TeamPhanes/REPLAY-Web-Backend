@@ -20,5 +20,7 @@ public interface ThemeMapper {
     @Mapping(target = "detailImage", source = "image")
     ThemeDetailRs toThemeDetailRs(ThemeContent themeContent);
 
+    @Mapping(target = "themeId", source = "id")
+    @Mapping(target = "themeName", source = "name")
     ThemeSearchRs toThemeSearchRs(ThemeSearchQuery theme);
 }

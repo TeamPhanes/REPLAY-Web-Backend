@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ThemeSearchRs {
 
-    private Long id;
-    private String name;
+    private Long themeId;
+    private String themeName;
     private String cafe;
     private String spot;
 }
