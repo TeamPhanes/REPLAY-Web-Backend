@@ -7,6 +7,7 @@ import phanes.replay.common.dto.mapper.PageMapper;
 import phanes.replay.common.dto.response.Page;
 import phanes.replay.image.service.S3Service;
 import phanes.replay.review.domain.Review;
+import phanes.replay.review.domain.ReviewLike;
 import phanes.replay.review.dto.mapper.ReviewMapper;
 import phanes.replay.review.dto.request.ReviewCreateRq;
 import phanes.replay.review.dto.request.ReviewUpdateRq;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReviewService {
 
+    private final ReviewLikeQueryService reviewLikeQueryService;
     private final ReviewQueryService reviewQueryService;
     private final PageMapper<List<ReviewRs>> pageMapper;
     private final ReviewQueryMapper reviewQueryMapper;
@@ -101,5 +103,17 @@ public class ReviewService {
             scores.add(scoreMap.getOrDefault(i, 0L));
         }
         return scores;
+    }
+
+    public void reviewLike(Long userId, Long reviewId) {
+        User user = userQueryService.findById(userId);
+        Review review = reviewQueryService.findById(reviewId);
+        ReviewLike reviewLike = ReviewLike.builder().user(user).review(review).build();
+        reviewLikeQueryService.save(reviewLike);
+    }
+
+    public void reviewUnLike(Long userId, Long reviewId) {
+        ReviewLike reviewLike = reviewLikeQueryService.findByReviewIdAndUserId(reviewId, userId);
+        reviewLikeQueryService.delete(reviewLike);
     }
 }

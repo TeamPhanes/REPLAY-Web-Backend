@@ -45,4 +45,8 @@ public class ReviewQueryService {
     public void delete(Review review) {
         reviewRepository.delete(review);
     }
+
+    public Review findById(Long reviewId) {
+        return reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFountException(String.format("Review  not found - reviewId: %d", reviewId)));
+    }
 }

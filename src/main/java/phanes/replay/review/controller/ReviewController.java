@@ -35,6 +35,12 @@ public class ReviewController {
     }
 
     @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/{reviewId}/like")
+    public void reviewLike(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
+        reviewService.reviewLike(userId, reviewId);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
     @PatchMapping("/{reviewId}")
     public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @ModelAttribute ReviewUpdateRq reviewUpdateRq) {
         reviewService.updateThemeReview(userId, reviewId, reviewUpdateRq);
@@ -44,6 +50,12 @@ public class ReviewController {
     @DeleteMapping("/{reviewId}")
     public void deleteReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @RequestParam Long themeId) {
         reviewService.deleteReview(userId, reviewId, themeId);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping("/{reviewId}/like")
+    public void reviewUnLike(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
+        reviewService.reviewUnLike(userId, reviewId);
     }
 
     @GetMapping("/rating")

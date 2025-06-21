@@ -11,6 +11,10 @@ public class ReviewLikeQueryService {
 
     private final ReviewLikeRepository reviewLikeRepository;
 
+    public ReviewLike findByReviewIdAndUserId(Long reviewId, Long userId) {
+        return reviewLikeRepository.findByReviewIdAndUserId(reviewId, userId);
+    }
+
     public void save(ReviewLike reviewLike) {
         reviewLikeRepository.save(reviewLike);
     }
