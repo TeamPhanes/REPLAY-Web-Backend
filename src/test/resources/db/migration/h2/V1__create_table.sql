@@ -50,6 +50,7 @@ CREATE TABLE review
 (
     id               IDENTITY PRIMARY KEY,
     content          VARCHAR(255),
+    image            VARCHAR(255),
     hint             INT,
     score            DOUBLE,
     success          BOOLEAN,
@@ -63,14 +64,6 @@ CREATE TABLE review
     updated_at       TIMESTAMP,
     FOREIGN KEY (theme_id) REFERENCES theme (id),
     FOREIGN KEY (user_id) REFERENCES users (id)
-);
-
-CREATE TABLE review_image
-(
-    id        IDENTITY PRIMARY KEY,
-    url       VARCHAR(200),
-    review_id BIGINT,
-    FOREIGN KEY (review_id) REFERENCES review (id)
 );
 
 CREATE TABLE refresh_token
