@@ -69,10 +69,12 @@ SELECT gm.user_id,
        twg.playtime,
        g.date_time,
        g.capacity,
-       g.registration_end
+       g.registration_end,
+       COALESCE(gmc.participant_count, 0) AS participant_count
 FROM gathering_member gm
          JOIN gathering g ON gm.gathering_id = g.id
-         JOIN theme_with_genres twg ON g.theme_id = twg.id;
+         JOIN theme_with_genres twg ON g.theme_id = twg.id
+         LEFT JOIN gathering_member_count gmc on gm.gathering_id = gmc.gathering_id;
 
 CREATE OR REPLACE VIEW gathering_like_with_participant AS
 SELECT gl.user_id,
