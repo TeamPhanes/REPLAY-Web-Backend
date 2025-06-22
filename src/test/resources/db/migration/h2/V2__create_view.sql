@@ -80,11 +80,11 @@ SELECT gm.user_id,
        g.date_time,
        g.capacity,
        g.registration_end,
-       CASE WHEN gl.gathering_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
+       COALESCE(gmc.participant_count, 0) AS participant_count
 FROM gathering_member gm
          JOIN gathering g ON gm.gathering_id = g.id
          JOIN theme_with_genres twg ON g.theme_id = twg.id
-         LEFT JOIN gathering_like gl ON gm.user_id = gl.user_id AND g.id = gl.gathering_id;
+         LEFT JOIN gathering_member_count gmc on gm.gathering_id = gmc.gathering_id;
 
 CREATE OR REPLACE VIEW gathering_like_with_participant AS
 SELECT gl.user_id,
@@ -129,11 +129,8 @@ FROM theme_like tl
          LEFT JOIN review_count rc ON twg.id = rc.theme_id;
 
 CREATE OR REPLACE VIEW gathering_schedule AS
-SELECT gp.*,
-       COALESCE(gmc.participant_count, 0) AS participant_count
-FROM gathering_participant gp
-         LEFT JOIN gathering_member_count gmc
-                   ON gp.gathering_id = gmc.gathering_id;
+SELECT gp.*
+FROM gathering_participant gp;
 
 CREATE OR REPLACE VIEW theme_list_with_review_and_liked_and_marked AS
 SELECT twg.id                                                    AS theme_id,
