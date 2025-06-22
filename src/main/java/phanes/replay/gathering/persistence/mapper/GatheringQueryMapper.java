@@ -12,4 +12,6 @@ public interface GatheringQueryMapper {
     Long countByKeywordAndAddress(String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre);
 
     List<GatheringQuery> findAllByKeywordAndAddress(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset);
+
+    List<GatheringQuery> findAllByHost(Long userId);
 }

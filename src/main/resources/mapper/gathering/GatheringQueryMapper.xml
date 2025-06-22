@@ -71,4 +71,10 @@
             </if>
         </where>
     </select>
+    <select id="findAllByHost" resultType="phanes.replay.gathering.dto.query.GatheringQuery">
+        SELECT *
+        FROM gathering_participant gp
+        WHERE user_id = ${userId}
+          AND gp.role = 'HOST'
+    </select>
 </mapper>

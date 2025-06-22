@@ -55,6 +55,7 @@ FROM theme_visit tv
 
 CREATE OR REPLACE VIEW gathering_participant AS
 SELECT gm.user_id,
+       gm.role,
        g.id                                                           AS gathering_id,
        g.name,
        twg.address,

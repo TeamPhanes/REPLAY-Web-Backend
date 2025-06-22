@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.common.dto.response.Page;
 import phanes.replay.gathering.dto.request.GatheringCreateRq;
@@ -27,6 +28,14 @@ public class GatheringController {
         userId = userId == null ? 0L : userId;
         startDate = startDate == null ? LocalDateTime.now() : startDate;
         return gatheringService.getGatheringList(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset);
+    }
+
+    @GetMapping("/host/{hostName}")
+    public Page<List<GatheringRs>> gatheringHostList(@PathVariable String hostName) {
+        if (!StringUtils.hasText(hostName)) {
+            return null;
+        }
+        return gatheringService.getGatheringHostList(hostName);
     }
 
     @GetMapping("/{gatheringId}")

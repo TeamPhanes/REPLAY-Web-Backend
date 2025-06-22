@@ -49,6 +49,16 @@ public class GatheringService {
         return pageMapper.toPage(totalCount, offset, data);
     }
 
+    public Page<List<GatheringRs>> getGatheringHostList(String hostName) {
+        User user = userQueryService.findByNickname(hostName);
+        Long totalCount = gatheringMemberQueryService.countByUserIdAndRoleEquals(user.getId(), Role.HOST);
+        List<GatheringRs> data = gatheringQueryMapper.findAllByHost(user.getId())
+                .stream()
+                .map(gatheringMapper::toGatheringRs)
+                .toList();
+        return pageMapper.toPage(totalCount, 0, data);
+    }
+
     public GatheringDetailRs getGatheringDetail(Long gatheringId) {
         return gatheringMapper.toGatheringDetailRs(gatheringContentQueryService.findByGatheringIdWithGathering(gatheringId));
     }
