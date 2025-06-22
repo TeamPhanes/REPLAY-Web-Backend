@@ -25,6 +25,7 @@ public class GatheringRs {
     private List<String> genres;
     private Integer playtime;
     private LocalDateTime dateTime;
+    private LocalDateTime registrationEnd;
     private Integer capacity;
     private Integer participantCount;
     private Level level;
