@@ -28,6 +28,10 @@ public class GatheringMemberQueryService {
         return gatheringMemberRepository.countByUserIdAndRoleEquals(userId, role);
     }
 
+    public Long countByUserIdAndRoleEqualsAndGatheringIdNot(Long userId, Long gatheringId, Role role) {
+        return gatheringMemberRepository.countByUserIdAndGatheringIdNotAndRoleEquals(userId, gatheringId, role);
+    }
+
     public List<GatheringMember> findAllByGatheringIdWithUserAndGathering(Long gatheringId) {
         return gatheringMemberRepository.findAllByGatheringId(gatheringId);
     }

@@ -49,19 +49,19 @@ public class GatheringService {
         return pageMapper.toPage(totalCount, offset, data);
     }
 
-    public Page<List<GatheringRs>> getGatheringHostList(Long userId, String hostName) {
+    public Page<List<GatheringRs>> getGatheringHostList(Long userId, Long gatheringId, String hostName) {
         User user = userQueryService.findByNickname(hostName);
-        Long totalCount = gatheringMemberQueryService.countByUserIdAndRoleEquals(user.getId(), Role.HOST);
-        List<GatheringRs> data = gatheringQueryMapper.findAllByHost(userId, user.getId())
+        Long totalCount = gatheringMemberQueryService.countByUserIdAndRoleEqualsAndGatheringIdNot(user.getId(), gatheringId, Role.HOST);
+        List<GatheringRs> data = gatheringQueryMapper.findAllByHost(userId, gatheringId, user.getId())
                 .stream()
                 .map(gatheringMapper::toGatheringRs)
                 .toList();
         return pageMapper.toPage(totalCount, 0, data);
     }
 
-    public Page<List<GatheringRs>> getGatheringDateTimeList(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
-        Long totalCount = gatheringQueryMapper.countByDateTime(startDate, endDate);
-        List<GatheringRs> data = gatheringQueryMapper.findAllByDateTime(userId, startDate, endDate)
+    public Page<List<GatheringRs>> getGatheringDateTimeList(Long userId, Long gatheringId, LocalDateTime startDate, LocalDateTime endDate) {
+        Long totalCount = gatheringQueryMapper.countByDateTime(gatheringId, startDate, endDate);
+        List<GatheringRs> data = gatheringQueryMapper.findAllByDateTime(userId, gatheringId, startDate, endDate)
                 .stream()
                 .map(gatheringMapper::toGatheringRs)
                 .toList();

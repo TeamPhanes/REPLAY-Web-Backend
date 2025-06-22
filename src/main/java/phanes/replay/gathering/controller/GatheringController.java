@@ -34,23 +34,23 @@ public class GatheringController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/host/{hostName}")
-    public Page<List<GatheringRs>> gatheringHostList(@AuthenticationPrincipal Long userId, @PathVariable String hostName) {
+    public Page<List<GatheringRs>> gatheringHostList(@AuthenticationPrincipal Long userId, @PathVariable String hostName, @RequestParam Long gatheringId) {
         if (!StringUtils.hasText(hostName)) {
             return null;
         }
-        return gatheringService.getGatheringHostList(userId, hostName);
+        return gatheringService.getGatheringHostList(userId, gatheringId, hostName);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/date")
-    public Page<List<GatheringRs>> getGatheringDateTimeList(@AuthenticationPrincipal Long userId, @RequestParam LocalDateTime dateTime) {
+    public Page<List<GatheringRs>> getGatheringDateTimeList(@AuthenticationPrincipal Long userId, @RequestParam LocalDateTime dateTime, @RequestParam Long gatheringId) {
         if (dateTime == null) {
             return null;
         }
         LocalDate targetDate = dateTime.toLocalDate();
         LocalDateTime startDate = targetDate.atStartOfDay();
         LocalDateTime endDate = targetDate.plusDays(1).atStartOfDay();
-        return gatheringService.getGatheringDateTimeList(userId, startDate, endDate);
+        return gatheringService.getGatheringDateTimeList(userId, gatheringId, startDate, endDate);
     }
 
     @GetMapping("/{gatheringId}")
