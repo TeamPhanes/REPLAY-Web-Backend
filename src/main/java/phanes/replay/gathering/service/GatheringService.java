@@ -49,10 +49,19 @@ public class GatheringService {
         return pageMapper.toPage(totalCount, offset, data);
     }
 
-    public Page<List<GatheringRs>> getGatheringHostList(String hostName) {
+    public Page<List<GatheringRs>> getGatheringHostList(Long userId, String hostName) {
         User user = userQueryService.findByNickname(hostName);
         Long totalCount = gatheringMemberQueryService.countByUserIdAndRoleEquals(user.getId(), Role.HOST);
-        List<GatheringRs> data = gatheringQueryMapper.findAllByHost(user.getId())
+        List<GatheringRs> data = gatheringQueryMapper.findAllByHost(userId, user.getId())
+                .stream()
+                .map(gatheringMapper::toGatheringRs)
+                .toList();
+        return pageMapper.toPage(totalCount, 0, data);
+    }
+
+    public Page<List<GatheringRs>> getGatheringDateTimeList(Long userId, LocalDateTime dateTime) {
+        Long totalCount = gatheringQueryMapper.countByDateTime(dateTime);
+        List<GatheringRs> data = gatheringQueryMapper.findAllByDateTime(userId, dateTime)
                 .stream()
                 .map(gatheringMapper::toGatheringRs)
                 .toList();

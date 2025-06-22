@@ -23,6 +23,7 @@ public class GatheringController {
 
     private final GatheringService gatheringService;
 
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping
     public Page<List<GatheringRs>> gatheringList(@AuthenticationPrincipal Long userId, @RequestParam(defaultValue = "dateTime") String sortBy, @RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state, @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate, @RequestParam(required = false) String genre, @RequestParam Integer limit, @RequestParam Integer offset) {
         userId = userId == null ? 0L : userId;
@@ -30,12 +31,22 @@ public class GatheringController {
         return gatheringService.getGatheringList(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset);
     }
 
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/host/{hostName}")
-    public Page<List<GatheringRs>> gatheringHostList(@PathVariable String hostName) {
+    public Page<List<GatheringRs>> gatheringHostList(@AuthenticationPrincipal Long userId, @PathVariable String hostName) {
         if (!StringUtils.hasText(hostName)) {
             return null;
         }
-        return gatheringService.getGatheringHostList(hostName);
+        return gatheringService.getGatheringHostList(userId, hostName);
+    }
+
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/date")
+    public Page<List<GatheringRs>> getGatheringDateTimeList(@AuthenticationPrincipal Long userId, @RequestParam LocalDateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+        return gatheringService.getGatheringDateTimeList(userId, dateTime);
     }
 
     @GetMapping("/{gatheringId}")
