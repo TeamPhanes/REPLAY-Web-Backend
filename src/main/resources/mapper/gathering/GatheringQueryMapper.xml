@@ -75,7 +75,7 @@
         SELECT gp.*,
                CASE WHEN gl.gathering_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
         FROM gathering_participant gp
-                 LEFT JOIN gathering_like gl ON gp.gathering_id = gl.gathering_id AND gp.user_id = #{userId}
+                 LEFT JOIN gathering_like gl ON gp.gathering_id = gl.gathering_id AND gl.user_id = #{userId}
         WHERE gp.user_id = #{hostId}
           AND gp.role = 'HOST'
     </select>
