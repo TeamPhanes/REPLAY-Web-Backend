@@ -11,11 +11,11 @@ public interface GatheringQueryMapper {
 
     Long countByKeywordAndAddress(String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre);
 
-    Long countByDateTime(LocalDateTime dateTime);
+    Long countByDateTime(LocalDateTime startDate, LocalDateTime endDate);
 
     List<GatheringQuery> findAllByKeywordAndAddress(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset);
 
     List<GatheringQuery> findAllByHost(Long userId, Long hostId);
 
-    List<GatheringQuery> findAllByDateTime(Long userId, LocalDateTime dateTime);
+    List<GatheringQuery> findAllByDateTime(Long userId, LocalDateTime startDate, LocalDateTime endDate);
 }

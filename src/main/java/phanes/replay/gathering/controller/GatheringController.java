@@ -13,6 +13,7 @@ import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.service.GatheringService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,7 +47,10 @@ public class GatheringController {
         if (dateTime == null) {
             return null;
         }
-        return gatheringService.getGatheringDateTimeList(userId, dateTime);
+        LocalDate targetDate = dateTime.toLocalDate();
+        LocalDateTime startDate = targetDate.atStartOfDay();
+        LocalDateTime endDate = targetDate.plusDays(1).atStartOfDay();
+        return gatheringService.getGatheringDateTimeList(userId, startDate, endDate);
     }
 
     @GetMapping("/{gatheringId}")

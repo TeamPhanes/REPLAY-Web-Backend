@@ -59,9 +59,9 @@ public class GatheringService {
         return pageMapper.toPage(totalCount, 0, data);
     }
 
-    public Page<List<GatheringRs>> getGatheringDateTimeList(Long userId, LocalDateTime dateTime) {
-        Long totalCount = gatheringQueryMapper.countByDateTime(dateTime);
-        List<GatheringRs> data = gatheringQueryMapper.findAllByDateTime(userId, dateTime)
+    public Page<List<GatheringRs>> getGatheringDateTimeList(Long userId, LocalDateTime startDate, LocalDateTime endDate) {
+        Long totalCount = gatheringQueryMapper.countByDateTime(startDate, endDate);
+        List<GatheringRs> data = gatheringQueryMapper.findAllByDateTime(userId, startDate, endDate)
                 .stream()
                 .map(gatheringMapper::toGatheringRs)
                 .toList();
