@@ -129,11 +129,8 @@ FROM theme_like tl
          LEFT JOIN review_count rc ON twg.id = rc.theme_id;
 
 CREATE OR REPLACE VIEW gathering_schedule AS
-SELECT gp.*,
-       COALESCE(gmc.participant_count, 0) AS participant_count
-FROM gathering_participant gp
-         LEFT JOIN gathering_member_count gmc
-                   ON gp.gathering_id = gmc.gathering_id;
+SELECT gp.*
+FROM gathering_participant gp;
 
 CREATE OR REPLACE VIEW theme_list_with_review_and_liked_and_marked AS
 SELECT twg.id                                                    AS theme_id,
