@@ -78,6 +78,7 @@
                  LEFT JOIN gathering_like gl ON gp.gathering_id = gl.gathering_id AND gl.user_id = #{userId}
         WHERE gp.user_id = #{hostId}
           AND gp.role = 'HOST'
+          AND date_time &gt; NOW()
         ORDER BY date_time
     </select>
     <select id="countByDateTime" resultType="java.lang.Long">
