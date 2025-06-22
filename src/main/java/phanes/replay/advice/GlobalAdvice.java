@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import phanes.replay.exception.IllegalAccessException;
 
 @Slf4j
 @RestControllerAdvice
@@ -12,7 +13,13 @@ public class GlobalAdvice {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public void handleGatheringNotFound(Exception ex) {
+    public void handleUnExpectedError(Exception ex) {
         log.error("unhandled exception", ex);
+    }
+
+    @ExceptionHandler(IllegalAccessException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public void handleIllegalAccess(IllegalAccessException ex) {
+        log.error("Illegal Access Exception", ex);
     }
 }
