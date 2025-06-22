@@ -71,4 +71,26 @@
             </if>
         </where>
     </select>
+    <select id="findAllByHost" resultType="phanes.replay.gathering.dto.query.GatheringQuery">
+        SELECT gp.*,
+               CASE WHEN gl.gathering_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
+        FROM gathering_participant gp
+                 LEFT JOIN gathering_like gl ON gp.gathering_id = gl.gathering_id AND gl.user_id = #{userId}
+        WHERE gp.user_id = #{hostId}
+          AND gp.role = 'HOST'
+        ORDER BY date_time
+    </select>
+    <select id="countByDateTime" resultType="java.lang.Long">
+        SELECT COUNT(*)
+        FROM gathering_list_with_theme_and_participant gltp
+        WHERE date_time BETWEEN #{startDate} AND #{endDate}
+    </select>
+    <select id="findAllByDateTime" resultType="phanes.replay.gathering.dto.query.GatheringQuery">
+        SELECT gltp.*,
+               CASE WHEN gl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
+        FROM gathering_list_with_theme_and_participant gltp
+                 LEFT JOIN gathering_like gl ON gltp.gathering_id = gl.gathering_id AND gl.user_id = #{userId}
+        WHERE date_time BETWEEN #{startDate} AND #{endDate}
+        ORDER BY date_time
+    </select>
 </mapper>

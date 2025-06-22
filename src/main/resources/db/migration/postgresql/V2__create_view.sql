@@ -55,6 +55,7 @@ FROM theme_visit tv
 
 CREATE OR REPLACE VIEW gathering_participant AS
 SELECT gm.user_id,
+       gm.role,
        g.id                                                           AS gathering_id,
        g.name,
        twg.address,
@@ -68,12 +69,10 @@ SELECT gm.user_id,
        twg.playtime,
        g.date_time,
        g.capacity,
-       g.registration_end,
-       CASE WHEN gl.gathering_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
+       g.registration_end
 FROM gathering_member gm
          JOIN gathering g ON gm.gathering_id = g.id
-         JOIN theme_with_genres twg ON g.theme_id = twg.id
-         LEFT JOIN gathering_like gl ON gm.user_id = gl.user_id AND g.id = gl.gathering_id;
+         JOIN theme_with_genres twg ON g.theme_id = twg.id;
 
 CREATE OR REPLACE VIEW gathering_like_with_participant AS
 SELECT gl.user_id,
@@ -117,13 +116,6 @@ FROM theme_like tl
          LEFT JOIN review_avg_rating rar ON twg.id = rar.theme_id
          LEFT JOIN review_count rc ON twg.id = rc.theme_id;
 
-CREATE OR REPLACE VIEW gathering_schedule AS
-SELECT gp.*,
-       COALESCE(gmc.participant_count, 0) AS participant_count
-FROM gathering_participant gp
-         LEFT JOIN gathering_member_count gmc
-                   ON gp.gathering_id = gmc.gathering_id;
-
 CREATE OR REPLACE VIEW theme_list_with_review AS
 SELECT twg.id                       AS theme_id,
        twg.name                     AS theme_name,
@@ -164,3 +156,10 @@ SELECT g.id                               AS gathering_id,
 FROM gathering g
          LEFT JOIN theme_with_genres twg ON g.theme_id = twg.id
          LEFT JOIN gathering_member_count gmc on g.id = gmc.gathering_id;
+
+CREATE OR REPLACE VIEW gathering_schedule AS
+SELECT gp.*,
+       COALESCE(gmc.participant_count, 0) AS participant_count
+FROM gathering_participant gp
+         LEFT JOIN gathering_member_count gmc
+                   ON gp.gathering_id = gmc.gathering_id;
