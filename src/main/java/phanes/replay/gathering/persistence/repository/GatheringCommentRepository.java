@@ -1,8 +1,9 @@
 package phanes.replay.gathering.persistence.repository;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import phanes.replay.gathering.domain.GatheringComment;
 
@@ -11,15 +12,15 @@ import java.util.Optional;
 
 public interface GatheringCommentRepository extends JpaRepository<GatheringComment, Long> {
 
-    @Query("SELECT gc FROM GatheringComment gc JOIN FETCH gc.gathering g JOIN FETCH gc.user u WHERE gc.user.id = :userId")
-    List<GatheringComment> findByUserId(@Param("userId") Long userId, Pageable pageable);
+    @EntityGraph(attributePaths = {"user", "gathering"})
+    Page<GatheringComment> findByUserId(@Param("userId") Long userId, Pageable pageable);
 
-    @Query("SELECT gc FROM GatheringComment gc JOIN FETCH gc.user u JOIN FETCH gc.gathering g WHERE g.id = :gatheringId ORDER BY gc.createdAt ASC")
-    List<GatheringComment> findByGatheringId(Long gatheringId, Pageable pageable);
+    @EntityGraph(attributePaths = {"user", "gathering"})
+    Page<GatheringComment> findAllByGatheringId(Long gatheringId, Pageable pageable);
+
+    List<GatheringComment> findAllByGatheringId(Long gatheringId);
 
     Optional<GatheringComment> findByIdAndGatheringIdAndUserId(Long commentId, Long gatheringId, Long userId);
 
     Long countByUserId(Long userId);
-
-    List<GatheringComment> findAllByGatheringId(Long gatheringId);
 }

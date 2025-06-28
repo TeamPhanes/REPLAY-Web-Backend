@@ -21,9 +21,9 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    public List<CommentRs> commentList(@RequestParam Long gatheringId, @RequestParam int offset, @RequestParam int limit) {
-        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(Sort.Direction.DESC, "createdAt"));
-        return commentService.getCommentByGatheringId(gatheringId, pageRequest);
+    public List<CommentRs> getCommentList(@RequestParam Long gatheringId, @RequestParam int offset, @RequestParam int limit) {
+        PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(Sort.Direction.ASC, "createdAt"));
+        return commentService.findAllByGatheringId(gatheringId, pageRequest);
     }
 
     @SecurityRequirement(name = "bearerAuth")
