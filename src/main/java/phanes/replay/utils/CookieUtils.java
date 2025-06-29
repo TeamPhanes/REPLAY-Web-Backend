@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.util.Arrays;
 
 public class CookieUtils {
+
     public static String getCookieValue(HttpServletRequest request, String name) {
         if (request.getCookies() == null) {
             return null;

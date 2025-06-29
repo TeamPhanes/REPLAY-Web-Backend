@@ -7,6 +7,7 @@ import phanes.replay.gathering.domain.GatheringLike;
 import phanes.replay.gathering.persistence.repository.GatheringLikeRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +20,8 @@ public class GatheringLikeQueryService {
     }
 
     public GatheringLike findByUserIdAndGatheringId(Long userId, Long gatheringId) {
-        return gatheringLikeRepository.findByUserIdAndGatheringId(userId, gatheringId).orElseThrow(() -> new LikeNotFoundException("Gathering Like not found"));
+        return gatheringLikeRepository.findByUserIdAndGatheringId(userId, gatheringId)
+                .orElseThrow(() -> new LikeNotFoundException("Gathering Like not found", Map.of("userId", userId, "gatheringId", gatheringId)));
     }
 
     public Long countByUserId(Long userId) {

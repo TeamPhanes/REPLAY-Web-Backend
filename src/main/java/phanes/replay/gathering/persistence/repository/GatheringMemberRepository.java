@@ -1,7 +1,7 @@
 package phanes.replay.gathering.persistence.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import phanes.replay.gathering.domain.GatheringMember;
 import phanes.replay.gathering.domain.enums.Role;
@@ -19,14 +19,14 @@ public interface GatheringMemberRepository extends JpaRepository<GatheringMember
 
     Long countByUserIdAndGatheringIdNotAndRoleEquals(Long userId, Long gatheringId, Role role);
 
-    @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.user u JOIN FETCH gm.gathering g WHERE gm.gathering.id IN :gatheringIdList")
-    List<GatheringMember> findAllByMember(Set<Long> gatheringIdList);
+    @EntityGraph(attributePaths = {"user", "gathering"})
+    List<GatheringMember> findAllByGatheringIdIn(Set<Long> gatheringIdList);
 
-    @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.user u JOIN FETCH gm.gathering g WHERE g.id = :gatheringId")
+    @EntityGraph(attributePaths = {"user", "gathering"})
     List<GatheringMember> findAllByGatheringId(Long gatheringId);
 
     GatheringMember findByUserIdAndGatheringId(Long userId, Long gatheringId);
 
-    @Query("SELECT gm FROM GatheringMember gm JOIN FETCH gm.gathering g JOIN FETCH gm.user u WHERE u.id = :userId and g.id = :gatheringId and gm.role = :role")
+    @EntityGraph(attributePaths = {"user", "gathering"})
     Optional<GatheringMember> findByUserIdAndGatheringIdAndRoleEquals(Long userId, Long gatheringId, Role role);
 }

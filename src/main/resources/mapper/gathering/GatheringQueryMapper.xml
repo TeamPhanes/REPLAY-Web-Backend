@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="phanes.replay.gathering.persistence.mapper.GatheringQueryMapper">
-    <select id="findAllByKeywordAndAddress" resultType="phanes.replay.gathering.dto.query.GatheringQuery">
+    <select id="findAllByKeywordAndCityAndStateAndDateAndGenre" resultType="phanes.replay.gathering.dto.query.GatheringQuery">
         SELECT gltp.*,
         CASE WHEN gl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
         FROM gathering_list_with_theme_and_participant gltp
@@ -45,7 +45,7 @@
         LIMIT #{limit}
         OFFSET #{offset}
     </select>
-    <select id="countByKeywordAndAddress" resultType="Long">
+    <select id="countByKeywordAndCityAndStateAndDateAndGenre" resultType="Long">
         SELECT COUNT(*)
         FROM gathering_list_with_theme_and_participant gltp
         <where>
@@ -82,13 +82,13 @@
           AND gp.gathering_id != #{gatheringId}
         ORDER BY date_time
     </select>
-    <select id="countByDateTime" resultType="java.lang.Long">
+    <select id="countByDate" resultType="java.lang.Long">
         SELECT COUNT(*)
         FROM gathering_list_with_theme_and_participant gltp
         WHERE gathering_id != #{gatheringId}
           AND date_time BETWEEN #{startDate} AND #{endDate}
     </select>
-    <select id="findAllByDateTime" resultType="phanes.replay.gathering.dto.query.GatheringQuery">
+    <select id="findAllByDate" resultType="phanes.replay.gathering.dto.query.GatheringQuery">
         SELECT gltp.*,
                CASE WHEN gl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked
         FROM gathering_list_with_theme_and_participant gltp

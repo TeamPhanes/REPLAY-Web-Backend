@@ -15,8 +15,8 @@ public class GatheringCommentQueryService {
 
     private final GatheringCommentRepository gatheringCommentRepository;
 
-    public List<GatheringComment> findByUserId(Long userId, Pageable pageable) {
-        return gatheringCommentRepository.findByUserId(userId, pageable)
+    public List<GatheringComment> findAllByUserId(Long userId, Pageable pageable) {
+        return gatheringCommentRepository.findAllByUserId(userId, pageable)
                 .stream()
                 .toList();
     }
@@ -33,7 +33,7 @@ public class GatheringCommentQueryService {
 
     public GatheringComment findByIdAndGatheringIdAndUserId(Long commentId, Long gatheringId, Long userId) {
         return gatheringCommentRepository.findByIdAndGatheringIdAndUserId(commentId, gatheringId, userId)
-                .orElseThrow(() -> new CommentNotFoundException(String.format("user: %d, gathering: %d, comment: %d not found", userId, gatheringId, commentId)));
+                .orElseThrow(() -> new CommentNotFoundException("Comment not found", userId, gatheringId, commentId));
     }
 
     public Long countByUserId(Long userId) {

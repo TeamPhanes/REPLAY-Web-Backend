@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 @ConfigurationProperties(prefix = "app.domain")
 public class DomainProperties {
+
     private String frontend;
     private String cookie;
 }

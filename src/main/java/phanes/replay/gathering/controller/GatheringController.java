@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.common.dto.response.Page;
+import phanes.replay.exception.DateTimeNotValidException;
 import phanes.replay.gathering.dto.request.GatheringCreateRq;
 import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
@@ -26,19 +27,19 @@ public class GatheringController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping
-    public Page<List<GatheringRs>> gatheringList(@AuthenticationPrincipal Long userId, @RequestParam(defaultValue = "dateTime") String sortBy, @RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state, @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate, @RequestParam(required = false) String genre, @RequestParam Integer limit, @RequestParam Integer offset) {
+    public Page<List<GatheringRs>> getGatheringList(@AuthenticationPrincipal Long userId, @RequestParam(defaultValue = "dateTime") String sortBy, @RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state, @RequestParam(required = false) LocalDateTime startDate, @RequestParam(required = false) LocalDateTime endDate, @RequestParam(required = false) String genre, @RequestParam Integer limit, @RequestParam Integer offset) {
         userId = userId == null ? 0L : userId;
         startDate = startDate == null ? LocalDateTime.now() : startDate;
-        return gatheringService.getGatheringList(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset);
+        return gatheringService.findAllByKeywordAndCityAndStateAndDateAndGenre(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/host/{hostName}")
-    public Page<List<GatheringRs>> gatheringHostList(@AuthenticationPrincipal Long userId, @PathVariable String hostName, @RequestParam Long gatheringId) {
+    public Page<List<GatheringRs>> getGatheringHostList(@AuthenticationPrincipal Long userId, @PathVariable String hostName, @RequestParam Long gatheringId) {
         if (!StringUtils.hasText(hostName)) {
             return null;
         }
-        return gatheringService.getGatheringHostList(userId, gatheringId, hostName);
+        return gatheringService.findAllByHostNameAndGatheringId(userId, gatheringId, hostName);
     }
 
     @SecurityRequirement(name = "bearerAuth")
@@ -50,21 +51,27 @@ public class GatheringController {
         LocalDate targetDate = dateTime.toLocalDate();
         LocalDateTime startDate = targetDate.atStartOfDay();
         LocalDateTime endDate = targetDate.plusDays(1).atStartOfDay();
-        return gatheringService.getGatheringDateTimeList(userId, gatheringId, startDate, endDate);
+        return gatheringService.findAllByDateAndGatheringId(userId, gatheringId, startDate, endDate);
     }
 
     @GetMapping("/{gatheringId}")
     public GatheringDetailRs gatheringDetail(@PathVariable Long gatheringId) {
-        return gatheringService.getGatheringDetail(gatheringId);
+        return gatheringService.findDetailByGatheringId(gatheringId);
     }
 
     @PostMapping
     public void createGathering(@AuthenticationPrincipal Long userId, @RequestBody @Valid GatheringCreateRq gatheringCreateRq) {
+        if (gatheringCreateRq.getRegistrationStart().isAfter(gatheringCreateRq.getRegistrationEnd())) {
+            throw new DateTimeNotValidException("StartDate cannot be after EndDate", gatheringCreateRq.getRegistrationStart(), gatheringCreateRq.getRegistrationEnd());
+        }
         gatheringService.createGathering(userId, gatheringCreateRq);
     }
 
     @PatchMapping("/{gatheringId}")
     public void updateGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId, @RequestBody @Valid GatheringUpdateRq gatheringUpdateRq) {
+        if (gatheringUpdateRq.getRegistrationStart().isAfter(gatheringUpdateRq.getRegistrationEnd())) {
+            throw new DateTimeNotValidException("StartDate cannot be after EndDate", gatheringUpdateRq.getRegistrationStart(), gatheringUpdateRq.getRegistrationEnd());
+        }
         gatheringService.updateGathering(userId, gatheringId, gatheringUpdateRq);
     }
 
@@ -75,13 +82,13 @@ public class GatheringController {
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/{gatheringId}/like")
-    public void gatheringLike(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
-        gatheringService.updateGatheringLike(userId, gatheringId);
+    public void likeGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        gatheringService.likeGathering(userId, gatheringId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{gatheringId}/like")
-    public void gatheringUnlike(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
-        gatheringService.deleteGatheringLike(userId, gatheringId);
+    public void unlikeGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        gatheringService.unlikeGathering(userId, gatheringId);
     }
 }

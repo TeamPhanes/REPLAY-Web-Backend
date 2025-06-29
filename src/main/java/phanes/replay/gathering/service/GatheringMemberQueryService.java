@@ -8,6 +8,7 @@ import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.persistence.repository.GatheringMemberRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -16,8 +17,8 @@ public class GatheringMemberQueryService {
 
     private final GatheringMemberRepository gatheringMemberRepository;
 
-    public List<GatheringMember> findAllByMember(Set<Long> gatheringIdList) {
-        return gatheringMemberRepository.findAllByMember(gatheringIdList);
+    public List<GatheringMember> findAllByGatheringIdIn(Set<Long> gatheringIdList) {
+        return gatheringMemberRepository.findAllByGatheringIdIn(gatheringIdList);
     }
 
     public Long countByUserId(Long userId) {
@@ -36,12 +37,9 @@ public class GatheringMemberQueryService {
         return gatheringMemberRepository.findAllByGatheringId(gatheringId);
     }
 
-    public List<GatheringMember> findAllByGatheringIdWithUser(Long gatheringId) {
-        return gatheringMemberRepository.findAllByGatheringId(gatheringId);
-    }
-
     public GatheringMember findHostByUserIdAndGatheringId(Long userId, Long gatheringId) {
-        return gatheringMemberRepository.findByUserIdAndGatheringIdAndRoleEquals(userId, gatheringId, Role.HOST).orElseThrow(() -> new HostNotFoundException("host not found"));
+        return gatheringMemberRepository.findByUserIdAndGatheringIdAndRoleEquals(userId, gatheringId, Role.HOST)
+                .orElseThrow(() -> new HostNotFoundException("Host not found", Map.of("userId", userId, "gatheringId", gatheringId)));
     }
 
     public GatheringMember findByUserIdAndGatheringId(Long userId, Long gatheringId) {

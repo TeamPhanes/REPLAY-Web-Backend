@@ -21,6 +21,7 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/review/*/like").authenticated()
                         .requestMatchers(
                                 "/auth/*",
                                 "/auth/*/callback",
