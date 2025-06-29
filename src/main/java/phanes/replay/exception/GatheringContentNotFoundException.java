@@ -1,8 +1,14 @@
 package phanes.replay.exception;
 
+import lombok.Getter;
+
+@Getter
 public class GatheringContentNotFoundException extends RuntimeException {
 
-    public GatheringContentNotFoundException(String message) {
+    private final Long gatheringId;
+
+    public GatheringContentNotFoundException(String message, Long gatheringId) {
         super(message);
+        this.gatheringId = gatheringId;
     }
 }

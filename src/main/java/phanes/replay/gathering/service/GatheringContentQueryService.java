@@ -14,11 +14,13 @@ public class GatheringContentQueryService {
     private final GatheringContentRepository gatheringContentRepository;
 
     public GatheringContent findByGatheringId(Long gatheringId) {
-        return gatheringContentRepository.findById(gatheringId).orElseThrow(() -> new GatheringNotFoundException("gathering not found"));
+        return gatheringContentRepository.findByGatheringId(gatheringId)
+                .orElseThrow(() -> new GatheringNotFoundException("Gathering Content not found", gatheringId));
     }
 
     public GatheringContent findByGatheringIdWithGathering(Long gatheringId) {
-        return gatheringContentRepository.findByGatheringIdWithGathering(gatheringId).orElseThrow(() -> new GatheringContentNotFoundException("gathering content not found"));
+        return gatheringContentRepository.findByGatheringId(gatheringId)
+                .orElseThrow(() -> new GatheringContentNotFoundException("Gathering Content not found", gatheringId));
     }
 
     public void save(GatheringContent gatheringContent) {

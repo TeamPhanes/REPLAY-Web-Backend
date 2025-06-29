@@ -9,13 +9,13 @@ import java.util.List;
 @Mapper
 public interface GatheringQueryMapper {
 
-    Long countByKeywordAndAddress(String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre);
+    Long countByKeywordAndCityAndStateAndDateAndGenre(String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre);
 
-    Long countByDateTime(Long gatheringId, LocalDateTime startDate, LocalDateTime endDate);
+    Long countByDate(Long gatheringId, LocalDateTime startDate, LocalDateTime endDate);
 
-    List<GatheringQuery> findAllByKeywordAndAddress(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset);
+    List<GatheringQuery> findAllByKeywordAndCityAndStateAndDateAndGenre(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset);
 
     List<GatheringQuery> findAllByHost(Long userId, Long gatheringId, Long hostId);
 
-    List<GatheringQuery> findAllByDateTime(Long userId, Long gatheringId, LocalDateTime startDate, LocalDateTime endDate);
+    List<GatheringQuery> findAllByDate(Long userId, Long gatheringId, LocalDateTime startDate, LocalDateTime endDate);
 }

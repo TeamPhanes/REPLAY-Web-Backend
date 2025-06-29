@@ -21,11 +21,14 @@ public class GatheringMemberService {
     private final GatheringQueryService gatheringQueryService;
     private final UserQueryService userQueryService;
 
-    public List<GatheringMemberRs> getMemberList(Long gatheringId) {
-        return gatheringMemberQueryService.findAllByGatheringIdWithUser(gatheringId).stream().map(gatheringMemberMapper::toGatheringRs).toList();
+    public List<GatheringMemberRs> findAllByGatheringId(Long gatheringId) {
+        return gatheringMemberQueryService.findAllByGatheringIdWithUserAndGathering(gatheringId)
+                .stream()
+                .map(gatheringMemberMapper::toGatheringRs)
+                .toList();
     }
 
-    public void addMember(Long userId, Long gatheringId) {
+    public void saveMember(Long userId, Long gatheringId) {
         User user = userQueryService.findById(userId);
         Gathering gathering = gatheringQueryService.findById(gatheringId);
         GatheringMember member = GatheringMember.builder()

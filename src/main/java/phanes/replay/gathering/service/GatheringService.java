@@ -24,6 +24,7 @@ import phanes.replay.user.service.UserQueryService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -42,14 +43,14 @@ public class GatheringService {
     private final UserQueryService userQueryService;
     private final GatheringMapper gatheringMapper;
 
-    public Page<List<GatheringRs>> getGatheringList(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset) {
-        Long totalCount = gatheringQueryMapper.countByKeywordAndAddress(sortBy, keyword, city, state, startDate, endDate, genre);
-        List<GatheringRs> data = gatheringQueryMapper.findAllByKeywordAndAddress(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset).stream()
+    public Page<List<GatheringRs>> findAllByKeywordAndCityAndStateAndDateAndGenre(Long userId, String sortBy, String keyword, String city, String state, LocalDateTime startDate, LocalDateTime endDate, String genre, Integer limit, Integer offset) {
+        Long totalCount = gatheringQueryMapper.countByKeywordAndCityAndStateAndDateAndGenre(sortBy, keyword, city, state, startDate, endDate, genre);
+        List<GatheringRs> data = gatheringQueryMapper.findAllByKeywordAndCityAndStateAndDateAndGenre(userId, sortBy, keyword, city, state, startDate, endDate, genre, limit, offset).stream()
                 .map(gatheringMapper::toGatheringRs).toList();
         return pageMapper.toPage(totalCount, offset, data);
     }
 
-    public Page<List<GatheringRs>> getGatheringHostList(Long userId, Long gatheringId, String hostName) {
+    public Page<List<GatheringRs>> findAllByHostNameAndGatheringId(Long userId, Long gatheringId, String hostName) {
         User user = userQueryService.findByNickname(hostName);
         Long totalCount = gatheringMemberQueryService.countByUserIdAndRoleEqualsAndGatheringIdNot(user.getId(), gatheringId, Role.HOST);
         List<GatheringRs> data = gatheringQueryMapper.findAllByHost(userId, gatheringId, user.getId())
@@ -59,16 +60,16 @@ public class GatheringService {
         return pageMapper.toPage(totalCount, 0, data);
     }
 
-    public Page<List<GatheringRs>> getGatheringDateTimeList(Long userId, Long gatheringId, LocalDateTime startDate, LocalDateTime endDate) {
-        Long totalCount = gatheringQueryMapper.countByDateTime(gatheringId, startDate, endDate);
-        List<GatheringRs> data = gatheringQueryMapper.findAllByDateTime(userId, gatheringId, startDate, endDate)
+    public Page<List<GatheringRs>> findAllByDateAndGatheringId(Long userId, Long gatheringId, LocalDateTime startDate, LocalDateTime endDate) {
+        Long totalCount = gatheringQueryMapper.countByDate(gatheringId, startDate, endDate);
+        List<GatheringRs> data = gatheringQueryMapper.findAllByDate(userId, gatheringId, startDate, endDate)
                 .stream()
                 .map(gatheringMapper::toGatheringRs)
                 .toList();
         return pageMapper.toPage(totalCount, 0, data);
     }
 
-    public GatheringDetailRs getGatheringDetail(Long gatheringId) {
+    public GatheringDetailRs findDetailByGatheringId(Long gatheringId) {
         return gatheringMapper.toGatheringDetailRs(gatheringContentQueryService.findByGatheringIdWithGathering(gatheringId));
     }
 
@@ -113,7 +114,7 @@ public class GatheringService {
         gatheringContentQueryService.save(gatheringContent);
     }
 
-    public void updateGatheringLike(Long userId, Long gatheringId) {
+    public void likeGathering(Long userId, Long gatheringId) {
         User user = userQueryService.findById(userId);
         Gathering gathering = gatheringQueryService.findById(gatheringId);
         GatheringLike gatheringLike = GatheringLike.builder().user(user).gathering(gathering).build();
@@ -125,7 +126,7 @@ public class GatheringService {
         List<GatheringMember> gatheringMemberList = gatheringMemberQueryService.findAllByGatheringIdWithUserAndGathering(gatheringId);
         GatheringMember host = findHost(gatheringMemberList);
         if (!Objects.equals(userId, host.getUser().getId())) {
-            throw new IllegalAccessException("Only the host can delete a gathering");
+            throw new IllegalAccessException("Only the host can delete a gathering", userId, host.getUser().getId());
         }
         GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gatheringId);
         List<GatheringLike> gatheringLikeList = gatheringLikeQueryService.findAllByGatheringId(gatheringId);
@@ -138,10 +139,11 @@ public class GatheringService {
     }
 
     private GatheringMember findHost(List<GatheringMember> gatheringMemberList) {
-        return gatheringMemberList.stream().filter(gm -> gm.getRole().equals(Role.HOST)).findFirst().orElseThrow(() -> new HostNotFoundException("Host not found"));
+        return gatheringMemberList.stream().filter(gm -> gm.getRole().equals(Role.HOST)).findFirst()
+                .orElseThrow(() -> new HostNotFoundException("Host not found", Map.of("memberIdList", gatheringMemberList.stream().map(GatheringMember::getId).toList())));
     }
 
-    public void deleteGatheringLike(Long userId, Long gatheringId) {
+    public void unlikeGathering(Long userId, Long gatheringId) {
         GatheringLike gatheringLike = gatheringLikeQueryService.findByUserIdAndGatheringId(userId, gatheringId);
         gatheringLikeQueryService.delete(gatheringLike);
     }

@@ -89,7 +89,7 @@ public class UserService {
     public Page<List<UserParticipatingGatheringRs>> getMyParticipatingGathering(Long userId, Integer limit, Integer offset) {
         List<UserParticipantGatheringQuery> userParticipantGatheringQuery = userGatheringQueryMapper.findUserParticipantGathering(userId, limit, offset);
         Set<Long> gatheringIdList = userParticipantGatheringQuery.stream().map(UserParticipantGatheringQuery::getGatheringId).collect(Collectors.toSet());
-        Map<Long, List<GatheringMember>> collect = gatheringMemberQueryService.findAllByMember(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
+        Map<Long, List<GatheringMember>> collect = gatheringMemberQueryService.findAllByGatheringIdIn(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
         List<UserParticipatingGatheringRs> data = userParticipantGatheringQuery.stream().map(userMapper::toUserParticipatingGatheringRs).toList();
         data.forEach(pg ->
                 pg.setParticipants(
@@ -105,7 +105,7 @@ public class UserService {
     }
 
     public Page<Map<LocalDate, List<UserCommentRs>>> getMyComment(Long userId, Pageable pageable) {
-        List<GatheringComment> myComment = gatheringCommentQueryService.findByUserId(userId, pageable);
+        List<GatheringComment> myComment = gatheringCommentQueryService.findAllByUserId(userId, pageable);
         Long totalCount = gatheringCommentQueryService.countByUserId(userId);
         LinkedHashMap<LocalDate, List<UserCommentRs>> data = myComment.stream()
                 .map(userMapper::toUserCommentRs)

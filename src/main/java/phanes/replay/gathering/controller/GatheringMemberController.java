@@ -17,14 +17,14 @@ public class GatheringMemberController {
     private final GatheringMemberService gatheringMemberService;
 
     @GetMapping("/{gatheringId}")
-    public List<GatheringMemberRs> memberList(@PathVariable Long gatheringId) {
-        return gatheringMemberService.getMemberList(gatheringId);
+    public List<GatheringMemberRs> getMemberList(@PathVariable Long gatheringId) {
+        return gatheringMemberService.findAllByGatheringId(gatheringId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/{gatheringId}")
     public void addMember(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
-        gatheringMemberService.addMember(userId, gatheringId);
+        gatheringMemberService.saveMember(userId, gatheringId);
     }
 
     @SecurityRequirement(name = "bearerAuth")

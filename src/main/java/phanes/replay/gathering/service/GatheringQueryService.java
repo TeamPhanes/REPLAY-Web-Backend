@@ -13,7 +13,8 @@ public class GatheringQueryService {
     private final GatheringRepository gatheringRepository;
 
     public Gathering findById(Long id) {
-        return gatheringRepository.findById(id).orElseThrow(() -> new GatheringNotFoundException(String.format("Gathering %d not found", id)));
+        return gatheringRepository.findById(id)
+                .orElseThrow(() -> new GatheringNotFoundException("Gathering not found", id));
     }
 
     public void save(Gathering gatheringContent) {

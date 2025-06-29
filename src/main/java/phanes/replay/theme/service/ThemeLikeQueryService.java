@@ -6,6 +6,8 @@ import phanes.replay.exception.LikeNotFoundException;
 import phanes.replay.theme.domain.ThemeLike;
 import phanes.replay.theme.persistence.repository.ThemeLikeRepository;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class ThemeLikeQueryService {
@@ -13,7 +15,8 @@ public class ThemeLikeQueryService {
     private final ThemeLikeRepository themeLikeRepository;
 
     public ThemeLike findByUserIdAndThemeId(Long userId, Long themeId) {
-        return themeLikeRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new LikeNotFoundException(String.format("Theme Like Not Found - user: %d, theme: %d", userId, themeId)));
+        return themeLikeRepository.findByUserIdAndThemeId(userId, themeId)
+                .orElseThrow(() -> new LikeNotFoundException("Theme Like not found", Map.of("userId", userId, "themeId", themeId)));
     }
 
     public Long countByUserId(Long userId) {
