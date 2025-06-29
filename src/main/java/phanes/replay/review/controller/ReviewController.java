@@ -7,7 +7,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.common.dto.response.Page;
-import phanes.replay.exception.IllegalAccessException;
 import phanes.replay.review.dto.request.ReviewCreateRq;
 import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.review.dto.request.ReviewUpdateWithImageRq;
@@ -40,9 +39,6 @@ public class ReviewController {
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/{reviewId}/like")
     public void reviewLike(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
-        if (userId == null) {
-            throw new IllegalAccessException("userId is null");
-        }
         reviewService.reviewLike(userId, reviewId);
     }
 
@@ -67,9 +63,6 @@ public class ReviewController {
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{reviewId}/like")
     public void reviewUnLike(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
-        if (userId == null) {
-            throw new IllegalAccessException("userId is null");
-        }
         reviewService.reviewUnLike(userId, reviewId);
     }
 
