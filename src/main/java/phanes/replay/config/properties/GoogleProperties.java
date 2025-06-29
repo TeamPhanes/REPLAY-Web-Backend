@@ -8,6 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 @ConfigurationProperties("oauth.google")
 public class GoogleProperties {
+
     private String clientId;
     private String clientSecret;
     private String redirectUri;

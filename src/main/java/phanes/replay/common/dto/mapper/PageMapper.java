@@ -13,12 +13,4 @@ public class PageMapper<T> {
                 .data(data)
                 .build();
     }
-
-    public Page<T> toPage(Long totalCount, Long currentPage, T data) {
-        return Page.<T>builder()
-                .totalCount(totalCount)
-                .currentPage(currentPage)
-                .data(data)
-                .build();
-    }
 }
