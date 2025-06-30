@@ -25,32 +25,32 @@ public class ReviewController {
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping
-    public Page<List<ReviewRs>> reviewList(@AuthenticationPrincipal Long userId, @RequestParam Long themeId, @RequestParam Integer limit, @RequestParam Integer offset) {
+    public Page<List<ReviewRs>> getReviewList(@AuthenticationPrincipal Long userId, @RequestParam Long themeId, @RequestParam Integer limit, @RequestParam Integer offset) {
         userId = userId == null ? 0L : userId;
-        return reviewService.getReviewByThemeId(userId, themeId, limit, offset);
+        return reviewService.findAllByThemeId(userId, themeId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void createReviewWithImage(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid ReviewCreateRq reviewCreateRq) {
+    public void createReview(@AuthenticationPrincipal Long userId, @ModelAttribute @Valid ReviewCreateRq reviewCreateRq) {
         reviewService.createReview(userId, reviewCreateRq);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/{reviewId}/like")
-    public void reviewLike(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
-        reviewService.reviewLike(userId, reviewId);
+    public void likeReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
+        reviewService.likeReview(userId, reviewId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PatchMapping(value = "/{reviewId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void updateMyPlayThemeWithImage(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @ModelAttribute ReviewUpdateWithImageRq reviewUpdateWithImageRq) {
+    public void updateThemeReviewWithImage(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @ModelAttribute ReviewUpdateWithImageRq reviewUpdateWithImageRq) {
         reviewService.updateThemeReviewWithImage(userId, reviewId, reviewUpdateWithImageRq);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PatchMapping(value = "/{reviewId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updateMyPlayTheme(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @RequestBody ReviewUpdateRq reviewUpdateRq) {
+    public void updateThemeReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @RequestBody ReviewUpdateRq reviewUpdateRq) {
         reviewService.updateThemeReview(userId, reviewId, reviewUpdateRq);
     }
 
@@ -62,12 +62,12 @@ public class ReviewController {
 
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{reviewId}/like")
-    public void reviewUnLike(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
-        reviewService.reviewUnLike(userId, reviewId);
+    public void unlikeReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
+        reviewService.unlikeReview(userId, reviewId);
     }
 
     @GetMapping("/rating")
-    public ReviewRatingRs reviewRating(@RequestParam Long themeId) {
+    public ReviewRatingRs getReviewRating(@RequestParam Long themeId) {
         return reviewService.getReviewRatingByThemeId(themeId);
     }
 }

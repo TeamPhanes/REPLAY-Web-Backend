@@ -12,5 +12,5 @@ public interface ReviewMapper {
     @Mapping(target = "playUser", source = "numberOfPlayer")
     @Mapping(target = "user.name", source = "nickname")
     @Mapping(target = "user.image", source = "profileImage")
-    ReviewRs ReviewToReviewDTO(ReviewQuery review);
+    ReviewRs toReviewDTO(ReviewQuery review);
 }
