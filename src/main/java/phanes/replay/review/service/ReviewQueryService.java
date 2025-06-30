@@ -7,6 +7,7 @@ import phanes.replay.review.domain.Review;
 import phanes.replay.review.persistence.repository.ReviewRepository;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -18,24 +19,31 @@ public class ReviewQueryService {
         return reviewRepository.countBySuccess(success);
     }
 
-    public Review findByIdAndUserId(Long id, Long userId) {
-        return reviewRepository.findByIdAndUserId(id, userId).orElseThrow(() -> new ReviewNotFountException(String.format("Review  not found - user: %d, review: %d", userId, id)));
-    }
-
-    public Review findByReviewIdAndThemeIdAndUserId(Long reviewId, Long themeId, Long userId) {
-        return reviewRepository.findByReviewIdAndThemeIdAndUserId(reviewId, themeId, userId).orElseThrow(() -> new ReviewNotFountException(String.format("user: %d, theme: %d, review: %d not found", userId, themeId, reviewId)));
-    }
-
     public Long countByThemeId(Long themeId) {
         return reviewRepository.countByThemeId(themeId);
     }
 
-    public Object[][] findCountAndAverageByThemeId(Long themeId) {
-        return reviewRepository.findCountAndAverageByThemeId(themeId);
-    }
-
     public List<Object[]> countAllByThemeId(Long themeId) {
         return reviewRepository.countAllByThemeId(themeId);
+    }
+
+    public Review findById(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewNotFountException("Review  not found", Map.of("reviewId", reviewId)));
+    }
+
+    public Review findByIdAndUserId(Long id, Long userId) {
+        return reviewRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new ReviewNotFountException("Review  not found", Map.of("userId", userId, "reviewId", id)));
+    }
+
+    public Review findByReviewIdAndThemeIdAndUserId(Long reviewId, Long themeId, Long userId) {
+        return reviewRepository.findByReviewIdAndThemeIdAndUserId(reviewId, themeId, userId)
+                .orElseThrow(() -> new ReviewNotFountException("Review not found", Map.of("reviewId", reviewId, "themeId", themeId, "userId", userId)));
+    }
+
+    public Object[][] findCountAndAverageByThemeId(Long themeId) {
+        return reviewRepository.findCountAndAverageByThemeId(themeId);
     }
 
     public void save(Review review) {
@@ -44,9 +52,5 @@ public class ReviewQueryService {
 
     public void delete(Review review) {
         reviewRepository.delete(review);
-    }
-
-    public Review findById(Long reviewId) {
-        return reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFountException(String.format("Review  not found - reviewId: %d", reviewId)));
     }
 }

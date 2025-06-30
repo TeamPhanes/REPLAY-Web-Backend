@@ -39,11 +39,11 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final S3Service s3Service;
 
-    public Page<List<ReviewRs>> getReviewByThemeId(Long userId, Long themeId, Integer limit, Integer offset) {
+    public Page<List<ReviewRs>> findAllByThemeId(Long userId, Long themeId, Integer limit, Integer offset) {
         Long totalCount = reviewQueryService.countByThemeId(themeId);
         List<ReviewRs> data = reviewQueryMapper.findAllByThemeId(userId, themeId, limit, offset)
                 .stream()
-                .map(reviewMapper::ReviewToReviewDTO)
+                .map(reviewMapper::toReviewDTO)
                 .toList();
         return pageMapper.toPage(totalCount, offset, data);
     }
@@ -128,14 +128,14 @@ public class ReviewService {
         return scores;
     }
 
-    public void reviewLike(Long userId, Long reviewId) {
+    public void likeReview(Long userId, Long reviewId) {
         User user = userQueryService.findById(userId);
         Review review = reviewQueryService.findById(reviewId);
         ReviewLike reviewLike = ReviewLike.builder().user(user).review(review).build();
         reviewLikeQueryService.save(reviewLike);
     }
 
-    public void reviewUnLike(Long userId, Long reviewId) {
+    public void unlikeReview(Long userId, Long reviewId) {
         ReviewLike reviewLike = reviewLikeQueryService.findByReviewIdAndUserId(reviewId, userId);
         reviewLikeQueryService.delete(reviewLike);
     }

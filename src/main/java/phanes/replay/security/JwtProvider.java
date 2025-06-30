@@ -25,7 +25,6 @@ public class JwtProvider {
         this.secretKey = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 
-    // AccessToken 생성
     public String generateAccessToken(Long userId) {
         return Jwts.builder()
                 .subject(String.valueOf(userId))
@@ -35,7 +34,6 @@ public class JwtProvider {
                 .compact();
     }
 
-    // 토큰에서 userId 추출
     public String getUserId(String token) {
         return Jwts.parser()
                 .verifyWith(secretKey)
@@ -46,7 +44,6 @@ public class JwtProvider {
                 .getSubject();
     }
 
-    // 토큰 유효성 검사
     public boolean validate(String token) {
         try {
             Jwts.parser()
