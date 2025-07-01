@@ -15,5 +15,5 @@ public class ThemeContent {
     @Column
     private String story;
     @Column
-    private String image; // 상세페이지용 이미지
+    private String image;
 }

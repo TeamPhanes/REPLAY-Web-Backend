@@ -31,7 +31,7 @@ public class GatheringAdvice {
     }
 
     @ExceptionHandler(DateTimeNotValidException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handleDateTimeNotValidFound(DateTimeNotValidException ex) {
         log.error("{} \t 파라미터 - registrationStart: {}, registrationEnd: {}", ex.getMessage(), ex.getRegistrationStart(), ex.getRegistrationEnd());
     }

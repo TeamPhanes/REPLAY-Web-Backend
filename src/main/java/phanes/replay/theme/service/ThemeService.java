@@ -30,46 +30,46 @@ public class ThemeService {
     private final ThemeQueryMapper themeQueryMapper;
     private final ThemeMapper themeMapper;
 
-    public Page<List<ThemeRs>> getThemeList(Long userId, String sortBy, String keyword, String city, String state, String genre, Integer limit, Integer offset) {
+    public Page<List<ThemeRs>> findAllByKeywordAndCityAndStateAndGenre(Long userId, String sortBy, String keyword, String city, String state, String genre, Integer limit, Integer offset) {
         Long totalCount = themeQueryMapper.countByKeywordAndAddress(keyword, city, state, genre);
-        List<ThemeRs> data = themeQueryMapper.findAllByKeywordAndAddress(userId, sortBy, keyword, city, state, genre, limit, offset)
+        List<ThemeRs> data = themeQueryMapper.findAllByKeywordAndCityAndStateAndGenre(userId, sortBy, keyword, city, state, genre, limit, offset)
                 .stream()
                 .map(themeMapper::toThemeRs)
                 .toList();
         return pageMapper.toPage(totalCount, offset, data);
     }
 
-    public ThemeDetailRs getThemeDetail(Long themeId) {
+    public ThemeDetailRs findDetailByThemeId(Long themeId) {
         return themeMapper.toThemeDetailRs(themeContentQueryService.findByThemeId(themeId));
     }
 
-    public List<ThemeSearchRs> getThemeSearchList(String keyword, String city, String state) {
+    public List<ThemeSearchRs> findAllByKeywordAndCityAndState(String keyword, String city, String state) {
         return themeQueryMapper.findAllByKeywordAndCityAndState(keyword, city, state)
                 .stream()
                 .map(themeMapper::toThemeSearchRs)
                 .toList();
     }
 
-    public void updateThemeLike(Long userId, Long themeId) {
+    public void likeTheme(Long userId, Long themeId) {
         User user = userQueryService.findById(userId);
         Theme theme = themeQueryService.findById(themeId);
         ThemeLike themeLike = ThemeLike.builder().user(user).theme(theme).build();
         themeLikeQueryService.save(themeLike);
     }
 
-    public void updateThemeVisit(Long userId, Long themeId) {
+    public void visitTheme(Long userId, Long themeId) {
         User user = userQueryService.findById(userId);
         Theme theme = themeQueryService.findById(themeId);
         ThemeVisit themeVisit = ThemeVisit.builder().user(user).theme(theme).build();
         themeVisitQueryService.save(themeVisit);
     }
 
-    public void deleteThemeLike(Long userId, Long themeId) {
+    public void unlikeTheme(Long userId, Long themeId) {
         ThemeLike themeLike = themeLikeQueryService.findByUserIdAndThemeId(userId, themeId);
         themeLikeQueryService.delete(themeLike);
     }
 
-    public void deleteThemeVisit(Long userId, Long themeId) {
+    public void deleteVisitTheme(Long userId, Long themeId) {
         ThemeVisit themeVisit = themeVisitQueryService.findByUserIdAndThemeId(userId, themeId);
         themeVisitQueryService.delete(themeVisit);
     }

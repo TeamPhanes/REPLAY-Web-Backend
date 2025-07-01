@@ -4,7 +4,7 @@
         tis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="phanes.replay.theme.persistence.mapper.ThemeQueryMapper">
-    <select id="findAllByKeywordAndAddress" resultType="phanes.replay.theme.dto.query.ThemeQuery">
+    <select id="findAllByKeywordAndCityAndStateAndGenre" resultType="phanes.replay.theme.dto.query.ThemeQuery">
         SELECT tlr.*,
             CASE WHEN tl.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_liked,
             CASE WHEN tv.user_id IS NOT NULL THEN TRUE ELSE FALSE END AS is_marked

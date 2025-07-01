@@ -13,7 +13,8 @@ public class ThemeVisitQueryService {
     private final ThemeVisitRepository themeVisitRepository;
 
     public ThemeVisit findByUserIdAndThemeId(Long userId, Long themeId) {
-        return themeVisitRepository.findByUserIdAndThemeId(userId, themeId).orElseThrow(() -> new ThemeVisitNotFoundException(String.format("Theme visit not found - user: %d, theme: %d", userId, themeId)));
+        return themeVisitRepository.findByUserIdAndThemeId(userId, themeId)
+                .orElseThrow(() -> new ThemeVisitNotFoundException("Visit Theme not found", userId, themeId));
     }
 
     public Long countByUserId(Long userId) {

@@ -20,20 +20,20 @@ public class Theme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 20)
-    private String name; // 테마 이름
+    private String name;
     @Column(length = 100)
-    private String address; // 상세 주소
-    private Integer playtime; // 플레이 시간
+    private String address;
+    private Integer playtime;
     @Enumerated(EnumType.STRING)
-    private Level level; // 난이도
+    private Level level;
     @Column(length = 15)
-    private String cafe; // 방탈출 카페
+    private String cafe;
     @Column(length = 10)
-    private String spot; // 지점명
+    private String spot;
     @Column(length = 5)
-    private String state; // 시도
+    private String state;
     @Column(length = 5)
-    private String city; // 시구군
+    private String city;
     private String image;
     @OneToMany(mappedBy = "theme")
     List<Genre> genres;

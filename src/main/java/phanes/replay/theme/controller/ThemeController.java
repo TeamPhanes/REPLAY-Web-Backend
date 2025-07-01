@@ -20,42 +20,42 @@ public class ThemeController {
     private final ThemeService themeService;
 
     @GetMapping
-    public Page<List<ThemeRs>> themeList(@AuthenticationPrincipal Long userId, @RequestParam(defaultValue = "likes") String sortBy, @RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state, @RequestParam(required = false) String genre, @RequestParam Integer limit, @RequestParam Integer offset) {
+    public Page<List<ThemeRs>> getThemeList(@AuthenticationPrincipal Long userId, @RequestParam(defaultValue = "likes") String sortBy, @RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state, @RequestParam(required = false) String genre, @RequestParam Integer limit, @RequestParam Integer offset) {
         userId = userId == null ? 0 : userId;
-        return themeService.getThemeList(userId, sortBy, keyword, city, state, genre, limit, offset);
+        return themeService.findAllByKeywordAndCityAndStateAndGenre(userId, sortBy, keyword, city, state, genre, limit, offset);
     }
 
     @GetMapping("/{themeId}")
-    public ThemeDetailRs themeDetail(@PathVariable Long themeId) {
-        return themeService.getThemeDetail(themeId);
+    public ThemeDetailRs getThemeDetail(@PathVariable Long themeId) {
+        return themeService.findDetailByThemeId(themeId);
     }
 
     @GetMapping("/search")
-    public List<ThemeSearchRs> themeSearchList(@RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state) {
-        return themeService.getThemeSearchList(keyword, city, state);
+    public List<ThemeSearchRs> getThemeSearchList(@RequestParam(required = false) String keyword, @RequestParam(required = false) String city, @RequestParam(required = false) String state) {
+        return themeService.findAllByKeywordAndCityAndState(keyword, city, state);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/{themeId}/like")
-    public void themeLike(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
-        themeService.updateThemeLike(userId, themeId);
+    public void likeTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.likeTheme(userId, themeId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{themeId}/like")
-    public void themeUnlike(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
-        themeService.deleteThemeLike(userId, themeId);
+    public void unlikeTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.unlikeTheme(userId, themeId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/{themeId}/visit")
-    public void themeVisit(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
-        themeService.updateThemeVisit(userId, themeId);
+    public void visitTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.visitTheme(userId, themeId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping("/{themeId}/visit")
-    public void themeUnVisit(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
-        themeService.deleteThemeVisit(userId, themeId);
+    public void deleteVisitTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.deleteVisitTheme(userId, themeId);
     }
 }
