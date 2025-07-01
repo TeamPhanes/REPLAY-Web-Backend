@@ -17,6 +17,7 @@ import phanes.replay.security.JwtProvider;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -37,7 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(userId, null, List.of());
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 } else {
-                    throw new UserNotFoundException("User auth header not found");
+                    throw new UserNotFoundException("User auth header not found", Map.of("token", token));
                 }
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
