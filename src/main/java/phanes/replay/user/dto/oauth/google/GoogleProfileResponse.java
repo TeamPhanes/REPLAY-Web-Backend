@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GoogleProfileResponse {
+
     private String id;
     private String email;
     private Boolean verified_email;

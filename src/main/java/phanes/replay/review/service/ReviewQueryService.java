@@ -15,8 +15,8 @@ public class ReviewQueryService {
 
     private final ReviewRepository reviewRepository;
 
-    public Long countBySuccess(Boolean success) {
-        return reviewRepository.countBySuccess(success);
+    public Long countByUserIdAndSuccess(Long userId, Boolean success) {
+        return reviewRepository.countByUserIdAndSuccess(userId, success);
     }
 
     public Long countByThemeId(Long themeId) {

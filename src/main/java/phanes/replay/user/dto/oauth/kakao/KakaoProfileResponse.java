@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KakaoProfileResponse {
+
     private Long id;
     private KakaoProfile kakao_account;
 }

@@ -42,7 +42,6 @@ public interface UserMapper {
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(userLikeThemeQuery.getGenres().split(\",\")))")
     UserLikeThemeRs toUserLikeThemeRs(UserLikeThemeQuery userLikeThemeQuery);
 
-
     @Mapping(target = "time", expression = "java(userScheduleQuery.getDateTime().toLocalTime())")
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(userScheduleQuery.getGenres().split(\",\")))")
     UserScheduleRs toUserScheduleRs(UserScheduleQuery userScheduleQuery);

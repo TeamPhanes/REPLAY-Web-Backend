@@ -51,23 +51,23 @@ public class UserService {
     private final UserMapper userMapper;
     private final S3Service s3Service;
 
-    public UserRs getProfileUserInfo(Long userId) {
+    public UserRs findByUserId(Long userId) {
         User user = userQueryService.findById(userId);
         Long totalGathering = gatheringMemberQueryService.countByUserId(userId);
         Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRoleEquals(userId, Role.HOST);
         Long totalTheme = themeVisitQueryService.countByUserId(userId);
-        Long successCount = reviewQueryService.countBySuccess(true);
-        Long failCount = reviewQueryService.countBySuccess(false);
+        Long successCount = reviewQueryService.countByUserIdAndSuccess(userId, true);
+        Long failCount = reviewQueryService.countByUserIdAndSuccess(userId, false);
         return userMapper.toUserRs(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
-    public OtherUserRs getUserByNickname(String nickname) {
+    public OtherUserRs findByNickname(String nickname) {
         User user = userQueryService.findByNickname(nickname);
         Long totalGathering = gatheringMemberQueryService.countByUserId(user.getId());
         Long totalMakeGathering = gatheringMemberQueryService.countByUserIdAndRoleEquals(user.getId(), Role.HOST);
         Long totalTheme = themeVisitQueryService.countByUserId(user.getId());
-        Long successCount = reviewQueryService.countBySuccess(true);
-        Long failCount = reviewQueryService.countBySuccess(false);
+        Long successCount = reviewQueryService.countByUserIdAndSuccess(user.getId(), true);
+        Long failCount = reviewQueryService.countByUserIdAndSuccess(user.getId(), false);
         return userMapper.toOtherUserRs(user, totalGathering, totalMakeGathering, totalTheme, successCount, failCount, List.of(""));
     }
 
@@ -79,18 +79,29 @@ public class UserService {
         userQueryService.save(user);
     }
 
-    public Page<List<UserVisitThemeRs>> getMyVisitTheme(Long userId, Integer limit, Integer offset) {
-        List<UserVisitThemeQuery> userPlayingThemeList = userThemeQueryMapper.findUserVisitThemes(userId, limit, offset);
+    public Page<List<UserVisitThemeRs>> findVisitThemeListById(Long userId, Integer limit, Integer offset) {
+        List<UserVisitThemeQuery> userPlayingThemeList = userThemeQueryMapper.findVisitThemeListById(userId, limit, offset);
         Long totalCount = themeVisitQueryService.countByUserId(userId);
-        List<UserVisitThemeRs> data = userPlayingThemeList.stream().map(userMapper::toUserVisitThemeRs).toList();
+        List<UserVisitThemeRs> data = userPlayingThemeList
+                .stream()
+                .map(userMapper::toUserVisitThemeRs)
+                .toList();
         return visitThemePageMapper.toPage(totalCount, offset, data);
     }
 
-    public Page<List<UserParticipatingGatheringRs>> getMyParticipatingGathering(Long userId, Integer limit, Integer offset) {
-        List<UserParticipantGatheringQuery> userParticipantGatheringQuery = userGatheringQueryMapper.findUserParticipantGathering(userId, limit, offset);
-        Set<Long> gatheringIdList = userParticipantGatheringQuery.stream().map(UserParticipantGatheringQuery::getGatheringId).collect(Collectors.toSet());
-        Map<Long, List<GatheringMember>> collect = gatheringMemberQueryService.findAllByGatheringIdIn(gatheringIdList).stream().collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
-        List<UserParticipatingGatheringRs> data = userParticipantGatheringQuery.stream().map(userMapper::toUserParticipatingGatheringRs).toList();
+    public Page<List<UserParticipatingGatheringRs>> findParticipatingGatheringListById(Long userId, Integer limit, Integer offset) {
+        List<UserParticipantGatheringQuery> userParticipantGatheringQuery = userGatheringQueryMapper.findUserParticipantGatheringById(userId, limit, offset);
+        Set<Long> gatheringIdList = userParticipantGatheringQuery
+                .stream()
+                .map(UserParticipantGatheringQuery::getGatheringId)
+                .collect(Collectors.toSet());
+        Map<Long, List<GatheringMember>> collect = gatheringMemberQueryService.findAllByGatheringIdIn(gatheringIdList)
+                .stream()
+                .collect(Collectors.groupingBy(gm -> gm.getGathering().getId()));
+        List<UserParticipatingGatheringRs> data = userParticipantGatheringQuery
+                .stream()
+                .map(userMapper::toUserParticipatingGatheringRs)
+                .toList();
         data.forEach(pg ->
                 pg.setParticipants(
                         collect.get(pg.getGatheringId()).stream()
@@ -104,7 +115,7 @@ public class UserService {
         return participatingGatheringPageMapper.toPage(totalCount, offset, data);
     }
 
-    public Page<Map<LocalDate, List<UserCommentRs>>> getMyComment(Long userId, Pageable pageable) {
+    public Page<Map<LocalDate, List<UserCommentRs>>> findCommentListById(Long userId, Pageable pageable) {
         List<GatheringComment> myComment = gatheringCommentQueryService.findAllByUserId(userId, pageable);
         Long totalCount = gatheringCommentQueryService.countByUserId(userId);
         LinkedHashMap<LocalDate, List<UserCommentRs>> data = myComment.stream()
@@ -113,22 +124,27 @@ public class UserService {
         return commentPageMapper.toPage(totalCount, pageable.getPageNumber(), data);
     }
 
-    public Page<List<UserLikeGatheringRs>> getMyLikeGathering(Long userId, Integer limit, Integer offset) {
-        List<UserLikeGatheringRs> data = userGatheringQueryMapper.findUserLikeGathering(userId, limit, offset).stream().map(userMapper::toUserLikeGatheringRs).toList();
+    public Page<List<UserLikeGatheringRs>> findLikeGatheringListById(Long userId, Integer limit, Integer offset) {
+        List<UserLikeGatheringRs> data = userGatheringQueryMapper.findUserLikeGatheringById(userId, limit, offset)
+                .stream()
+                .map(userMapper::toUserLikeGatheringRs)
+                .toList();
         Long totalCount = gatheringLikeQueryService.countByUserId(userId);
         return likeGatheringPageMapper.toPage(totalCount, offset, data);
     }
 
-    public Page<List<UserLikeThemeRs>> getMyLikeTheme(Long userId, Integer limit, Integer offset) {
-        List<UserLikeThemeRs> data = userThemeQueryMapper.findUserLikeThemes(userId, limit, offset).stream().map(userMapper::toUserLikeThemeRs).toList();
+    public Page<List<UserLikeThemeRs>> findLikeThemeListById(Long userId, Integer limit, Integer offset) {
+        List<UserLikeThemeRs> data = userThemeQueryMapper.findUserLikeThemeById(userId, limit, offset)
+                .stream()
+                .map(userMapper::toUserLikeThemeRs)
+                .toList();
         Long totalCount = themeLikeQueryService.countByUserId(userId);
         return likeThemePageMapper.toPage(totalCount, offset, data);
     }
 
-    public Map<LocalDate, List<UserScheduleRs>> getMySchedule(Long userId) {
-        List<UserScheduleQuery> userScheduleQuery = userGatheringQueryMapper.findUserSchedule(userId);
+    public Map<LocalDate, List<UserScheduleRs>> findScheduleByUserId(Long userId) {
+        List<UserScheduleQuery> userScheduleQuery = userGatheringQueryMapper.findScheduleById(userId);
         return userScheduleQuery.stream()
-                .collect(Collectors.groupingBy(gsv -> gsv.getDateTime().toLocalDate(),
-                        Collectors.mapping(userMapper::toUserScheduleRs, Collectors.toList())));
+                .collect(Collectors.groupingBy(gsv -> gsv.getDateTime().toLocalDate(), Collectors.mapping(userMapper::toUserScheduleRs, Collectors.toList())));
     }
 }

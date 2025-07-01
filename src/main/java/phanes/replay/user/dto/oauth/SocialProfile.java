@@ -11,6 +11,7 @@ import phanes.replay.user.domain.enums.SocialType;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SocialProfile {
+
     private String socialId;
     private String profileImage;
     private SocialType socialType;
