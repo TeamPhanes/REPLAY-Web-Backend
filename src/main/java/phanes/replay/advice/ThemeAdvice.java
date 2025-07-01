@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import phanes.replay.exception.ImageUploadFailException;
-import phanes.replay.exception.ReviewNotFountException;
 import phanes.replay.exception.ThemeNotFoundException;
+import phanes.replay.exception.ThemeVisitNotFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -16,13 +16,13 @@ public class ThemeAdvice {
     @ExceptionHandler(ThemeNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void handleThemeNotFound(ThemeNotFoundException ex) {
-        log.error(ex.getMessage());
+        log.error("{} \t 쿼리 - themeId: {}", ex.getMessage(), ex.getThemeId());
     }
 
-    @ExceptionHandler(ReviewNotFountException.class)
+    @ExceptionHandler(ThemeVisitNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public void handleReviewNotFound(ReviewNotFountException ex) {
-        log.error(ex.getMessage());
+    public void handleThemeVisitNotFound(ThemeVisitNotFoundException ex) {
+        log.error("{} \t 쿼리 - userId: {}, themeId: {}", ex.getMessage(), ex.getUserId(), ex.getThemeId());
     }
 
     @ExceptionHandler(ImageUploadFailException.class)

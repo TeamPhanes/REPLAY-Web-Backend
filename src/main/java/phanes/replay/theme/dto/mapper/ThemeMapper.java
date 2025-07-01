@@ -15,7 +15,6 @@ public interface ThemeMapper {
     @Mapping(target = "genres", expression = "java(java.util.Arrays.asList(themeQuery.getGenres().split(\",\")))")
     ThemeRs toThemeRs(ThemeQuery themeQuery);
 
-
     @Mapping(target = "themeId", source = "theme.id")
     @Mapping(target = "detailImage", source = "image")
     ThemeDetailRs toThemeDetailRs(ThemeContent themeContent);

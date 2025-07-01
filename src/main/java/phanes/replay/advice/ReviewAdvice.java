@@ -13,7 +13,7 @@ import phanes.replay.utils.LogUtils;
 public class ReviewAdvice {
 
     @ExceptionHandler(ReviewNotFountException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public void handleUnExpectedError(ReviewNotFountException ex) {
         log.error("{} \t 쿼리 - {}", ex.getMessage(), LogUtils.toLogString(ex.getQueryMaps()));
     }
