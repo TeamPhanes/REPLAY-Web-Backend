@@ -27,12 +27,12 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me")
     public UserRs me(@AuthenticationPrincipal Long userId) {
-        return userService.getProfileUserInfo(userId);
+        return userService.findByUserId(userId);
     }
 
     @GetMapping("/{nickname}")
     public OtherUserRs getOtherUser(@PathVariable String nickname) {
-        return userService.getUserByNickname(nickname);
+        return userService.findByNickname(nickname);
     }
 
     @SecurityRequirement(name = "bearerAuth")
@@ -44,31 +44,31 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/schedule")
     public Map<LocalDate, List<UserScheduleRs>> mySchedule(@AuthenticationPrincipal Long userId) {
-        return userService.getMySchedule(userId);
+        return userService.findScheduleByUserId(userId);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/theme")
     public Page<List<UserVisitThemeRs>> myVisitTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        return userService.getMyVisitTheme(userId, limit, offset);
+        return userService.findVisitThemeListById(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/gathering")
     public Page<List<UserParticipatingGatheringRs>> myParticipatingGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        return userService.getMyParticipatingGathering(userId, limit, offset);
+        return userService.findParticipatingGatheringListById(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/gathering/like")
     public Page<List<UserLikeGatheringRs>> myLikeGathering(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        return userService.getMyLikeGathering(userId, limit, offset);
+        return userService.findLikeGatheringListById(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/me/theme/like")
     public Page<List<UserLikeThemeRs>> myLikeTheme(@AuthenticationPrincipal Long userId, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
-        return userService.getMyLikeTheme(userId, limit, offset);
+        return userService.findLikeThemeListById(userId, limit, offset);
     }
 
     @SecurityRequirement(name = "bearerAuth")
@@ -76,6 +76,6 @@ public class UserController {
     public Page<Map<LocalDate, List<UserCommentRs>>> myComment(@AuthenticationPrincipal Long userId, @RequestParam("sortBy") String sortBy, @RequestParam("limit") Integer limit, @RequestParam("offset") Integer offset) {
         Sort.Direction direction = "create".equals(sortBy) ? Sort.Direction.ASC : Sort.Direction.DESC;
         PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(direction, "createdAt"));
-        return userService.getMyComment(userId, pageRequest);
+        return userService.findCommentListById(userId, pageRequest);
     }
 }

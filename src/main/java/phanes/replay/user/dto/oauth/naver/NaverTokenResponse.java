@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NaverTokenResponse {
+
     @JsonProperty("access_token")
     private String accessToken;
 

@@ -31,5 +31,4 @@ public class KakaoUserInfo {
     //true : 기본 닉네임, false : 사용자 등록
     @JsonProperty("is_default_nickname")
     private Boolean isDefaultNickName;
-
 }

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="phanes.replay.user.persistence.mapper.UserGatheringQueryMapper">
-    <select id="findUserParticipantGathering" resultType="phanes.replay.user.dto.user.query.UserParticipantGatheringQuery">
+    <select id="findUserParticipantGatheringById" resultType="phanes.replay.user.dto.user.query.UserParticipantGatheringQuery">
         SELECT *
         FROM gathering_participant
         WHERE user_id = #{userId}
@@ -11,7 +11,7 @@
         OFFSET #{offset}
     </select>
 
-    <select id="findUserLikeGathering" resultType="phanes.replay.user.dto.user.query.UserLikeGatheringQuery">
+    <select id="findUserLikeGatheringById" resultType="phanes.replay.user.dto.user.query.UserLikeGatheringQuery">
         SELECT *
         FROM gathering_like_with_participant
         WHERE user_id = #{userId}
@@ -19,7 +19,7 @@
         OFFSET #{offset}
     </select>
 
-    <select id="findUserSchedule" resultType="phanes.replay.user.dto.user.query.UserScheduleQuery">
+    <select id="findScheduleById" resultType="phanes.replay.user.dto.user.query.UserScheduleQuery">
         SELECT *
         FROM gathering_schedule
         WHERE user_id = #{userId}

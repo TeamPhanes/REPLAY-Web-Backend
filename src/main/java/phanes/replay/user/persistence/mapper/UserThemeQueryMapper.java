@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface UserThemeQueryMapper {
 
-    List<UserVisitThemeQuery> findUserVisitThemes(@Param("userId") Long userId, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<UserVisitThemeQuery> findVisitThemeListById(@Param("userId") Long userId, @Param("limit") Integer limit, @Param("offset") Integer offset);
 
-    List<UserLikeThemeQuery> findUserLikeThemes(@Param("userId") Long userId, @Param("limit") Integer limit, @Param("offset") Integer offset);
+    List<UserLikeThemeQuery> findUserLikeThemeById(@Param("userId") Long userId, @Param("limit") Integer limit, @Param("offset") Integer offset);
 }

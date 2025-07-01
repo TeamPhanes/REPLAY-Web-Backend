@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    Long countBySuccess(Boolean success);
+    Long countByUserIdAndSuccess(Long userId, Boolean success);
 
     @EntityGraph(attributePaths = {"user", "theme"})
     Optional<Review> findByIdAndUserId(Long id, Long userId);

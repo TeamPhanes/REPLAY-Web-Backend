@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserParticipatingGatheringRs {
+
     private Long gatheringId;
     private String name;
     private String address;
