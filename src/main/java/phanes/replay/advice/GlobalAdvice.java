@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import phanes.replay.exception.IllegalAccessException;
 import phanes.replay.exception.LikeNotFoundException;
+import phanes.replay.exception.UnAuthenticateException;
 import phanes.replay.utils.LogUtils;
 
 @Slf4j
@@ -18,6 +19,12 @@ public class GlobalAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public void handleUnExpectedError(Exception ex) {
         log.error("Unexpected error", ex);
+    }
+
+    @ExceptionHandler(UnAuthenticateException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public void handleIllegalAccess(UnAuthenticateException ex) {
+        log.error("unauthenticate exception", ex);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
