@@ -1,0 +1,64 @@
+server:
+    ssl:
+        enabled: true
+        key-store-type: ENC[AES256_GCM,data:0pOVDVf4,iv:1pe4jY2VEE3F6qSK+VAfotsYvdf9KPjGQO+h9FBPMdw=,tag:epDNV0lZSN/JxRB5PmWQ/w==,type:str]
+    port: 8443
+spring:
+    application:
+        name: Replay
+    profiles:
+        active: local
+    jackson:
+        serialization:
+            write-dates-as-timestamps: false
+jwt:
+    secret: ENC[AES256_GCM,data:ow9yI/TCe2GdI8euwDzvkhhgF3t7d5c7Oo2HEcVa9QbxQaf42VHAJedRua0=,iv:0Ykd0Fq11dqHqd1K+BkewxH+nGpcu2vyCsKaWjso9Es=,tag:CzcAg0dSGECP0ONrPWbC4w==,type:str]
+    access-token:
+        expire-time: ENC[AES256_GCM,data:Tf7X,iv:F79Fhux2M867lSnp08PTF5OAA2csn4uro2omuNi/HfM=,tag:IVFtJA5G7yJb7+AWoeogQQ==,type:str]
+    refresh-token:
+        expire-time: ENC[AES256_GCM,data:fvA=,iv:TlXMSQK18nTlgX+RfMhuhhUL4g9eBlCuKNogcJ4x8S0=,tag:K/vWyRL5iEUA59H81/t6Qw==,type:str]
+oauth:
+    naver:
+        client-id: ENC[AES256_GCM,data:mFXSdPEvmCC1HTN7objJHrf8bxo=,iv:emmk265610dfW9frkDuWfZpB1U9vbMLHkqSvrRxSc4E=,tag:p8+esT9L8rwHDeYfgmavzw==,type:str]
+        client-secret: ENC[AES256_GCM,data:VTvUrE5oMh+H4Q==,iv:0f9FG0qvGsRqwUEtYadAkryA/3Uh2NLKNjYjsew9Lro=,tag:0UL1tr6tpC1n5UdxV8c0Zg==,type:str]
+    google:
+        client-id: ENC[AES256_GCM,data:22JRStqLyhgnEuOwpOQk8/85yYEmeG7QvgF1NtIQdoffzJ3jbQI1EzjdR1NQVftV5w99hl5RkfDbI0wF4nG3308aS4wdcOPE,iv:CcvYVEn5i1wFGErrkE3E+t1W1DCygmdYCXhmiz/G/GI=,tag:opK0J7N4+AGOMuQhPop6aQ==,type:str]
+        client-secret: ENC[AES256_GCM,data:FOoBe2EjwWBtUVk1A2ocdCcd2lgn1ZQU2US2bAJdhsN847I=,iv:FUYtqODpqsgfg2F6+bu1uj+YyMOqeh9Ve44UCyYAEWU=,tag:fdIH6vWgsoS/2o/WoVpMQw==,type:str]
+    kakao:
+        client-id: ENC[AES256_GCM,data:GX2SDrMcGYcj+px7FHt8NgN1OlU8nKiVSrKzc9YDlE8=,iv:1wX2yjz8j3tr1eI0m6/plzY483DQc2+pvqqW9uBZEqY=,tag:z4xwBuvPQTiBNc2ZVfowQQ==,type:str]
+        client-secret: ENC[AES256_GCM,data:fm689Fv5f03noi11y68fJbztU3l90eLhQEWw8ptlAeA=,iv:Ylc5RLY984qAq0bOACG0cnkbx2TNlzQUE/AhGQbxYAE=,tag:QLjIletx06fE6daIlCHiXg==,type:str]
+s3:
+    bucket: replay
+    access-key: ENC[AES256_GCM,data:eZ4g9eba9+HG0xFoYCsc5SnCAZs=,iv:hSphJXkfLCu1ZTOn3clWVBI5LH/eB96MRkwVV7DLVbE=,tag:hf7FtmFjMMTn4I7Bi271+Q==,type:str]
+    secret-key: ENC[AES256_GCM,data:O9+qQN2fO2/+UB+sqAG5yGZCLz4A3MfDc9HmWlAkK/l9Fbj/LdcHIQ==,iv:7atMGS07lWUIjI5ccd+YarqKwPaeKfzffMJO2KxarwE=,tag:lXm1/+jDTyY3SM9r9YehLw==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2025-10-28T10:19:44Z"
+    mac: ENC[AES256_GCM,data:n11d+wZtH3nm/U4+CgWlVTTInPThCkSh5QcYSwE0egT+c4OENv5Ez9btnLE4/MAE2dPvjiJhZFUXycc1UdfPQRickzmhGvLnMdVMx95g2fwIc/TVE5vMSwZOycOTypdThVNnPlmXHuH1i/yJ/3Mkz3EBt3abJ4FmI7cK4QA4AXE=,iv:LZ/B59hobMJ//jbSBy4YoRqEFxrtiILcYUpSIkSn8Ys=,tag:sMOY2B4pW6tlri7Q6K+XaQ==,type:str]
+    pgp:
+        - created_at: "2025-10-28T10:19:44Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA0pEQ+ak5/eRAQ//Y/onbGDgjdFHMahtn+21IjwGywpuWxIpHNMH1EREKtcx
+            mJxn85hsWwn9TdJ0Fgl5MPLhDv6JoHDhvaKHE2sZhRGf44WsLvbhEzJ+t+qkC7KE
+            1/LEIU/lQ5tlz9xXSZR4JgMjWD5ClpnDMvHE6TMMJFukokmif580zZKlAgOc0clD
+            HPCgCMeQniJK0gy5dtAEf4dezmE50E7PKDY+IKBFsdkr/dGosXTj8tTx1IcjbwTe
+            E+B6TztI62L+PEUi7u8Meye5j7Sl4va3xQ+k4kP6fNv1hMtJLSpiafkd/Sn0TKaY
+            oonEel46hlcBx1uKx6XgPSAX1jh7U0seGWUp7eRX1h/i52NmSzcFLMMalxBAK6Qt
+            X552cuqOn6JFhNiM7lTDPeLfBeAa7vmDwzf7xEhwzeitKWika46rTom4Lg+CdM9M
+            zI7bdoMisPoUbuaUclMVDUbV0YBQOOAuHXBCcOcaMVA3c7KwpXAkvRdY7euvkqN4
+            6u0B7QssgXD3wIJAlqRZVheHmGnwMu8m+apuTI79yzRNQgtioWgDUg3C9Oc9v4jp
+            RTODBJ3dpdkxegH7ySnvscgptWv3V+wZC3dHrb4/GKauIoAKBD4jUAxieg7Oze72
+            Y/4YqbbSFR1vcNg9DbeFA5Chjgaa9dojWNH30ShS2ErTPPsGt/QQegZG01wj9zrS
+            XAFQhH0h76EAr9saU2uVLvI4m9XIQfUDQFrP99DRbpBUcNAPQVNwxD1BjHcm0y9y
+            8ERVYSR5FwsDi5j9WvtJ0lWdIb92ctUImRf3/fPpnTOcsH/TclYxszVWNrR/
+            =b3Ji
+            -----END PGP MESSAGE-----
+          fp: B57822CEBBF7C27C196DB7D3D9DF0BD2C91CBE98
+    encrypted_regex: ^(?i)(.*(_)?(password|secret|token|endpoint|key|client.?id|uri|url|username|host|domain).*)$
+    version: 3.9.3
