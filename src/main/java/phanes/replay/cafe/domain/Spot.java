@@ -26,6 +26,8 @@ public class Spot {
     private String city;
     @Column(length = 50)
     private String address;
+    private Double lat;
+    private Double lng;
     @Column(length = 20)
     private String phone;
     @Column(length = 200)
