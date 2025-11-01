@@ -5,7 +5,6 @@ import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
 import phanes.replay.theme.domain.Theme;
-import phanes.replay.theme.mapper.ThemeRecordMapper;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import static phanes.replay.tables.ThemeLike.THEME_LIKE;
 @RequiredArgsConstructor
 public class ThemeJooqRepository {
 
-    private final ThemeRecordMapper themeRecordMapper;
     private final DSLContext dsl;
 
     public List<Theme> findAllOrderByThemeLike(int size) {
@@ -30,7 +28,7 @@ public class ThemeJooqRepository {
                 .leftJoin(likeCountByThemeId).on(themeId.eq(THEME.ID))
                 .orderBy(orderBy)
                 .limit(size)
-                .fetch(themeRecordMapper.themeRecordMapper());
+                .fetchInto(Theme.class);
     }
 
     private Table<Record2<Long, Integer>> likeCountByThemeId() {
