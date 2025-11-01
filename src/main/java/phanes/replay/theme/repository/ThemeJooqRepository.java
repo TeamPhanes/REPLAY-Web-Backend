@@ -16,6 +16,7 @@ import static phanes.replay.tables.ThemeLike.THEME_LIKE;
 @RequiredArgsConstructor
 public class ThemeJooqRepository {
 
+    private final ThemeRecordMapper themeRecordMapper;
     private final DSLContext dsl;
 
     public List<Theme> findAllOrderByThemeLike(int size) {
@@ -29,7 +30,7 @@ public class ThemeJooqRepository {
                 .leftJoin(likeCountByThemeId).on(themeId.eq(THEME.ID))
                 .orderBy(orderBy)
                 .limit(size)
-                .fetch(ThemeRecordMapper.themeRecordMapper());
+                .fetch(themeRecordMapper.themeRecordMapper());
     }
 
     private Table<Record2<Long, Integer>> likeCountByThemeId() {

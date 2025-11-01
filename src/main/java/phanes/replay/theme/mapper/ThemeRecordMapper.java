@@ -2,13 +2,15 @@ package phanes.replay.theme.mapper;
 
 import org.jooq.Record;
 import org.jooq.RecordMapper;
+import org.springframework.stereotype.Component;
 import phanes.replay.theme.domain.Theme;
 
 import static phanes.replay.tables.Theme.THEME;
 
+@Component
 public class ThemeRecordMapper {
 
-    public static RecordMapper<Record, Theme> themeRecordMapper() {
+    public RecordMapper<Record, Theme> themeRecordMapper() {
         return r -> Theme.builder()
                 .id(r.get(THEME.ID))
                 .title(r.get(THEME.TITLE))
