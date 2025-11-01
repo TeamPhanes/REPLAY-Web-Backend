@@ -116,7 +116,7 @@ jooq {
                     }
                     target {
                         packageName = 'phanes.replay'
-                        directory = "$projectDir/src/main/generated"
+                        directory = "$buildDir/generated-src/jooq/main"
                     }
                 }
             }
@@ -127,7 +127,7 @@ jooq {
 sourceSets {
     main {
         java {
-            srcDir "$projectDir/src/main/generated"
+            srcDir "$buildDir/generated-src/jooq/main"
         }
     }
 }
