@@ -26,4 +26,9 @@ public class ThemeController {
     public List<ThemePreviewRs> getPreviewThemeOrderByCreatedAt(@RequestParam int size) {
         return themeService.findAllByThemePreviewOrderByCreatedAt(size);
     }
+//
+//    @GetMapping("")
+//    public Page<ThemeRs> getThemeList(Pageable pageable, @RequestParam String state, @RequestParam String city, @RequestParam List<String> genres) {
+//        return null;
+//    }
 }
