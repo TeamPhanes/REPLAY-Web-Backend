@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class UserRs {
 
-    private Long id;
+    private Long nickname;
     private String image;
 }
