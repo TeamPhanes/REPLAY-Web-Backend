@@ -1,0 +1,133 @@
+import nu.studer.gradle.jooq.JooqEdition
+
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.7'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'nu.studer.jooq' version '9.0'
+}
+
+group = 'phanes'
+version = '0.0.1-SNAPSHOT'
+description = 'Replay Backend for Phanes'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2025.0.0")
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
+
+    implementation('org.springframework.boot:spring-boot-starter-jooq') {
+        exclude group: 'org.jooq', module: 'jooq'
+    }
+    implementation 'org.jooq:jooq:3.19.27'
+    jooqGenerator 'org.jooq:jooq-codegen:3.19.27'
+    jooqGenerator 'org.jooq:jooq-meta:3.19.27'
+    jooqGenerator 'org.mariadb.jdbc:mariadb-java-client'
+
+    implementation 'org.opensearch.client:spring-data-opensearch-starter:2.0.2'
+
+    runtimeOnly 'com.h2database:h2'
+
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.mapstruct:mapstruct:1.6.3'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+
+    // S3
+    implementation 'software.amazon.awssdk:s3:2.36.2'
+
+    // random nickname creator
+    implementation 'com.aventrix.jnanoid:jnanoid:2.0.0'
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.13.0'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.13.0'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.13.0'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('compileJava') {
+    dependsOn tasks.named('generateJooq')
+}
+
+jooq {
+    version = '3.19.27'
+    edition = JooqEdition.OSS
+
+    configurations {
+        main {
+            generationTool {
+                jdbc {
+                    driver = 'org.mariadb.jdbc.Driver'
+                    url = System.getenv("DB_URL")
+                    user = System.getenv("DB_USER")
+                    password = System.getenv("DB_PASSWORD")
+                }
+                generator {
+                    name = 'org.jooq.codegen.JavaGenerator'
+                    database {
+                        name = 'org.jooq.meta.mariadb.MariaDBDatabase'
+                        inputSchema = System.getenv("DB_SCHEMA")
+                    }
+                    generate {
+                        daos = false
+                        pojos = false
+                        javaTimeTypes = true
+                    }
+                    target {
+                        packageName = 'phanes.replay'
+                        directory = "$buildDir/generated-src/jooq/main"
+                    }
+                }
+            }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "$buildDir/generated-src/jooq/main"
+        }
+    }
+}
