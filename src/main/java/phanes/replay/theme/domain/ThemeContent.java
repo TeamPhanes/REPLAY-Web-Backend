@@ -21,6 +21,8 @@ public class ThemeContent {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String story;
+    @Column(length = 200)
+    private String link;
     @Column(length = 100)
     private String image;
 }
