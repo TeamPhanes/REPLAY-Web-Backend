@@ -30,6 +30,4 @@ public class Spot {
     private Double lng;
     @Column(length = 20)
     private String phone;
-    @Column(length = 200)
-    private String link;
 }

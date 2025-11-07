@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.cafe.domain.Spot;
 import phanes.replay.common.domain.CreateTimeEntity;
+import phanes.replay.theme.domain.enums.Level;
 
 @Entity
 @Getter
@@ -24,8 +25,8 @@ public class Theme extends CreateTimeEntity {
     private String title;
     @Column(nullable = false)
     private Integer playtime;
-    @Column(length = 10)
-    private String level;
+    @Enumerated(EnumType.STRING)
+    private Level level;
     @Column(length = 100)
     private String image;
     @Column(nullable = false)
