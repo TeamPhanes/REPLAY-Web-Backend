@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "spot", indexes = {
+        @Index(name = "idx_spot_state_city", columnList = "state,city")
+})
 public class Spot {
 
     @Id

@@ -1,18 +1,18 @@
 package phanes.replay.theme.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.jooq.Condition;
-import org.jooq.DSLContext;
-import org.jooq.Record1;
-import org.jooq.Table;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import phanes.replay.theme.dto.ThemeDto;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import static phanes.replay.tables.Cafe.CAFE;
 import static phanes.replay.tables.Genre.GENRE;
@@ -28,13 +28,27 @@ public class ThemeVisitJooqRepository {
     private final DSLContext dsl;
     private final JooqRepositoryUtils utils;
 
-    public Page<ThemeDto> findAllByVisit(Long userId, Pageable pageable, List<String> state, List<String> city, List<String> genres) {
+    public Page<ThemeDto> findAllByVisit(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
         Condition where = DSL.trueCondition();
-        if (state != null && !state.isEmpty()) {
-            where = where.and(SPOT.STATE.in(state));
-        }
-        if (city != null && !city.isEmpty()) {
-            where = where.and(SPOT.CITY.in(city));
+        if (!CollectionUtils.isEmpty(locations)) {
+            Set<Row2<String, String>> pairs = new LinkedHashSet<>();
+            Set<String> stateOnly = new LinkedHashSet<>();
+            for (String location : locations) {
+                String[] split = location.trim().split(" ");
+                if (split.length == 2) {
+                    pairs.add(DSL.row(split[0].trim(), split[1].trim()));
+                } else if (split.length == 1) {
+                    stateOnly.add(split[0].trim());
+                } else {
+                    throw new RuntimeException();
+                }
+            }
+            if(!pairs.isEmpty()) {
+                where = where.and(DSL.row(SPOT.STATE, SPOT.CITY).in(pairs));
+            }
+            if(!stateOnly.isEmpty()) {
+                where = where.and(SPOT.STATE.in(stateOnly));
+            }
         }
         if (genres != null && !genres.isEmpty()) {
             where = where.andExists(

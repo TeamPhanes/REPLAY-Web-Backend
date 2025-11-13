@@ -34,20 +34,20 @@ public class ThemeController {
     }
 
     @GetMapping()
-    public Page<ThemeRs> getThemeList(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> state, @RequestParam(required = false) List<String> city, @RequestParam(required = false) List<String> genres) {
+    public Page<ThemeRs> getThemeList(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
         userId = userId == null ? 0L : userId;
-        return themeService.findAll(userId, pageable, state, city, genres);
+        return themeService.findAll(userId, pageable, locations, genres);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/like")
-    public Page<ThemeRs> getLikeTheme(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> state, @RequestParam(required = false) List<String> city, @RequestParam(required = false) List<String> genres) {
-        return themeService.findAllByLike(userId, pageable, state, city, genres);
+    public Page<ThemeRs> getLikeTheme(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
+        return themeService.findAllByLike(userId, pageable, locations, genres);
     }
 
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/visit")
-    public Page<ThemeRs> getVisitTheme(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> state, @RequestParam(required = false) List<String> city, @RequestParam(required = false) List<String> genres) {
-        return themeService.findAllByVisit(userId, pageable, state, city, genres);
+    public Page<ThemeRs> getVisitTheme(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
+        return themeService.findAllByVisit(userId, pageable, locations, genres);
     }
 }

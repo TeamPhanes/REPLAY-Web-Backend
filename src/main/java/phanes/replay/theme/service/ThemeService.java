@@ -41,8 +41,8 @@ public class ThemeService {
                 .toList();
     }
 
-    public Page<ThemeRs> findAll(Long userId, Pageable pageable, List<String> state, List<String> city, List<String> genres) {
-        Page<ThemeDto> themeDtoPage = themeJooqRepository.findAll(userId, pageable, state, city, genres);
+    public Page<ThemeRs> findAll(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
+        Page<ThemeDto> themeDtoPage = themeJooqRepository.findAll(userId, pageable, locations, genres);
         List<Long> themeIdList = themeDtoPage.stream().map(ThemeDto::getId).toList();
         Map<Long, Long> reviewCountMap = reviewJooqRepository.countAllByThemeIdList(themeIdList);
         Map<Long, Double> scoreMap = reviewJooqRepository.aggregateAllByThemeIdList(themeIdList);
@@ -58,8 +58,8 @@ public class ThemeService {
         return new PageImpl<>(content, pageable, themeDtoPage.getTotalElements());
     }
 
-    public Page<ThemeRs> findAllByLike(Long userId, Pageable pageable, List<String> state, List<String> city, List<String> genres) {
-        Page<ThemeDto> themeLikeDtoList = themeLikeJooqRepository.findAllByLike(userId, pageable, state, city, genres);
+    public Page<ThemeRs> findAllByLike(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
+        Page<ThemeDto> themeLikeDtoList = themeLikeJooqRepository.findAllByLike(userId, pageable, locations, genres);
         List<Long> themeIdList = themeLikeDtoList.stream().map(ThemeDto::getId).toList();
         Map<Long, Long> reviewCountMap = reviewJooqRepository.countAllByThemeIdList(themeIdList);
         Map<Long, Double> scoreMap = reviewJooqRepository.aggregateAllByThemeIdList(themeIdList);
@@ -75,8 +75,8 @@ public class ThemeService {
         return new PageImpl<>(content, pageable, themeLikeDtoList.getTotalElements());
     }
 
-    public Page<ThemeRs> findAllByVisit(Long userId, Pageable pageable, List<String> state, List<String> city, List<String> genres) {
-        Page<ThemeDto> themeVisitDtoList = themeVisitJooqRepository.findAllByVisit(userId, pageable, state, city, genres);
+    public Page<ThemeRs> findAllByVisit(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
+        Page<ThemeDto> themeVisitDtoList = themeVisitJooqRepository.findAllByVisit(userId, pageable, locations, genres);
         List<Long> themeIdList = themeVisitDtoList.stream().map(ThemeDto::getId).toList();
         Map<Long, Long> reviewCountMap = reviewJooqRepository.countAllByThemeIdList(themeIdList);
         Map<Long, Double> scoreMap = reviewJooqRepository.aggregateAllByThemeIdList(themeIdList);
