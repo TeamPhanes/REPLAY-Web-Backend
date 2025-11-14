@@ -21,4 +21,11 @@ public class GenreJooqRepository {
                 .where(GENRE.THEME_ID.in(themeIdList))
                 .fetchGroups(GENRE.THEME_ID, GENRE.NAME);
     }
+
+    public List<String> findByThemeId(Long themeId) {
+        return dsl.select(GENRE.NAME)
+                .from(GENRE)
+                .where(GENRE.THEME_ID.eq(themeId))
+                .fetchInto(String.class);
+    }
 }

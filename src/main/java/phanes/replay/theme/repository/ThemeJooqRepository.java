@@ -9,8 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 import phanes.replay.theme.domain.Theme;
+import phanes.replay.theme.dto.ThemeDetailDto;
 import phanes.replay.theme.dto.ThemeDto;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +21,7 @@ import static phanes.replay.tables.Cafe.CAFE;
 import static phanes.replay.tables.Genre.GENRE;
 import static phanes.replay.tables.Spot.SPOT;
 import static phanes.replay.tables.Theme.THEME;
+import static phanes.replay.tables.ThemeContent.THEME_CONTENT;
 import static phanes.replay.tables.ThemeLike.THEME_LIKE;
 
 @Repository
@@ -97,5 +100,21 @@ public class ThemeJooqRepository {
                 .where(where)
                 .fetchOne(0, Long.class);
         return new PageImpl<>(themeDtoList, pageable, totalCount == null ? 0 : totalCount);
+    }
+
+    public ThemeDetailDto findById(Long userId, Long themeId) {
+        List<Field<?>> themeFieldList = Arrays.stream(THEME.fields())
+                .filter(f -> !f.getName().equals("image"))
+                .toList();
+        return dsl.select(themeFieldList)
+                .select(THEME_CONTENT.IMAGE, THEME_CONTENT.STORY, THEME_CONTENT.LINK)
+                .select(SPOT.NAME.as("spotName"), SPOT.ADDRESS, SPOT.PHONE, CAFE.NAME.as("cafeName"))
+                .select(utils.isLiked(userId), utils.isVisited(userId))
+                .from(THEME)
+                .join(THEME_CONTENT).on(THEME_CONTENT.THEME_ID.eq(THEME.ID))
+                .join(SPOT).on(SPOT.ID.eq(THEME.SPOT_ID))
+                .join(CAFE).on(CAFE.ID.eq(SPOT.CAFE_ID))
+                .where(THEME.ID.eq(themeId))
+                .fetchOneInto(ThemeDetailDto.class);
     }
 }

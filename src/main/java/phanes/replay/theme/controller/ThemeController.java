@@ -6,10 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import phanes.replay.theme.dto.response.ThemeDetailRs;
 import phanes.replay.theme.dto.response.ThemePreviewRs;
 import phanes.replay.theme.dto.response.ThemeRs;
 import phanes.replay.theme.service.ThemeService;
@@ -49,5 +47,31 @@ public class ThemeController {
     @GetMapping("/visit")
     public Page<ThemeRs> getVisitTheme(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
         return themeService.findAllByVisit(userId, pageable, locations, genres);
+    }
+
+    @PostMapping("/like/{themeId}")
+    public void likeTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.saveThemeLike(userId, themeId);
+    }
+
+    @PostMapping("/visit/{themeId}")
+    public void visitTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.saveThemeVisit(userId, themeId);
+    }
+
+    @DeleteMapping("/like/{themeId}")
+    public void unLikeTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.deleteThemeLike(userId, themeId);
+    }
+
+    @DeleteMapping("/visit/{themeId}")
+    public void unVisitTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        themeService.deleteThemeVisit(userId, themeId);
+    }
+
+    @GetMapping("/{themeId}")
+    public ThemeDetailRs getThemeDetail(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        userId = userId == null ? 0L : userId;
+        return themeService.findByThemeId(userId, themeId);
     }
 }
