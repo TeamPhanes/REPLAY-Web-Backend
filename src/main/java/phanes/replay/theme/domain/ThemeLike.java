@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import phanes.replay.common.domain.CreateTimeEntity;
 import phanes.replay.user.domain.User;
 
 @Entity
@@ -16,7 +15,7 @@ import phanes.replay.user.domain.User;
 @Table(uniqueConstraints = {
         @UniqueConstraint(name = "uq_theme_like", columnNames = {"theme_id", "user_id"})
 })
-public class ThemeLike extends CreateTimeEntity {
+public class ThemeLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.cafe.domain.Spot;
-import phanes.replay.common.domain.CreateTimeEntity;
 import phanes.replay.theme.domain.enums.Level;
 
 @Entity
@@ -14,7 +13,7 @@ import phanes.replay.theme.domain.enums.Level;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Theme extends CreateTimeEntity {
+public class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

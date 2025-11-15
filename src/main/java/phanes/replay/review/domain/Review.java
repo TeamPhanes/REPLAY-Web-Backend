@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.common.domain.CreateTimeEntity;
+import phanes.replay.review.domain.enums.Eval;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.user.domain.User;
 
@@ -13,7 +15,7 @@ import phanes.replay.user.domain.User;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Review {
+public class Review extends CreateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +36,12 @@ public class Review {
     @Column(nullable = false)
     private Integer numberOfPlayer;
     @Column(length = 5)
-    private String themeReview;
+    @Enumerated(EnumType.STRING)
+    private Eval themeReview;
     @Column(length = 5)
-    private String levelReview;
+    @Enumerated(EnumType.STRING)
+    private Eval levelReview;
     @Column(length = 5)
-    private String storyReview;
+    @Enumerated(EnumType.STRING)
+    private Eval storyReview;
 }
