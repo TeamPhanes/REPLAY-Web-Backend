@@ -7,8 +7,8 @@ import org.jooq.impl.DSL;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import phanes.replay.common.utils.JooqRepositoryUtils;
 import phanes.replay.gathering.dto.GatheringDto;
-import phanes.replay.theme.repository.JooqRepositoryUtils;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class GatheringJooqRepository {
         List<GatheringDto> contents = dsl.select(GATHERING.ID, GATHERING.THEME_ID, GATHERING.NAME, GATHERING.IMAGE, GATHERING.DATE, GATHERING.CAPACITY)
                 .select(THEME.PLAYTIME, THEME.LEVEL)
                 .select(SPOT.NAME.as("spotName"), SPOT.ADDRESS, CAFE.NAME.as("cafeName"))
-                .select(utils.isLiked(userId), participantCount)
+                .select(utils.isLikedGathering(userId), participantCount)
                 .from(GATHERING)
                 .leftJoin(GATHERING_MEMBER).on(GATHERING_MEMBER.GATHERING_ID.eq(GATHERING.ID))
                 .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))

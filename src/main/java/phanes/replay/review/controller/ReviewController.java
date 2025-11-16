@@ -27,7 +27,7 @@ public class ReviewController {
     }
 
     @DeleteMapping("/like/{reviewId}")
-    public void deleteReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
+    public void unLikeReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
         reviewService.deleteReviewLike(userId, reviewId);
     }
 }

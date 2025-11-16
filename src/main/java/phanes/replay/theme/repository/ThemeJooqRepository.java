@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import phanes.replay.common.utils.JooqRepositoryUtils;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.dto.ThemeDetailDto;
 import phanes.replay.theme.dto.ThemeDto;
@@ -84,7 +85,7 @@ public class ThemeJooqRepository {
         List<ThemeDto> themeDtoList = dsl
                 .select(THEME.fields())
                 .select(SPOT.NAME.as("spotName"), SPOT.ADDRESS, CAFE.NAME.as("cafeName"))
-                .select(utils.isLiked(userId), utils.isVisited(userId))
+                .select(utils.isLikedTheme(userId), utils.isVisitedTheme(userId))
                 .from(THEME)
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .join(CAFE).on(SPOT.CAFE_ID.eq(CAFE.ID))
@@ -109,7 +110,7 @@ public class ThemeJooqRepository {
         return dsl.select(themeFieldList)
                 .select(THEME_CONTENT.IMAGE, THEME_CONTENT.STORY, THEME_CONTENT.LINK)
                 .select(SPOT.NAME.as("spotName"), SPOT.ADDRESS, SPOT.PHONE, CAFE.NAME.as("cafeName"))
-                .select(utils.isLiked(userId), utils.isVisited(userId))
+                .select(utils.isLikedTheme(userId), utils.isVisitedTheme(userId))
                 .from(THEME)
                 .join(THEME_CONTENT).on(THEME_CONTENT.THEME_ID.eq(THEME.ID))
                 .join(SPOT).on(SPOT.ID.eq(THEME.SPOT_ID))

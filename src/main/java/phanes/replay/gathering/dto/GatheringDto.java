@@ -19,6 +19,7 @@ public class GatheringDto {
     private String name;
     private String image;
     private LocalDateTime date;
+    private Integer participantCount;
     private Integer capacity;
     private String cafeName;
     private String spotName;
