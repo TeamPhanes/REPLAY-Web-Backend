@@ -23,7 +23,6 @@ public class Gathering extends BaseTimeEntity {
     @ManyToOne
     private Theme theme;
     private String name;
-    private String image;
     private Integer capacity;
     private LocalDateTime date;
     private LocalDateTime registrationStart;

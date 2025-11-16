@@ -21,8 +21,7 @@ public class GatheringRs {
     private LocalDateTime date;
     private Integer participantCount;
     private Integer capacity;
-    private String cafeName;
-    private String spotName;
+    private String title;
     private String address;
     private List<String> genres;
     private Integer playtime;

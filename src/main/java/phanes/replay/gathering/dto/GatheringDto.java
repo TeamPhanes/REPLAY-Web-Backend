@@ -21,8 +21,7 @@ public class GatheringDto {
     private LocalDateTime date;
     private Integer participantCount;
     private Integer capacity;
-    private String cafeName;
-    private String spotName;
+    private String title;
     private String address;
     private Integer playtime;
     private Level level;
