@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import phanes.replay.gathering.dto.GatheringDetailDto;
 import phanes.replay.gathering.dto.GatheringDto;
 import phanes.replay.utils.JooqRepositoryUtils;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import static phanes.replay.tables.Gathering.GATHERING;
+import static phanes.replay.tables.GatheringContent.GATHERING_CONTENT;
 import static phanes.replay.tables.GatheringMember.GATHERING_MEMBER;
 import static phanes.replay.tables.Genre.GENRE;
 import static phanes.replay.tables.Spot.SPOT;
@@ -84,7 +86,20 @@ public class GatheringJooqRepository {
         return new PageImpl<>(contents, pageable, total == null ? 0L : total);
     }
 
-    public PageImpl<GatheringDto> findByThemeId(Long userId, Pageable pageable, Long themeId) {
+    public GatheringDetailDto findById(Long userId, Long gatheringId) {
+        return dsl.select(GATHERING.fields())
+                .select(GATHERING_CONTENT.CONTENT, GATHERING_CONTENT.IMAGE, GATHERING_CONTENT.PRICE, GATHERING_CONTENT.IS_INDIVIDUAL)
+                .select(THEME.TITLE, utils.isLikedGathering(userId))
+                .from(GATHERING)
+                .join(GATHERING_CONTENT).on(GATHERING_CONTENT.GATHERING_ID.eq(GATHERING.ID))
+                .join(GATHERING_MEMBER).on(GATHERING_MEMBER.GATHERING_ID.eq(GATHERING.ID))
+                .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
+                .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
+                .where(GATHERING.ID.eq(gatheringId))
+                .fetchOneInto(GatheringDetailDto.class);
+    }
+
+    public Page<GatheringDto> findByThemeId(Long userId, Pageable pageable, Long themeId) {
         Field<Integer> participantCount = DSL.selectCount()
                 .from(GATHERING_MEMBER)
                 .where(GATHERING_MEMBER.GATHERING_ID.eq(GATHERING.ID))

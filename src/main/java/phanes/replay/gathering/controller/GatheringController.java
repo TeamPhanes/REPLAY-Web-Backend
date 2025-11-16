@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.service.GatheringService;
 
@@ -22,6 +23,11 @@ public class GatheringController {
     public Page<GatheringRs> getGatheringList(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
         userId = userId == null ? 0L : userId;
         return gatheringService.findAll(userId, pageable, locations, genres);
+    }
+
+    @GetMapping("/{gatheringId}")
+    public GatheringDetailRs getGatheringDetail(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        return gatheringService.findById(userId, gatheringId);
     }
 
     @GetMapping("/{themeId}")

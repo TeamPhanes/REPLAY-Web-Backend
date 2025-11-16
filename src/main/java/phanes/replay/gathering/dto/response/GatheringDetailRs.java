@@ -1,31 +1,31 @@
-package phanes.replay.gathering.domain;
+package phanes.replay.gathering.dto.response;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import phanes.replay.common.domain.BaseTimeEntity;
-import phanes.replay.theme.domain.Theme;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Gathering extends BaseTimeEntity {
+public class GatheringDetailRs {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Theme theme;
-    @Column(length = 20)
     private String name;
     private Integer capacity;
     private LocalDateTime date;
     private LocalDateTime registrationStart;
     private LocalDateTime registrationEnd;
+    private String content;
+    private String image;
+    private Long price;
+    private Boolean isIndividual;
+    private List<Participant> participants;
+    private String title;
+    private List<String> genres;
+    private Boolean isLiked;
 }
