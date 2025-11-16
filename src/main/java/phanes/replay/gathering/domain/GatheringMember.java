@@ -22,5 +22,6 @@ public class GatheringMember {
     private User user;
     @ManyToOne
     private Gathering gathering;
+    @Enumerated(EnumType.STRING)
     private Role role;
 }

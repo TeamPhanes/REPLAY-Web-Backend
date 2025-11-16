@@ -1,18 +1,12 @@
 package phanes.replay.review.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.jooq.DSLContext;
-import org.jooq.Field;
-import org.jooq.Record2;
-import org.jooq.Result;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import phanes.replay.review.domain.enums.Eval;
-import phanes.replay.review.dto.response.Evaluation;
-import phanes.replay.review.dto.response.ReviewCountStat;
-import phanes.replay.review.dto.response.ReviewDetailRs;
-import phanes.replay.review.dto.response.UserEvaluation;
+import phanes.replay.review.dto.response.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -78,14 +72,14 @@ public class ReviewJooqRepository {
 
     public UserEvaluation findEvaluationByThemeId(Long themeId) {
         return UserEvaluation.builder()
-                .theme(fetchEvalPercent(REVIEW.THEME_REVIEW.cast(Eval.class), themeId))
-                .level(fetchEvalPercent(REVIEW.LEVEL_REVIEW.cast(Eval.class), themeId))
-                .story(fetchEvalPercent(REVIEW.STORY_REVIEW.cast(Eval.class), themeId))
+                .theme(fetchEvalPercent(REVIEW.THEME_REVIEW.cast(String.class), themeId))
+                .level(fetchEvalPercent(REVIEW.LEVEL_REVIEW.cast(String.class), themeId))
+                .story(fetchEvalPercent(REVIEW.STORY_REVIEW.cast(String.class), themeId))
                 .build();
     }
 
-    private Evaluation fetchEvalPercent(Field<Eval> evalField, Long themeId) {
-        Result<Record2<Eval, Integer>> rows = dsl
+    private Evaluation fetchEvalPercent(Field<String> evalField, Long themeId) {
+        Result<Record2<String, Integer>> rows = dsl
                 .select(evalField.as("eval"), DSL.count().as("count"))
                 .from(REVIEW)
                 .where(REVIEW.THEME_ID.eq(themeId))
@@ -98,10 +92,10 @@ public class ReviewJooqRepository {
                 .map(r -> r.get("count", Integer.class))
                 .mapToInt(Integer::intValue)
                 .sum();
-        Record2<Eval, Integer> maxRow = rows.stream()
+        Record2<String, Integer> maxRow = rows.stream()
                 .max(Comparator.comparingInt(r -> r.get("count", Integer.class)))
                 .orElseThrow();
-        Eval eval = maxRow.get("eval", Eval.class);
+        Eval eval = Eval.valueOf(maxRow.get("eval", String.class));
         int max = maxRow.get("count", Integer.class);
         if (total == 0) {
             return Evaluation.emptyValue();
@@ -112,18 +106,47 @@ public class ReviewJooqRepository {
                 .build();
     }
 
-    public List<ReviewCountStat> findScoreCountByThemeId(Long themeId) {
-        return dsl.select(DSL.round(REVIEW.SCORE).as("score"), DSL.count().as("count"))
+    public ReviewCountSummary findScoreCountByThemeId(Long themeId) {
+        Table<Record1<Integer>> SCORES = DSL.values(
+                DSL.row(1),
+                DSL.row(2),
+                DSL.row(3),
+                DSL.row(4),
+                DSL.row(5)
+        ).as("s", "score");
+        Table<?> REVIEW_STAT = dsl
+                .select(
+                        DSL.round(REVIEW.SCORE).cast(Integer.class).as("score"),
+                        DSL.count().as("cnt")
+                )
                 .from(REVIEW)
                 .where(REVIEW.THEME_ID.eq(themeId))
                 .groupBy(DSL.round(REVIEW.SCORE))
-                .orderBy(DSL.round(REVIEW.SCORE))
+                .asTable("r");
+        Field<Integer> S_SCORE = SCORES.field("score", Integer.class);
+        Field<Integer> R_SCORE = REVIEW_STAT.field("score", Integer.class);
+        Field<Long> R_CNT = REVIEW_STAT.field("cnt", Long.class);
+        List<ReviewCountStat> counts = dsl.select(
+                        S_SCORE.as("score"),
+                        DSL.coalesce(R_CNT, 0L).as("count")
+                )
+                .from(SCORES)
+                .leftJoin(REVIEW_STAT).on(R_SCORE.eq(S_SCORE))
+                .orderBy(S_SCORE)
                 .fetch()
                 .stream()
                 .map(record -> ReviewCountStat.builder()
-                        .reviewScore(record.get("score", Integer.class))
+                        .score(record.get("score", Integer.class))
                         .count(record.get("count", Long.class))
                         .build())
                 .toList();
+        Long total = dsl.selectCount()
+                .from(REVIEW)
+                .where(REVIEW.THEME_ID.eq(themeId))
+                .fetchOneInto(Long.class);
+        return ReviewCountSummary.builder()
+                .total(total)
+                .counts(counts)
+                .build();
     }
 }

@@ -11,11 +11,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewRs {
+public class ReviewCountSummary {
 
-    private Double avgScore;
-    private Long createdGatheringCount;
-    private ReviewCountSummary reviewCountSummary;
-    private UserEvaluation userEvaluation;
-    private List<ReviewDetailRs> contents;
+    private Long total;
+    private List<ReviewCountStat> counts;
 }

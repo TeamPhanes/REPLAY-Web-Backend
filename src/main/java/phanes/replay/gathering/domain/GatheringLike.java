@@ -12,6 +12,9 @@ import phanes.replay.user.domain.User;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "uq_gathering_like", columnNames = {"gathering_id", "user_id"})
+})
 public class GatheringLike {
 
     @Id

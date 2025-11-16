@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import phanes.replay.gathering.repository.GatheringRepository;
 import phanes.replay.review.domain.Review;
 import phanes.replay.review.domain.ReviewLike;
-import phanes.replay.review.dto.response.ReviewCountStat;
+import phanes.replay.review.dto.response.ReviewCountSummary;
 import phanes.replay.review.dto.response.ReviewDetailRs;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.dto.response.UserEvaluation;
@@ -33,8 +33,8 @@ public class ReviewService {
         Double avgScore = reviewJooqRepository.aggregateByThemeId(themeId);
         Long createdGatheringCount = gatheringRepository.countByThemeId(themeId);
         UserEvaluation userEvaluation = reviewJooqRepository.findEvaluationByThemeId(themeId);
-        List<ReviewCountStat> reviewCount = reviewJooqRepository.findScoreCountByThemeId(themeId);
-        return reviewMapper.toReviewRs(avgScore, createdGatheringCount, reviewCount, userEvaluation, reviewDetailList);
+        ReviewCountSummary reviewCountSummary = reviewJooqRepository.findScoreCountByThemeId(themeId);
+        return reviewMapper.toReviewRs(avgScore, createdGatheringCount, reviewCountSummary, userEvaluation, reviewDetailList);
     }
 
     public void saveReviewLike(Long userId, Long reviewId) {

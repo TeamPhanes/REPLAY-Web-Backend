@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReviewCountStat {
 
-    private Integer reviewScore;
+    private Integer score;
     private Long count;
 }
