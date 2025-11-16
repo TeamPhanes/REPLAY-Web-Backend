@@ -17,7 +17,7 @@ public class GatheringController {
     private final GatheringService gatheringService;
 
     @GetMapping("/{themeId}")
-    public Page<GatheringRs> getGatheringByThemeId(@AuthenticationPrincipal Long userId, @PageableDefault Pageable pageable, @PathVariable Long themeId) {
+    public Page<GatheringRs> getGatheringByThemeId(@AuthenticationPrincipal Long userId, @PageableDefault(size = 2) Pageable pageable, @PathVariable Long themeId) {
         return gatheringService.findByThemeId(userId, pageable, themeId);
     }
 
