@@ -69,6 +69,12 @@ public class ThemeService {
         return new PageImpl<>(content, pageable, themeDtoPage.getTotalElements());
     }
 
+    public ThemeDetailRs findById(Long userId, Long themeId) {
+        ThemeDetailDto detail = themeJooqRepository.findById(userId, themeId);
+        List<String> genres = genreJooqRepository.findByThemeId(themeId);
+        return themeMapper.toThemeDetailRs(detail, genres);
+    }
+
     public Page<ThemeRs> findAllByLike(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
         Page<ThemeDto> themeLikeDtoList = themeLikeJooqRepository.findAllByLike(userId, pageable, locations, genres);
         List<Long> themeIdList = themeLikeDtoList.stream().map(ThemeDto::getId).toList();
@@ -131,11 +137,5 @@ public class ThemeService {
     public void deleteThemeVisit(Long userId, Long themeId) {
         ThemeVisit themeVisit = themeVisitQueryService.findByUserIdAndThemeId(userId, themeId);
         themeVisitQueryService.delete(themeVisit);
-    }
-
-    public ThemeDetailRs findByThemeId(Long userId, Long themeId) {
-        ThemeDetailDto detail = themeJooqRepository.findById(userId, themeId);
-        List<String> genres = genreJooqRepository.findByThemeId(themeId);
-        return themeMapper.toThemeDetailRs(detail, genres);
     }
 }

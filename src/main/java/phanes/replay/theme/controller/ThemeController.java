@@ -37,6 +37,12 @@ public class ThemeController {
         return themeService.findAll(userId, pageable, locations, genres);
     }
 
+    @GetMapping("/{themeId}")
+    public ThemeDetailRs getThemeDetail(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
+        userId = userId == null ? 0L : userId;
+        return themeService.findById(userId, themeId);
+    }
+
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/like")
     public Page<ThemeRs> getLikeTheme(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
@@ -67,11 +73,5 @@ public class ThemeController {
     @DeleteMapping("/visit/{themeId}")
     public void unVisitTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
         themeService.deleteThemeVisit(userId, themeId);
-    }
-
-    @GetMapping("/{themeId}")
-    public ThemeDetailRs getThemeDetail(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
-        userId = userId == null ? 0L : userId;
-        return themeService.findByThemeId(userId, themeId);
     }
 }
