@@ -8,8 +8,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import phanes.replay.common.utils.JooqRepositoryUtils;
 import phanes.replay.theme.dto.ThemeDto;
+import phanes.replay.utils.JooqRepositoryUtils;
 
 import java.util.LinkedHashSet;
 import java.util.List;
