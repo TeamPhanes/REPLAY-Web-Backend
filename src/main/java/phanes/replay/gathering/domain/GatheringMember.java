@@ -1,10 +1,11 @@
-package phanes.replay.theme.domain;
+package phanes.replay.gathering.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.user.domain.User;
 
 @Entity
@@ -12,16 +13,15 @@ import phanes.replay.user.domain.User;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(uniqueConstraints = {
-        @UniqueConstraint(name = "uq_theme_like", columnNames = {"theme_id", "user_id"})
-})
-public class ThemeLike {
+public class GatheringMember {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private Theme theme;
-    @ManyToOne
     private User user;
+    @ManyToOne
+    private Gathering gathering;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

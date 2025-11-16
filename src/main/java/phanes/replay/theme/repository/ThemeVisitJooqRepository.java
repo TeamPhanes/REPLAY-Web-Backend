@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import phanes.replay.common.utils.JooqRepositoryUtils;
 import phanes.replay.theme.dto.ThemeDto;
 
 import java.util.LinkedHashSet;
@@ -68,7 +69,7 @@ public class ThemeVisitJooqRepository {
         List<ThemeDto> themeLikeDtoList = dsl
                 .select(THEME.fields())
                 .select(SPOT.NAME.as("spotName"), SPOT.ADDRESS, CAFE.NAME.as("cafeName"))
-                .select(DSL.inline(true).as("isVisited"), utils.isLiked(userId))
+                .select(DSL.inline(true).as("isVisited"), utils.isLikedTheme(userId))
                 .from(visitIdTable)
                 .join(THEME).on(THEME.ID.eq(THEME_VISIT.THEME_ID))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
