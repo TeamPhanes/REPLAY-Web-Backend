@@ -15,6 +15,7 @@ import phanes.replay.gathering.dto.GatheringDetailDto;
 import phanes.replay.gathering.dto.GatheringDto;
 import phanes.replay.utils.JooqRepositoryUtils;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -117,6 +118,31 @@ public class GatheringJooqRepository {
         Long total = dsl.selectCount()
                 .from(GATHERING)
                 .where(GATHERING.THEME_ID.eq(themeId))
+                .fetchOne(0, Long.class);
+        return new PageImpl<>(contents, pageable, total == null ? 0L : total);
+    }
+
+    public Page<GatheringDto> findAllByDate(Long userId, Pageable pageable, LocalDateTime date) {
+        Condition where = GATHERING.DATE.between(date.toLocalDate().atStartOfDay(), date.toLocalDate().plusDays(1).atStartOfDay().minusNanos(1));
+        Field<Integer> participantCount = DSL.selectCount()
+                .from(GATHERING_MEMBER)
+                .where(GATHERING_MEMBER.GATHERING_ID.eq(GATHERING.ID))
+                .asField("participantCount");
+        List<GatheringDto> contents = dsl.select(GATHERING.ID, GATHERING.THEME_ID, GATHERING.NAME, GATHERING.DATE, GATHERING.CAPACITY)
+                .select(THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE, SPOT.ADDRESS)
+                .select(utils.isLikedGathering(userId), participantCount)
+                .from(GATHERING)
+                .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
+                .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
+                .where(where)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchInto(GatheringDto.class);
+        Long total = dsl.selectCount()
+                .from(GATHERING)
+                .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
+                .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
+                .where(where)
                 .fetchOne(0, Long.class);
         return new PageImpl<>(contents, pageable, total == null ? 0L : total);
     }

@@ -28,4 +28,5 @@ public class GatheringDetailRs {
     private String title;
     private List<String> genres;
     private Boolean isLiked;
+    private List<GatheringCommentRs> comments;
 }

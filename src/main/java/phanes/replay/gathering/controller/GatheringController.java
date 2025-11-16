@@ -10,6 +10,7 @@ import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.service.GatheringService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -28,6 +29,11 @@ public class GatheringController {
     @GetMapping("/{gatheringId}")
     public GatheringDetailRs getGatheringDetail(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         return gatheringService.findById(userId, gatheringId);
+    }
+
+    @GetMapping("/date")
+    public Page<GatheringRs> getGatheringBetweenDate(@AuthenticationPrincipal Long userId, @PageableDefault(size = 4) Pageable pageable, @RequestParam LocalDateTime date) {
+        return gatheringService.findByDateBetween(userId, pageable, date);
     }
 
     @GetMapping("/{themeId}")
