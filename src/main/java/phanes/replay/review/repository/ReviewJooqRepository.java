@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static phanes.replay.tables.Review.REVIEW;
+import static phanes.replay.tables.ReviewLike.REVIEW_LIKE;
 import static phanes.replay.tables.Users.USERS;
 
 @Repository
@@ -23,11 +24,12 @@ public class ReviewJooqRepository {
     private final DSLContext dsl;
 
     public Map<Long, Long> countAllByThemeIdList(List<Long> themeIdList) {
-        return dsl.select(REVIEW.THEME_ID, DSL.count().as("reviewCount"))
+        Field<Long> reviewCount = DSL.count().cast(Long.class).as("reviewCount");
+        return dsl.select(REVIEW.THEME_ID, reviewCount)
                 .from(REVIEW)
-                .where(REVIEW.ID.in(themeIdList))
+                .where(REVIEW.THEME_ID.in(themeIdList))
                 .groupBy(REVIEW.THEME_ID)
-                .fetchMap(REVIEW.THEME_ID, DSL.field("reviewCount").cast(Long.class));
+                .fetchMap(REVIEW.THEME_ID, reviewCount);
     }
 
     public Double aggregateByThemeId(Long themeId) {
@@ -41,23 +43,24 @@ public class ReviewJooqRepository {
     }
 
     public Map<Long, Double> aggregateAllByThemeIdList(List<Long> themeIdList) {
-        return dsl.select(REVIEW.THEME_ID, DSL.avg(REVIEW.SCORE).as("avgScore"))
+        Field<Double> avgScore = DSL.avg(REVIEW.SCORE).cast(Double.class).as("avgScore");
+        return dsl.select(REVIEW.THEME_ID, avgScore)
                 .from(REVIEW)
                 .where(REVIEW.THEME_ID.in(themeIdList))
                 .groupBy(REVIEW.THEME_ID)
-                .fetchMap(REVIEW.THEME_ID, DSL.field("avgScore").cast(Double.class));
+                .fetchMap(REVIEW.THEME_ID, avgScore);
     }
 
     public List<ReviewDetailRs> findAllByThemeId(Long userId, Pageable pageable, Long themeId) {
         Field<Object> likeCount = DSL.selectCount()
-                .from(REVIEW)
-                .where(REVIEW.THEME_ID.eq(themeId))
+                .from(REVIEW_LIKE)
+                .where(REVIEW_LIKE.REVIEW_ID.eq(REVIEW.ID))
                 .asField("likeCount");
-        Field<Boolean> isLiked = DSL.exists(dsl
+        Field<Boolean> isLiked = DSL.exists(DSL
                         .selectOne()
-                        .from(REVIEW)
-                        .where(REVIEW.THEME_ID.eq(themeId)
-                                .and(REVIEW.USER_ID.eq(userId))))
+                        .from(REVIEW_LIKE)
+                        .where(REVIEW_LIKE.REVIEW_ID.eq(REVIEW.ID)
+                                .and(REVIEW_LIKE.USER_ID.eq(userId))))
                 .as("isLiked");
         return dsl.select(REVIEW.fields())
                 .select(USERS.NICKNAME, USERS.PROFILE_IMAGE)
