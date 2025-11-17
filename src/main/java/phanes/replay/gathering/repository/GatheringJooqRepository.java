@@ -97,7 +97,6 @@ public class GatheringJooqRepository {
                 .select(THEME.TITLE, utils.isLikedGathering(userId))
                 .from(GATHERING)
                 .join(GATHERING_CONTENT).on(GATHERING_CONTENT.GATHERING_ID.eq(GATHERING.ID))
-                .join(GATHERING_MEMBER).on(GATHERING_MEMBER.GATHERING_ID.eq(GATHERING.ID))
                 .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .where(GATHERING.ID.eq(gatheringId))

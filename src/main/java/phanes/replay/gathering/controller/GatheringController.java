@@ -28,11 +28,13 @@ public class GatheringController {
 
     @GetMapping("/{gatheringId}")
     public GatheringDetailRs getGatheringDetail(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        userId = userId == null ? 0L : userId;
         return gatheringService.findById(userId, gatheringId);
     }
 
     @GetMapping("/date")
     public Page<GatheringRs> getGatheringBetweenDate(@AuthenticationPrincipal Long userId, @PageableDefault(size = 4) Pageable pageable, @RequestParam LocalDateTime date) {
+        userId = userId == null ? 0L : userId;
         return gatheringService.findByDateBetween(userId, pageable, date);
     }
 
