@@ -6,8 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import phanes.replay.gathering.dto.response.GatheringCommentRs;
+import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.service.GatheringService;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,13 +21,31 @@ public class GatheringController {
 
     private final GatheringService gatheringService;
 
-    @GetMapping("/{themeId}")
-    public Page<GatheringRs> getGatheringByThemeId(@AuthenticationPrincipal Long userId, @PageableDefault(size = 2) Pageable pageable, @PathVariable Long themeId) {
-        return gatheringService.findByThemeId(userId, pageable, themeId);
+    @GetMapping()
+    public Page<GatheringRs> getGatheringList(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres, @RequestParam(required = false) Long themeId) {
+        userId = userId == null ? 0L : userId;
+        return gatheringService.findAll(userId, themeId, pageable, locations, genres);
+    }
+
+    @GetMapping("/{gatheringId}")
+    public GatheringDetailRs getGatheringDetail(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        userId = userId == null ? 0L : userId;
+        return gatheringService.findById(userId, gatheringId);
+    }
+
+    @GetMapping("/date")
+    public Page<GatheringRs> getGatheringBetweenDate(@AuthenticationPrincipal Long userId, @PageableDefault(size = 4) Pageable pageable, @RequestParam LocalDateTime date) {
+        userId = userId == null ? 0L : userId;
+        return gatheringService.findByDateBetween(userId, pageable, date);
+    }
+
+    @GetMapping("/comment")
+    public Page<GatheringCommentRs> getGatheringCommentList(@PageableDefault Pageable pageable, @RequestParam Long gatheringId) {
+        return gatheringService.findCommentAll(pageable, gatheringId);
     }
 
     @PostMapping("/like/{gatheringId}")
-    public void likeGathering (@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+    public void likeGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringService.saveGatheringLike(userId, gatheringId);
     }
 

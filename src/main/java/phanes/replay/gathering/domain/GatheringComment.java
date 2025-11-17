@@ -6,26 +6,22 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.common.domain.BaseTimeEntity;
-import phanes.replay.theme.domain.Theme;
-
-import java.time.LocalDateTime;
+import phanes.replay.user.domain.User;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Gathering extends BaseTimeEntity {
+public class GatheringComment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private Theme theme;
-    @Column(length = 20)
-    private String name;
-    private Integer capacity;
-    private LocalDateTime date;
-    private LocalDateTime registrationStart;
-    private LocalDateTime registrationEnd;
+    private Gathering gathering;
+    @ManyToOne
+    private User user;
+    private String content;
+    private Long parentId;
 }
