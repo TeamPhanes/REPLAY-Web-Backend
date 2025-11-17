@@ -21,9 +21,9 @@ public class GatheringController {
     private final GatheringService gatheringService;
 
     @GetMapping()
-    public Page<GatheringRs> getGatheringList(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
+    public Page<GatheringRs> getGatheringList(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres, @RequestParam(required = false) Long themeId) {
         userId = userId == null ? 0L : userId;
-        return gatheringService.findAll(userId, pageable, locations, genres);
+        return gatheringService.findAll(userId, themeId, pageable, locations, genres);
     }
 
     @GetMapping("/{gatheringId}")
@@ -34,11 +34,6 @@ public class GatheringController {
     @GetMapping("/date")
     public Page<GatheringRs> getGatheringBetweenDate(@AuthenticationPrincipal Long userId, @PageableDefault(size = 4) Pageable pageable, @RequestParam LocalDateTime date) {
         return gatheringService.findByDateBetween(userId, pageable, date);
-    }
-
-    @GetMapping("/{themeId}")
-    public Page<GatheringRs> getGatheringByThemeId(@AuthenticationPrincipal Long userId, @PageableDefault(size = 2) Pageable pageable, @PathVariable Long themeId) {
-        return gatheringService.findByThemeId(userId, pageable, themeId);
     }
 
     @PostMapping("/like/{gatheringId}")

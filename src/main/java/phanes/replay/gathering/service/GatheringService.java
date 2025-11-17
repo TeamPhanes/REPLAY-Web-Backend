@@ -39,9 +39,9 @@ public class GatheringService {
     private final GenreJooqRepository genreJooqRepository;
     private final GatheringMapper gatheringMapper;
 
-    public Page<GatheringRs> findAll(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
-        Page<GatheringDto> gatheringDtoList = gatheringJooqRepository.findAll(userId, pageable, locations, genres);
-        List<Long> themeIdList = gatheringDtoList.getContent().stream().map(GatheringDto::getThemeId).toList();
+    public Page<GatheringRs> findAll(Long userId, Long themeId, Pageable pageable, List<String> locations, List<String> genres) {
+        Page<GatheringDto> gatheringDtoList = gatheringJooqRepository.findAll(userId, themeId, pageable, locations, genres);
+        List<Long> themeIdList = themeId == null ?  gatheringDtoList.getContent().stream().map(GatheringDto::getThemeId).toList() : List.of(themeId);
         Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
         List<GatheringRs> contents = gatheringDtoList.getContent().stream().map(g -> gatheringMapper.toGatheringRs(g, genreListMap.getOrDefault(g.getThemeId(), Collections.emptyList()))).toList();
         return new PageImpl<>(contents, pageable, gatheringDtoList.getTotalElements());
@@ -61,14 +61,6 @@ public class GatheringService {
                 .map(gatheringMapper::toGatheringCommentRs)
                 .toList()));
         return gatheringMapper.toGatheringDetailRs(gatheringDetailDto, genres, participants, rootComment);
-    }
-
-    public Page<GatheringRs> findByThemeId(Long userId, Pageable pageable, Long themeId) {
-        Page<GatheringDto> gatheringDtoList = gatheringJooqRepository.findByThemeId(userId, pageable, themeId);
-        List<Long> themeIdList = gatheringDtoList.getContent().stream().map(GatheringDto::getThemeId).toList();
-        Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
-        List<GatheringRs> contents = gatheringDtoList.getContent().stream().map(g -> gatheringMapper.toGatheringRs(g, genreListMap.getOrDefault(g.getThemeId(), Collections.emptyList()))).toList();
-        return new PageImpl<>(contents, pageable, gatheringDtoList.getTotalElements());
     }
 
     public void saveGatheringLike(Long userId, Long gatheringId) {
