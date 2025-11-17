@@ -23,8 +23,9 @@ import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class GatheringService {
 
     public Page<GatheringRs> findAll(Long userId, Long themeId, Pageable pageable, List<String> locations, List<String> genres) {
         Page<GatheringDto> gatheringDtoList = gatheringJooqRepository.findAll(userId, themeId, pageable, locations, genres);
-        List<Long> themeIdList = themeId == null ?  gatheringDtoList.getContent().stream().map(GatheringDto::getThemeId).toList() : List.of(themeId);
+        List<Long> themeIdList = themeId == null ? gatheringDtoList.getContent().stream().map(GatheringDto::getThemeId).toList() : List.of(themeId);
         Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
         List<GatheringRs> contents = gatheringDtoList.getContent().stream().map(g -> gatheringMapper.toGatheringRs(g, genreListMap.getOrDefault(g.getThemeId(), Collections.emptyList()))).toList();
         return new PageImpl<>(contents, pageable, gatheringDtoList.getTotalElements());
@@ -51,16 +52,7 @@ public class GatheringService {
         GatheringDetailDto gatheringDetailDto = gatheringJooqRepository.findById(userId, gatheringId);
         List<String> genres = genreJooqRepository.findByThemeId(gatheringDetailDto.getThemeId());
         List<Participant> participants = gatheringMemberJooqRepository.findAllByGatheringId(gatheringId);
-        List<GatheringCommentDto> commentList = gatheringCommentJooqRepository.findAllByGatheringId(gatheringId);
-        Map<Long, List<GatheringCommentDto>> groupedByParent = commentList.stream()
-                .collect(Collectors.groupingBy(gc -> Optional.ofNullable(gc.getParentId()).orElse(0L)));
-        List<GatheringCommentRs> rootComment = groupedByParent.getOrDefault(0L, new ArrayList<>()).stream()
-                .map(gatheringMapper::toGatheringCommentRs)
-                .toList();
-        rootComment.forEach(c -> c.setComments(groupedByParent.getOrDefault(c.getId(), new ArrayList<>()).stream()
-                .map(gatheringMapper::toGatheringCommentRs)
-                .toList()));
-        return gatheringMapper.toGatheringDetailRs(gatheringDetailDto, genres, participants, rootComment);
+        return gatheringMapper.toGatheringDetailRs(gatheringDetailDto, genres, participants, participants.size());
     }
 
     public void saveGatheringLike(Long userId, Long gatheringId) {
@@ -84,5 +76,20 @@ public class GatheringService {
         Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
         List<GatheringRs> contents = gatheringDtoList.getContent().stream().map(g -> gatheringMapper.toGatheringRs(g, genreListMap.getOrDefault(g.getThemeId(), Collections.emptyList()))).toList();
         return new PageImpl<>(contents, pageable, gatheringDtoList.getTotalElements());
+    }
+
+    public Page<GatheringCommentRs> findCommentAll(Pageable pageable, Long gatheringId) {
+        Page<GatheringCommentDto> commentList = gatheringCommentJooqRepository.findParentCommentByGatheringId(pageable, gatheringId);
+        List<Long> commentIdList = commentList.stream().map(GatheringCommentDto::getId).toList();
+        Map<Long, List<GatheringCommentDto>> childCommentList = gatheringCommentJooqRepository.findChileCommentById(commentIdList);
+        List<GatheringCommentRs> contents = commentList.stream()
+                .map(gatheringMapper::toGatheringCommentRs)
+                .toList();
+        contents.forEach(g -> g.setComments(
+                childCommentList.getOrDefault(g.getId(), Collections.emptyList()).stream()
+                        .map(gatheringMapper::toGatheringCommentRs)
+                        .toList())
+        );
+        return new PageImpl<>(contents, pageable, commentList.getTotalElements());
     }
 }

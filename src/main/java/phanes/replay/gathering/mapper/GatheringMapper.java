@@ -16,7 +16,7 @@ public interface GatheringMapper {
 
     GatheringRs toGatheringRs(GatheringDto gatheringDto, List<String> genres);
 
-    GatheringDetailRs toGatheringDetailRs(GatheringDetailDto gatheringDetailDto, List<String> genres, List<Participant> participants, List<GatheringCommentRs> comments);
+    GatheringDetailRs toGatheringDetailRs(GatheringDetailDto gatheringDetailDto, List<String> genres, List<Participant> participants, Integer participantCount);
 
     GatheringCommentRs toGatheringCommentRs(GatheringCommentDto commentDto);
 }

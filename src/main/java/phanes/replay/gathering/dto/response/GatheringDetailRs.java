@@ -24,9 +24,11 @@ public class GatheringDetailRs {
     private String image;
     private Long price;
     private Boolean isIndividual;
+    private Integer participantCount;
     private List<Participant> participants;
+    private Long themeId;
     private String title;
+    private String address;
     private List<String> genres;
     private Boolean isLiked;
-    private List<GatheringCommentRs> comments;
 }

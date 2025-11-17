@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class GatheringDetailDto {
 
     private Long id;
-    private Long themeId;
     private String name;
     private Integer capacity;
     private LocalDateTime date;
@@ -24,6 +23,8 @@ public class GatheringDetailDto {
     private String image;
     private Long price;
     private Boolean isIndividual;
+    private Long themeId;
     private String title;
+    private String address;
     private Boolean isLiked;
 }

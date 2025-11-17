@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import phanes.replay.gathering.dto.response.GatheringCommentRs;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
 import phanes.replay.gathering.service.GatheringService;
@@ -36,6 +37,11 @@ public class GatheringController {
     public Page<GatheringRs> getGatheringBetweenDate(@AuthenticationPrincipal Long userId, @PageableDefault(size = 4) Pageable pageable, @RequestParam LocalDateTime date) {
         userId = userId == null ? 0L : userId;
         return gatheringService.findByDateBetween(userId, pageable, date);
+    }
+
+    @GetMapping("/comment")
+    public Page<GatheringCommentRs> getGatheringCommentList(@PageableDefault Pageable pageable, @RequestParam Long gatheringId) {
+        return gatheringService.findCommentAll(pageable, gatheringId);
     }
 
     @PostMapping("/like/{gatheringId}")

@@ -23,6 +23,4 @@ public class GatheringContent {
     private String content;
     private Long price;
     private Boolean isIndividual;
-    @Column(length = 100)
-    private String image;
 }

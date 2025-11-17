@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.gathering.domain.enums.Role;
 
 @Getter
 @Builder
@@ -15,4 +16,5 @@ public class Participant {
     private String profileImage;
     private String nickname;
     private String email;
+    private Role role;
 }

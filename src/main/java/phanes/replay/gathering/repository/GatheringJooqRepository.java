@@ -26,6 +26,7 @@ import static phanes.replay.tables.GatheringMember.GATHERING_MEMBER;
 import static phanes.replay.tables.Genre.GENRE;
 import static phanes.replay.tables.Spot.SPOT;
 import static phanes.replay.tables.Theme.THEME;
+import static phanes.replay.tables.ThemeContent.THEME_CONTENT;
 
 @Repository
 @RequiredArgsConstructor
@@ -93,11 +94,12 @@ public class GatheringJooqRepository {
 
     public GatheringDetailDto findById(Long userId, Long gatheringId) {
         return dsl.select(GATHERING.fields())
-                .select(GATHERING_CONTENT.CONTENT, GATHERING_CONTENT.IMAGE, GATHERING_CONTENT.PRICE, GATHERING_CONTENT.IS_INDIVIDUAL)
-                .select(THEME.TITLE, utils.isLikedGathering(userId))
+                .select(GATHERING_CONTENT.CONTENT, GATHERING_CONTENT.PRICE, GATHERING_CONTENT.IS_INDIVIDUAL)
+                .select(THEME.TITLE, THEME_CONTENT.IMAGE, SPOT.ADDRESS, utils.isLikedGathering(userId))
                 .from(GATHERING)
                 .join(GATHERING_CONTENT).on(GATHERING_CONTENT.GATHERING_ID.eq(GATHERING.ID))
                 .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
+                .join(THEME_CONTENT).on(THEME_CONTENT.THEME_ID.eq(THEME.ID))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .where(GATHERING.ID.eq(gatheringId))
                 .fetchOneInto(GatheringDetailDto.class);
