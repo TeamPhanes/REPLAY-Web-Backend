@@ -1,12 +1,16 @@
 package phanes.replay.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import phanes.replay.gathering.domain.enums.Role;
+import phanes.replay.gathering.dto.MyCommentDto;
+import phanes.replay.gathering.repository.GatheringCommentJooqRepository;
 import phanes.replay.gathering.repository.GatheringMemberJooqRepository;
 import phanes.replay.theme.repository.ThemeVisitJooqRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.user.AchievementDto;
+import phanes.replay.user.dto.user.MyCommentRs;
 import phanes.replay.user.dto.user.ProfileRs;
 import phanes.replay.user.dto.user.UserRs;
 import phanes.replay.user.mapper.UserMapper;
@@ -20,6 +24,7 @@ public class UserService {
 
     private final UserQueryService userQueryService;
     private final GatheringMemberJooqRepository gatheringMemberJooqRepository;
+    private final GatheringCommentJooqRepository gatheringCommentJooqRepository;
     private final ThemeVisitJooqRepository themeVisitJooqRepository;
     private final AchievementJooqRepository achievementJooqRepository;
     private final UserMapper userMapper;
@@ -38,5 +43,11 @@ public class UserService {
         Integer successThemeCount = visitThemeList.stream().filter(r -> r).toList().size();
         List<AchievementDto> achievementList = achievementJooqRepository.findAllByUserId(userId, isOwner);
         return userMapper.toProfileRs(user, createGatheringCount, visitGatheringCount, visitThemeCount, successThemeCount, achievementList);
+    }
+
+    public List<MyCommentRs> findCommentById(Long userId, Pageable pageable) {
+        User user = userQueryService.findById(userId);
+        List<MyCommentDto> myCommentList = gatheringCommentJooqRepository.findAllByUserId(userId, pageable);
+        return myCommentList.stream().map(c -> userMapper.toMyCommentRs(user, c)).toList();
     }
 }

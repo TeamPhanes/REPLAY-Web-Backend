@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import phanes.replay.gathering.dto.GatheringCommentDto;
+import phanes.replay.gathering.dto.MyCommentDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,5 +54,15 @@ public class GatheringCommentJooqRepository {
                 .fetchInto(GatheringCommentDto.class)
                 .stream()
                 .collect(Collectors.groupingBy(GatheringCommentDto::getParentId));
+    }
+
+    public List<MyCommentDto> findAllByUserId(Long userId, Pageable pageable) {
+        return dsl.select(GATHERING_COMMENT.CONTENT, GATHERING_COMMENT.CREATED_AT, GATHERING_COMMENT.GATHERING_ID)
+                .from(GATHERING_COMMENT)
+                .where(GATHERING_COMMENT.USER_ID.eq(userId))
+                .orderBy(GATHERING_COMMENT.CREATED_AT.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchInto(MyCommentDto.class);
     }
 }
