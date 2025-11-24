@@ -17,6 +17,7 @@ import java.util.Set;
 
 import static phanes.replay.tables.Cafe.CAFE;
 import static phanes.replay.tables.Genre.GENRE;
+import static phanes.replay.tables.Review.REVIEW;
 import static phanes.replay.tables.Spot.SPOT;
 import static phanes.replay.tables.Theme.THEME;
 import static phanes.replay.tables.ThemeLike.THEME_LIKE;
@@ -85,5 +86,14 @@ public class ThemeVisitJooqRepository {
                 .where(THEME_LIKE.USER_ID.eq(userId))
                 .fetchOne(0, Long.class);
         return new PageImpl<>(themeLikeDtoList, pageable, totalCount == null ? 0 : totalCount);
+    }
+
+    public List<Boolean> findVisitByUserId(Long userId) {
+        return dsl.select(DSL.coalesce(REVIEW.IS_SUCCESS, DSL.inline(false)))
+                .from(THEME_VISIT)
+                .leftJoin(REVIEW).on(THEME_VISIT.USER_ID.eq(REVIEW.USER_ID)
+                        .and(THEME_VISIT.THEME_ID.eq(REVIEW.THEME_ID)))
+                .where(THEME_VISIT.USER_ID.eq(userId))
+                .fetchInto(Boolean.class);
     }
 }

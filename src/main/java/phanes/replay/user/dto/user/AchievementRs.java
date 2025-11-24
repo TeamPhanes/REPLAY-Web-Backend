@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRs {
+public class AchievementRs {
 
-    private String nickname;
+    private Long id;
+    private String name;
     private String image;
+    private Boolean isRepresentative;
 }
