@@ -19,5 +19,6 @@ public interface UserMapper {
 
     ProfileRs toProfileRs(User user, Integer createGatheringCount, Integer visitGatheringCount, Integer visitThemeCount, Integer successThemeCount, List<AchievementDto> achievements);
 
+    @Mapping(source = "myCommentDto.createdAt", target = "createdAt")
     MyCommentRs toMyCommentRs(User user, MyCommentDto myCommentDto);
 }

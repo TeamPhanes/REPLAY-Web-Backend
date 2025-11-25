@@ -18,7 +18,7 @@ public class AchievementJooqRepository {
 
     private final DSLContext dsl;
 
-    public List<AchievementDto> findAllByUserId(Long userId, boolean isOwner) {
+    public List<AchievementDto> findByUserIdAndOwner(Long userId, boolean isOwner) {
         Condition where = DSL.trueCondition();
         if (!isOwner) {
             where.and(ACHIEVEMENT_PROGRESS.IS_REPRESENTATIVE.eq(true));

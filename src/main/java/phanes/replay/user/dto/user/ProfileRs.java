@@ -16,7 +16,6 @@ public class ProfileRs {
 
     private String nickname;
     private String email;
-    private String description;
     private String profileComment;
     private String profileImage;
     private LocalDateTime createdAt;

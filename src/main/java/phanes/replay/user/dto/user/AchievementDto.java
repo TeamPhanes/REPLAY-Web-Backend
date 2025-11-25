@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class AchievementDto {
 
     private Long id;
-    private String name;
     private Integer progress;
     private Boolean isRepresentative;
     private LocalDateTime completedAt;

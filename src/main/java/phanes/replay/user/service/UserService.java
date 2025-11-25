@@ -41,7 +41,7 @@ public class UserService {
         List<Boolean> visitThemeList = themeVisitJooqRepository.findVisitByUserId(userId);
         Integer visitThemeCount = visitThemeList.size();
         Integer successThemeCount = visitThemeList.stream().filter(r -> r).toList().size();
-        List<AchievementDto> achievementList = achievementJooqRepository.findAllByUserId(userId, isOwner);
+        List<AchievementDto> achievementList = achievementJooqRepository.findByUserIdAndOwner(userId, isOwner);
         return userMapper.toProfileRs(user, createGatheringCount, visitGatheringCount, visitThemeCount, successThemeCount, achievementList);
     }
 
