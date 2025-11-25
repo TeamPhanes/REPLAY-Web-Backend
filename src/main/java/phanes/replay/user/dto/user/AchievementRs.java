@@ -5,12 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRs {
+public class AchievementRs {
 
-    private String nickname;
-    private String image;
+    private Long id;
+    private Integer progress;
+    private Boolean isRepresentative;
+    private LocalDateTime completedAt;
 }

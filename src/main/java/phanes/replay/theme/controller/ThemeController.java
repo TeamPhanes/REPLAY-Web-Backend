@@ -49,12 +49,6 @@ public class ThemeController {
         return themeService.findAllByLike(userId, pageable, locations, genres);
     }
 
-    @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/visit")
-    public Page<ThemeRs> getVisitTheme(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
-        return themeService.findAllByVisit(userId, pageable, locations, genres);
-    }
-
     @PostMapping("/like/{themeId}")
     public void likeTheme(@AuthenticationPrincipal Long userId, @PathVariable Long themeId) {
         themeService.saveThemeLike(userId, themeId);

@@ -92,23 +92,6 @@ public class ThemeService {
         return new PageImpl<>(content, pageable, themeLikeDtoList.getTotalElements());
     }
 
-    public Page<ThemeRs> findAllByVisit(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
-        Page<ThemeDto> themeVisitDtoList = themeVisitJooqRepository.findAllByVisit(userId, pageable, locations, genres);
-        List<Long> themeIdList = themeVisitDtoList.stream().map(ThemeDto::getId).toList();
-        Map<Long, Long> reviewCountMap = reviewJooqRepository.countAllByThemeIdList(themeIdList);
-        Map<Long, Double> scoreMap = reviewJooqRepository.aggregateAllByThemeIdList(themeIdList);
-        Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
-        List<ThemeRs> content = themeVisitDtoList.stream()
-                .map(t ->
-                        themeMapper.toThemeRs(
-                                t,
-                                reviewCountMap.getOrDefault(t.getId(), 0L),
-                                scoreMap.getOrDefault(t.getId(), 0.0),
-                                genreListMap.getOrDefault(t.getId(), Collections.emptyList())))
-                .toList();
-        return new PageImpl<>(content, pageable, themeVisitDtoList.getTotalElements());
-    }
-
     public void saveThemeLike(Long userId, Long themeId) {
         User user = userQueryService.findById(userId);
         Theme theme = themeQueryService.findById(themeId);

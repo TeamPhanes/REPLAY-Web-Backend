@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
+import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.response.Participant;
 
 import java.util.List;
@@ -24,5 +25,12 @@ public class GatheringMemberJooqRepository {
                 .join(USERS).on(GATHERING_MEMBER.USER_ID.eq(USERS.ID))
                 .where(GATHERING_MEMBER.GATHERING_ID.eq(gatheringId))
                 .fetchInto(Participant.class);
+    }
+
+    public List<Role> findParticipantAllByUserId(Long userId) {
+        return dsl.select(GATHERING_MEMBER.ROLE)
+                .from(GATHERING_MEMBER)
+                .where(GATHERING_MEMBER.USER_ID.eq(userId))
+                .fetchInto(Role.class);
     }
 }
