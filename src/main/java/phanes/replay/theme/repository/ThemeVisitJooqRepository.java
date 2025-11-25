@@ -72,7 +72,7 @@ public class ThemeVisitJooqRepository {
                 .select(SPOT.NAME.as("spotName"), SPOT.ADDRESS, CAFE.NAME.as("cafeName"))
                 .select(DSL.inline(true).as("isVisited"), utils.isLikedTheme(userId))
                 .from(visitIdTable)
-                .join(THEME).on(THEME.ID.eq(THEME_VISIT.THEME_ID))
+                .join(THEME).on(THEME.ID.eq(visitIdTable.field(THEME_VISIT.THEME_ID)))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .join(CAFE).on(SPOT.CAFE_ID.eq(CAFE.ID))
                 .where(where)

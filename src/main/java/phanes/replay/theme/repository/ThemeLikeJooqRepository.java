@@ -70,7 +70,7 @@ public class ThemeLikeJooqRepository {
                 .select(SPOT.NAME.as("spotName"), SPOT.ADDRESS, CAFE.NAME.as("cafeName"))
                 .select(DSL.inline(true).as("isLiked"), utils.isVisitedTheme(userId))
                 .from(likeIdTable)
-                .join(THEME).on(THEME.ID.eq(THEME_LIKE.THEME_ID))
+                .join(THEME).on(THEME.ID.eq(likeIdTable.field(THEME_LIKE.THEME_ID)))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .join(CAFE).on(SPOT.CAFE_ID.eq(CAFE.ID))
                 .where(where)
