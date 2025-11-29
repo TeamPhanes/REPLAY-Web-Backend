@@ -1,22 +1,26 @@
 package phanes.replay.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.MyCommentDto;
+import phanes.replay.gathering.dto.response.Participant;
 import phanes.replay.gathering.repository.GatheringCommentJooqRepository;
 import phanes.replay.gathering.repository.GatheringMemberJooqRepository;
+import phanes.replay.theme.repository.GenreJooqRepository;
 import phanes.replay.theme.repository.ThemeVisitJooqRepository;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.dto.user.AchievementDto;
-import phanes.replay.user.dto.user.MyCommentRs;
-import phanes.replay.user.dto.user.ProfileRs;
-import phanes.replay.user.dto.user.UserRs;
+import phanes.replay.user.dto.user.*;
 import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.AchievementJooqRepository;
+import phanes.replay.user.repository.UserJooqRepository;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,8 @@ public class UserService {
     private final GatheringCommentJooqRepository gatheringCommentJooqRepository;
     private final ThemeVisitJooqRepository themeVisitJooqRepository;
     private final AchievementJooqRepository achievementJooqRepository;
+    private final UserJooqRepository userJooqRepository;
+    private final GenreJooqRepository genreJooqRepository;
     private final UserMapper userMapper;
 
     public UserRs findByUserId(Long userId) {
@@ -49,5 +55,30 @@ public class UserService {
         User user = userQueryService.findById(userId);
         List<MyCommentDto> myCommentList = gatheringCommentJooqRepository.findAllByUserId(userId, pageable);
         return myCommentList.stream().map(c -> userMapper.toMyCommentRs(user, c)).toList();
+    }
+
+    public Page<MyVisitThemeRs> findVisitThemeById(Long userId, Pageable pageable) {
+        Page<MyVisitThemeDto> visitThemeList = userJooqRepository.findVisitThemeById(userId, pageable);
+        List<Long> themeIdList = visitThemeList.stream().map(MyVisitThemeDto::getId).toList();
+        Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
+        List<MyVisitThemeRs> contents = visitThemeList.stream().map(t -> userMapper.toMyVisitThemeRs(t, genreListMap.getOrDefault(t.getId(), Collections.emptyList()))).toList();
+        return new PageImpl<>(contents, pageable, visitThemeList.getTotalElements());
+    }
+
+    public Page<MyParticipantGatheringRs> findParticipantGatheringById(Long userId, Pageable pageable) {
+        Page<MyParticipantGatheringDto> participantGatheringList = userJooqRepository.findParticipantGatheringById(userId, pageable);
+        List<Long> themeIdList = participantGatheringList.stream().map(MyParticipantGatheringDto::getThemeId).toList();
+        List<Long> gatheringIdList = participantGatheringList.stream().map(MyParticipantGatheringDto::getId).toList();
+        Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
+        Map<Long, List<Participant>> participantListMap = gatheringMemberJooqRepository.findAllByGatheringIdList(gatheringIdList);
+        List<MyParticipantGatheringRs> contents = participantGatheringList.stream()
+                .map(g ->
+                        userMapper.toMyParticipantGatheringRs(
+                                g,
+                                genreListMap.getOrDefault(g.getThemeId(), Collections.emptyList()),
+                                participantListMap.getOrDefault(g.getId(), Collections.emptyList())
+                        )
+                ).toList();
+        return new PageImpl<>(contents, pageable, participantGatheringList.getTotalElements());
     }
 }

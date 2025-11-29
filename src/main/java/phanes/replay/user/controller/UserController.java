@@ -2,6 +2,7 @@ package phanes.replay.user.controller;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,9 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import phanes.replay.user.dto.user.MyCommentRs;
-import phanes.replay.user.dto.user.ProfileRs;
-import phanes.replay.user.dto.user.UserRs;
+import phanes.replay.user.dto.user.*;
 import phanes.replay.user.service.UserService;
 
 import java.util.List;
@@ -42,5 +41,15 @@ public class UserController {
     @GetMapping("/me/comment")
     public List<MyCommentRs> myComment(@AuthenticationPrincipal Long userId, @PageableDefault Pageable pageable) {
         return userService.findCommentById(userId, pageable);
+    }
+
+    @GetMapping("/me/theme/visit")
+    public Page<MyVisitThemeRs> myVisitTheme(@AuthenticationPrincipal Long userId, @PageableDefault Pageable pageable) {
+        return userService.findVisitThemeById(userId, pageable);
+    }
+
+    @GetMapping("/me/gathering/visit")
+    public Page<MyParticipantGatheringRs> myParticipantGathering(@AuthenticationPrincipal Long userId, @PageableDefault Pageable pageable) {
+        return userService.findParticipantGatheringById(userId, pageable);
     }
 }
