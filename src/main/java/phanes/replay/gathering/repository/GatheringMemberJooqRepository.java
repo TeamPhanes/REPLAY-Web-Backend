@@ -8,6 +8,7 @@ import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.response.Participant;
 
 import java.util.List;
+import java.util.Map;
 
 import static phanes.replay.tables.GatheringMember.GATHERING_MEMBER;
 import static phanes.replay.tables.Users.USERS;
@@ -25,6 +26,14 @@ public class GatheringMemberJooqRepository {
                 .join(USERS).on(GATHERING_MEMBER.USER_ID.eq(USERS.ID))
                 .where(GATHERING_MEMBER.GATHERING_ID.eq(gatheringId))
                 .fetchInto(Participant.class);
+    }
+
+    public Map<Long, List<Participant>> findAllByGatheringIdList(List<Long> gatheringIdList) {
+        return dsl.select(GATHERING_MEMBER.GATHERING_ID, USERS.ID, USERS.PROFILE_IMAGE, USERS.NICKNAME, DSL.when(USERS.EMAIL_MARK.eq(true), USERS.EMAIL).otherwise("").as("email"))
+                .from(GATHERING_MEMBER)
+                .join(USERS).on(GATHERING_MEMBER.USER_ID.eq(USERS.ID))
+                .where(GATHERING_MEMBER.GATHERING_ID.in(gatheringIdList))
+                .fetchGroups(GATHERING_MEMBER.GATHERING_ID, Participant.class);
     }
 
     public List<Role> findParticipantAllByUserId(Long userId) {

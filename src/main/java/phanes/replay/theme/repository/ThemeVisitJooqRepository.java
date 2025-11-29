@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.stereotype.Repository;
-import phanes.replay.utils.JooqRepositoryUtils;
 
 import java.util.List;
 
@@ -16,7 +15,6 @@ import static phanes.replay.tables.ThemeVisit.THEME_VISIT;
 public class ThemeVisitJooqRepository {
 
     private final DSLContext dsl;
-    private final JooqRepositoryUtils utils;
 
     public List<Boolean> findVisitByUserId(Long userId) {
         return dsl.select(DSL.coalesce(REVIEW.IS_SUCCESS, DSL.inline(false)))

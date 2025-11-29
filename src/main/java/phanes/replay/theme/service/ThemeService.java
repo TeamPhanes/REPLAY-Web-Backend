@@ -13,7 +13,10 @@ import phanes.replay.theme.dto.response.ThemeDetailRs;
 import phanes.replay.theme.dto.response.ThemePreviewRs;
 import phanes.replay.theme.dto.response.ThemeRs;
 import phanes.replay.theme.mapper.ThemeMapper;
-import phanes.replay.theme.repository.*;
+import phanes.replay.theme.repository.GenreJooqRepository;
+import phanes.replay.theme.repository.ThemeJooqRepository;
+import phanes.replay.theme.repository.ThemeLikeJooqRepository;
+import phanes.replay.theme.repository.ThemeRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
 
@@ -31,7 +34,6 @@ public class ThemeService {
     private final ThemeVisitQueryService themeVisitQueryService;
     private final ThemeJooqRepository themeJooqRepository;
     private final ThemeLikeJooqRepository themeLikeJooqRepository;
-    private final ThemeVisitJooqRepository themeVisitJooqRepository;
     private final ThemeRepository themeRepository;
     private final ReviewJooqRepository reviewJooqRepository;
     private final GenreJooqRepository genreJooqRepository;

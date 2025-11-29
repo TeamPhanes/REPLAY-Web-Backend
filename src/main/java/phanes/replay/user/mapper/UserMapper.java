@@ -3,11 +3,9 @@ package phanes.replay.user.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import phanes.replay.gathering.dto.MyCommentDto;
+import phanes.replay.gathering.dto.response.Participant;
 import phanes.replay.user.domain.User;
-import phanes.replay.user.dto.user.AchievementDto;
-import phanes.replay.user.dto.user.MyCommentRs;
-import phanes.replay.user.dto.user.ProfileRs;
-import phanes.replay.user.dto.user.UserRs;
+import phanes.replay.user.dto.user.*;
 
 import java.util.List;
 
@@ -21,4 +19,8 @@ public interface UserMapper {
 
     @Mapping(source = "myCommentDto.createdAt", target = "createdAt")
     MyCommentRs toMyCommentRs(User user, MyCommentDto myCommentDto);
+
+    MyVisitThemeRs toMyVisitThemeRs(MyVisitThemeDto myVisitThemeDto, List<String> genres);
+
+    MyParticipantGatheringRs toMyParticipantGatheringRs(MyParticipantGatheringDto myParticipantGatheringDto, List<String> genres, List<Participant> participants);
 }

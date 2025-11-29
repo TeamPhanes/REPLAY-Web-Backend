@@ -3,7 +3,6 @@ package phanes.replay.gathering.repository;
 import lombok.RequiredArgsConstructor;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
-import org.jooq.Field;
 import org.jooq.Row2;
 import org.jooq.impl.DSL;
 import org.springframework.data.domain.Page;
@@ -69,17 +68,15 @@ public class GatheringJooqRepository {
                                         .and(GENRE.NAME.in(genres))));
             }
         }
-        Field<Integer> participantCount = DSL.selectCount()
-                .from(GATHERING_MEMBER)
-                .where(GATHERING_MEMBER.GATHERING_ID.eq(GATHERING.ID))
-                .asField("participantCount");
         List<GatheringDto> contents = dsl.select(GATHERING.ID, GATHERING.THEME_ID, GATHERING.NAME, GATHERING.DATE, GATHERING.CAPACITY)
                 .select(THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE, SPOT.ADDRESS)
-                .select(utils.isLikedGathering(userId), participantCount)
+                .select(utils.isLikedGathering(userId), DSL.count(GATHERING_MEMBER.USER_ID).as("participantCount"))
                 .from(GATHERING)
+                .join(GATHERING_MEMBER).on(GATHERING.ID.eq(GATHERING_MEMBER.GATHERING_ID))
                 .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .where(where)
+                .groupBy(GATHERING.ID, GATHERING.THEME_ID, GATHERING.NAME, GATHERING.DATE, GATHERING.CAPACITY, THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE, SPOT.ADDRESS)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchInto(GatheringDto.class);
@@ -107,17 +104,15 @@ public class GatheringJooqRepository {
 
     public Page<GatheringDto> findAllByDate(Long userId, Pageable pageable, LocalDateTime date) {
         Condition where = GATHERING.DATE.between(date.toLocalDate().atStartOfDay(), date.toLocalDate().plusDays(1).atStartOfDay().minusNanos(1));
-        Field<Integer> participantCount = DSL.selectCount()
-                .from(GATHERING_MEMBER)
-                .where(GATHERING_MEMBER.GATHERING_ID.eq(GATHERING.ID))
-                .asField("participantCount");
         List<GatheringDto> contents = dsl.select(GATHERING.ID, GATHERING.THEME_ID, GATHERING.NAME, GATHERING.DATE, GATHERING.CAPACITY)
                 .select(THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE, SPOT.ADDRESS)
-                .select(utils.isLikedGathering(userId), participantCount)
+                .select(utils.isLikedGathering(userId), DSL.count(GATHERING_MEMBER.USER_ID).as("participantCount"))
                 .from(GATHERING)
+                .join(GATHERING_MEMBER).on(GATHERING.ID.eq(GATHERING_MEMBER.GATHERING_ID))
                 .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .where(where)
+                .groupBy(GATHERING.ID, GATHERING.THEME_ID, GATHERING.NAME, GATHERING.DATE, GATHERING.CAPACITY, THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE, SPOT.ADDRESS)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchInto(GatheringDto.class);

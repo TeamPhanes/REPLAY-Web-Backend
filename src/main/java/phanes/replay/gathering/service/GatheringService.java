@@ -17,6 +17,7 @@ import phanes.replay.gathering.dto.response.Participant;
 import phanes.replay.gathering.mapper.GatheringMapper;
 import phanes.replay.gathering.repository.GatheringCommentJooqRepository;
 import phanes.replay.gathering.repository.GatheringJooqRepository;
+import phanes.replay.gathering.repository.GatheringLikeJooqRepository;
 import phanes.replay.gathering.repository.GatheringMemberJooqRepository;
 import phanes.replay.theme.repository.GenreJooqRepository;
 import phanes.replay.user.domain.User;
@@ -37,6 +38,7 @@ public class GatheringService {
     private final GatheringJooqRepository gatheringJooqRepository;
     private final GatheringMemberJooqRepository gatheringMemberJooqRepository;
     private final GatheringCommentJooqRepository gatheringCommentJooqRepository;
+    private final GatheringLikeJooqRepository gatheringLikeJooqRepository;
     private final GenreJooqRepository genreJooqRepository;
     private final GatheringMapper gatheringMapper;
 
@@ -91,5 +93,13 @@ public class GatheringService {
                         .toList())
         );
         return new PageImpl<>(contents, pageable, commentList.getTotalElements());
+    }
+
+    public Page<GatheringRs> findAllByLike(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
+        Page<GatheringDto> gatheringDtoList = gatheringLikeJooqRepository.findAllByLike(userId, pageable, locations, genres);
+        List<Long> themeIdList = gatheringDtoList.getContent().stream().map(GatheringDto::getThemeId).toList();
+        Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
+        List<GatheringRs> contents = gatheringDtoList.getContent().stream().map(g -> gatheringMapper.toGatheringRs(g, genreListMap.getOrDefault(g.getThemeId(), Collections.emptyList()))).toList();
+        return new PageImpl<>(contents, pageable, gatheringDtoList.getTotalElements());
     }
 }

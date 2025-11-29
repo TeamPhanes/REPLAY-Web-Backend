@@ -74,9 +74,6 @@ public class ThemeLikeJooqRepository {
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .join(CAFE).on(SPOT.CAFE_ID.eq(CAFE.ID))
                 .where(where)
-                .groupBy(THEME.ID)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .fetchInto(ThemeDto.class);
         Long totalCount = dsl
                 .selectCount()
