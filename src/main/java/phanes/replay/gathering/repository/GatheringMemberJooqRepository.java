@@ -29,7 +29,7 @@ public class GatheringMemberJooqRepository {
     }
 
     public Map<Long, List<Participant>> findAllByGatheringIdList(List<Long> gatheringIdList) {
-        return dsl.select(GATHERING_MEMBER.GATHERING_ID, USERS.PROFILE_IMAGE, USERS.NICKNAME)
+        return dsl.select(GATHERING_MEMBER.GATHERING_ID, USERS.ID, USERS.PROFILE_IMAGE, USERS.NICKNAME, DSL.when(USERS.EMAIL_MARK.eq(true), USERS.EMAIL).otherwise("").as("email"))
                 .from(GATHERING_MEMBER)
                 .join(USERS).on(GATHERING_MEMBER.USER_ID.eq(USERS.ID))
                 .where(GATHERING_MEMBER.GATHERING_ID.in(gatheringIdList))

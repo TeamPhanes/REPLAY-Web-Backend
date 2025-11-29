@@ -48,7 +48,7 @@ public class UserJooqRepository {
     }
 
     public Page<MyParticipantGatheringDto> findParticipantGatheringById(Long userId, Pageable pageable) {
-        dsl.select(GATHERING.ID, GATHERING.NAME, GATHERING.DATE, GATHERING.CAPACITY, utils.isLikedGathering(userId))
+        List<MyParticipantGatheringDto> contents = dsl.select(GATHERING.ID, GATHERING.NAME, GATHERING.DATE, GATHERING.CAPACITY, utils.isLikedGathering(userId))
                 .select(THEME.ID.as("themeId"), THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE)
                 .select(SPOT.ADDRESS, SPOT.NAME.as("spotName"), CAFE.NAME.as("cafeName"))
                 .from(GATHERING_MEMBER)
@@ -60,6 +60,10 @@ public class UserJooqRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchInto(MyParticipantGatheringDto.class);
-        return null;
+        Long totalCount = dsl.selectCount()
+                .from(GATHERING_MEMBER)
+                .where(GATHERING_MEMBER.USER_ID.eq(userId))
+                .fetchOneInto(Long.class);
+        return new PageImpl<>(contents, pageable, totalCount == null ? 0 : totalCount);
     }
 }

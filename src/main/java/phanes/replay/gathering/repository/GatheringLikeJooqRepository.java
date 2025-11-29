@@ -68,6 +68,7 @@ public class GatheringLikeJooqRepository {
                 .select(DSL.inline(true).as("isLiked"), DSL.count(GATHERING_MEMBER.USER_ID).as("participantCount"))
                 .from(likeIdTable)
                 .join(GATHERING).on(GATHERING.ID.eq(likeIdTable.field(GATHERING_LIKE.GATHERING_ID)))
+                .join(GATHERING_MEMBER).on(GATHERING.ID.eq(GATHERING_MEMBER.GATHERING_ID))
                 .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .where(where)
