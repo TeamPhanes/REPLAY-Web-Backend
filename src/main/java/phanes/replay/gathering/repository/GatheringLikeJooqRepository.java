@@ -1,4 +1,4 @@
-package phanes.replay.theme.repository;
+package phanes.replay.gathering.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.*;
@@ -8,27 +8,26 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import phanes.replay.theme.dto.ThemeDto;
-import phanes.replay.utils.JooqRepositoryUtils;
+import phanes.replay.gathering.dto.GatheringDto;
 
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import static phanes.replay.tables.Cafe.CAFE;
+import static phanes.replay.tables.Gathering.GATHERING;
+import static phanes.replay.tables.GatheringLike.GATHERING_LIKE;
+import static phanes.replay.tables.GatheringMember.GATHERING_MEMBER;
 import static phanes.replay.tables.Genre.GENRE;
 import static phanes.replay.tables.Spot.SPOT;
 import static phanes.replay.tables.Theme.THEME;
-import static phanes.replay.tables.ThemeLike.THEME_LIKE;
 
 @Repository
 @RequiredArgsConstructor
-public class ThemeLikeJooqRepository {
+public class GatheringLikeJooqRepository {
 
     private final DSLContext dsl;
-    private final JooqRepositoryUtils utils;
 
-    public Page<ThemeDto> findAllByLike(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
+    public Page<GatheringDto> findAllByLike(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
         Condition where = DSL.trueCondition();
         if (!CollectionUtils.isEmpty(locations)) {
             Set<Row2<String, String>> pairs = new LinkedHashSet<>();
@@ -43,43 +42,43 @@ public class ThemeLikeJooqRepository {
                     throw new RuntimeException();
                 }
             }
-            if(!pairs.isEmpty()) {
+            if (!pairs.isEmpty()) {
                 where = where.and(DSL.row(SPOT.STATE, SPOT.CITY).in(pairs));
             }
-            if(!stateOnly.isEmpty()) {
+            if (!stateOnly.isEmpty()) {
                 where = where.and(SPOT.STATE.in(stateOnly));
             }
         }
-        if (genres != null && !genres.isEmpty()) {
+        if (!CollectionUtils.isEmpty(genres)) {
             where = where.andExists(
                     dsl.selectOne()
                             .from(GENRE)
                             .where(GENRE.THEME_ID.eq(THEME.ID)
                                     .and(GENRE.NAME.in(genres))));
         }
-        Table<Record1<Long>> likeIdTable = dsl
-                .select(THEME_LIKE.THEME_ID)
-                .from(THEME_LIKE)
-                .where(THEME_LIKE.USER_ID.eq(userId))
-                .orderBy(THEME_LIKE.THEME_ID.asc())
+        Table<Record1<Long>> likeIdTable = dsl.select(GATHERING_LIKE.GATHERING_ID)
+                .from(GATHERING_LIKE)
+                .where(GATHERING_LIKE.USER_ID.eq(userId))
+                .orderBy(GATHERING_LIKE.GATHERING_ID.asc())
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
-                .asTable("tl");
-        List<ThemeDto> themeLikeDtoList = dsl
-                .select(THEME.fields())
-                .select(SPOT.NAME.as("spotName"), SPOT.ADDRESS, CAFE.NAME.as("cafeName"))
-                .select(DSL.inline(true).as("isLiked"), utils.isVisitedTheme(userId))
+                .asTable("gl");
+        List<GatheringDto> contents = dsl.select(GATHERING.ID, GATHERING.THEME_ID, GATHERING.NAME, GATHERING.DATE, GATHERING.CAPACITY)
+                .select(THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE, SPOT.ADDRESS)
+                .select(DSL.inline(true).as("isLiked"), DSL.count(GATHERING_MEMBER.USER_ID).as("participantCount"))
                 .from(likeIdTable)
-                .join(THEME).on(THEME.ID.eq(likeIdTable.field(THEME_LIKE.THEME_ID)))
+                .join(GATHERING).on(GATHERING.ID.eq(likeIdTable.field(GATHERING_LIKE.GATHERING_ID)))
+                .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
-                .join(CAFE).on(SPOT.CAFE_ID.eq(CAFE.ID))
                 .where(where)
-                .fetchInto(ThemeDto.class);
-        Long totalCount = dsl
-                .selectCount()
-                .from(THEME_LIKE)
-                .where(THEME_LIKE.USER_ID.eq(userId))
+                .groupBy(GATHERING.ID, GATHERING.THEME_ID, GATHERING.NAME, GATHERING.DATE, GATHERING.CAPACITY, THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE, SPOT.ADDRESS)
+                .fetchInto(GatheringDto.class);
+        Long total = dsl.selectCount()
+                .from(GATHERING)
+                .join(THEME).on(GATHERING.THEME_ID.eq(THEME.ID))
+                .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
+                .where(where)
                 .fetchOne(0, Long.class);
-        return new PageImpl<>(themeLikeDtoList, pageable, totalCount == null ? 0 : totalCount);
+        return new PageImpl<>(contents, pageable, total == null ? 0L : total);
     }
 }

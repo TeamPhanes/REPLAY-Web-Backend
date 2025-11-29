@@ -44,6 +44,11 @@ public class GatheringController {
         return gatheringService.findCommentAll(pageable, gatheringId);
     }
 
+    @GetMapping("/like")
+    public Page<GatheringRs> getLikeGathering(@AuthenticationPrincipal Long userId, @PageableDefault(size = 8) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
+        return gatheringService.findAllByLike(userId, pageable, locations, genres);
+    }
+
     @PostMapping("/like/{gatheringId}")
     public void likeGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringService.saveGatheringLike(userId, gatheringId);
