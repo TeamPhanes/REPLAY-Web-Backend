@@ -17,6 +17,8 @@ public class MyVisitThemeDto {
     private Long id;
     private String title;
     private String image;
+    private String spotName;
+    private String cafeName;
     private LocalDateTime visitDate;
     private Double score;
     private Eval themeReview;

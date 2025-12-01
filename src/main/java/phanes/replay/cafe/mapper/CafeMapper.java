@@ -1,4 +1,4 @@
-package phanes.replay.cafe.dto.mapper;
+package phanes.replay.cafe.mapper;
 
 import org.mapstruct.Mapper;
 import phanes.replay.cafe.domain.Cafe;
