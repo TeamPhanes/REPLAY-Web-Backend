@@ -1,4 +1,4 @@
-package phanes.replay.theme.dto.response;
+package phanes.replay.theme.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ThemePreviewRs {
+public class ThemePreviewDto {
 
     private Long id;
     private String title;

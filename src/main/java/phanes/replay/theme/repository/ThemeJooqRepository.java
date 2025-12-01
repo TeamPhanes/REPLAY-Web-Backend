@@ -6,17 +6,15 @@ import org.jooq.impl.DSL;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.dto.ThemeDetailDto;
 import phanes.replay.theme.dto.ThemeDto;
+import phanes.replay.theme.dto.ThemePreviewDto;
 import phanes.replay.utils.JooqRepositoryUtils;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static phanes.replay.tables.Cafe.CAFE;
 import static phanes.replay.tables.Genre.GENRE;
@@ -32,25 +30,50 @@ public class ThemeJooqRepository {
     private final DSLContext dsl;
     private final JooqRepositoryUtils utils;
 
-    public List<Theme> findAllOrderByThemeLike(int size) {
-        Table<Record2<Long, Integer>> likeCountByThemeId = likeCountByThemeId();
-        Field<Long> likeCount = DSL.coalesce(DSL.field(DSL.name("tlc", "lc"), Long.class), DSL.inline(0L)).as("like_count");
-        Field<Long> themeId = DSL.field(DSL.name("tlc", "theme_id"), Long.class);
-        List<SortField<?>> orderBy = List.of(likeCount.desc(), THEME.ID.asc());
-        return dsl.select(THEME.fields())
-                .select(likeCount)
+    public Page<ThemePreviewDto> findAllPreview(Pageable pageable, String genre) {
+        Condition where = DSL.trueCondition();
+        if (genre != null && !genre.isBlank()) {
+            where = where.andExists(dsl.selectOne()
+                    .from(GENRE)
+                    .where(GENRE.THEME_ID.eq(THEME.ID).and(GENRE.NAME.eq(genre))));
+        }
+        Field<Integer> likeCount = DSL.count(THEME_LIKE.ID);
+        List<ThemePreviewDto> contents = dsl
+                .select(THEME.ID, THEME.TITLE, THEME.IMAGE)
                 .from(THEME)
-                .leftJoin(likeCountByThemeId).on(themeId.eq(THEME.ID))
-                .orderBy(orderBy)
-                .limit(size)
-                .fetchInto(Theme.class);
+                .leftJoin(THEME_LIKE).on(THEME.ID.eq(THEME_LIKE.THEME_ID))
+                .where(where)
+                .groupBy(THEME.ID, THEME.TITLE, THEME.IMAGE)
+                .orderBy(toSortFields(pageable, likeCount))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchInto(ThemePreviewDto.class);
+        Long total = dsl
+                .select(DSL.countDistinct(THEME.ID))
+                .from(THEME)
+                .leftJoin(THEME_LIKE).on(THEME.ID.eq(THEME_LIKE.THEME_ID))
+                .where(where)
+                .fetchOne(0, Long.class);
+        return new PageImpl<>(contents, pageable, total == null ? 0 : total);
     }
 
-    private Table<Record2<Long, Integer>> likeCountByThemeId() {
-        return dsl.select(THEME_LIKE.THEME_ID, DSL.count().as("lc"))
-                .from(THEME_LIKE)
-                .groupBy(THEME_LIKE.THEME_ID)
-                .asTable("tlc");
+    private SortField<?>[] toSortFields(Pageable pageable, Field<Integer> likeCount) {
+        List<SortField<?>> sortFields = new ArrayList<>();
+        for (Sort.Order order : pageable.getSort()) {
+            String property = order.getProperty();
+            boolean isAscending = order.isAscending();
+            switch (property) {
+                case "id" -> sortFields.add(isAscending ? THEME.ID.asc() : THEME.ID.desc());
+                case "like" -> {
+                    sortFields.add(isAscending ? likeCount.asc() : likeCount.desc());
+                    sortFields.add(THEME.ID.asc());
+                }
+            }
+        }
+        if (sortFields.isEmpty()) {
+            sortFields.add(THEME.ID.desc());
+        }
+        return sortFields.toArray(SortField[]::new);
     }
 
     public Page<ThemeDto> findAll(Long userId, Pageable pageable, List<String> locations, List<String> genres) {
@@ -68,10 +91,10 @@ public class ThemeJooqRepository {
                     throw new RuntimeException();
                 }
             }
-            if(!pairs.isEmpty()) {
+            if (!pairs.isEmpty()) {
                 where = where.and(DSL.row(SPOT.STATE, SPOT.CITY).in(pairs));
             }
-            if(!stateOnly.isEmpty()) {
+            if (!stateOnly.isEmpty()) {
                 where = where.and(SPOT.STATE.in(stateOnly));
             }
         }

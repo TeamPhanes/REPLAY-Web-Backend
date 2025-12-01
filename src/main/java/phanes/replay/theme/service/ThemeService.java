@@ -1,7 +1,9 @@
 package phanes.replay.theme.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RestController;
 import phanes.replay.review.repository.ReviewJooqRepository;
 import phanes.replay.theme.domain.Theme;
@@ -9,6 +11,7 @@ import phanes.replay.theme.domain.ThemeLike;
 import phanes.replay.theme.domain.ThemeVisit;
 import phanes.replay.theme.dto.ThemeDetailDto;
 import phanes.replay.theme.dto.ThemeDto;
+import phanes.replay.theme.dto.ThemePreviewDto;
 import phanes.replay.theme.dto.response.ThemeDetailRs;
 import phanes.replay.theme.dto.response.ThemePreviewRs;
 import phanes.replay.theme.dto.response.ThemeRs;
@@ -16,7 +19,6 @@ import phanes.replay.theme.mapper.ThemeMapper;
 import phanes.replay.theme.repository.GenreJooqRepository;
 import phanes.replay.theme.repository.ThemeJooqRepository;
 import phanes.replay.theme.repository.ThemeLikeJooqRepository;
-import phanes.replay.theme.repository.ThemeRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
 
@@ -34,24 +36,14 @@ public class ThemeService {
     private final ThemeVisitQueryService themeVisitQueryService;
     private final ThemeJooqRepository themeJooqRepository;
     private final ThemeLikeJooqRepository themeLikeJooqRepository;
-    private final ThemeRepository themeRepository;
     private final ReviewJooqRepository reviewJooqRepository;
     private final GenreJooqRepository genreJooqRepository;
     private final ThemeMapper themeMapper;
 
-    public List<ThemePreviewRs> findAllByThemePreviewOrderByLike(int size) {
-        return themeJooqRepository.findAllOrderByThemeLike(size)
-                .stream()
-                .map(themeMapper::toThemePreview)
-                .toList();
-    }
-
-    public List<ThemePreviewRs> findAllByThemePreviewOrderByCreatedAt(int size) {
-        Pageable pageable = PageRequest.of(0, size, Sort.by(Sort.Order.desc("createdAt")));
-        return themeRepository.findAllBy(pageable)
-                .stream()
-                .map(themeMapper::toThemePreview)
-                .toList();
+    public Page<ThemePreviewRs> findAllPreview(Pageable pageable, String genre) {
+        Page<ThemePreviewDto> themePreviewList = themeJooqRepository.findAllPreview(pageable, genre);
+        List<ThemePreviewRs> contents = themePreviewList.stream().map(themeMapper::toThemePreview).toList();
+        return new PageImpl<>(contents, pageable, themePreviewList.getTotalElements());
     }
 
     public Page<ThemeRs> findAll(Long userId, Pageable pageable, List<String> locations, List<String> genres) {

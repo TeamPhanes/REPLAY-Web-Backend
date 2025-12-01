@@ -21,14 +21,9 @@ public class ThemeController {
 
     private final ThemeService themeService;
 
-    @GetMapping("/preview/like")
-    public List<ThemePreviewRs> getPreviewThemeOrderByLike(@RequestParam int size) {
-        return themeService.findAllByThemePreviewOrderByLike(size);
-    }
-
-    @GetMapping("/preview/new")
-    public List<ThemePreviewRs> getPreviewThemeOrderByCreatedAt(@RequestParam int size) {
-        return themeService.findAllByThemePreviewOrderByCreatedAt(size);
+    @GetMapping("/preview")
+    public Page<ThemePreviewRs> getPreviewThemeOrderByCreatedAt(@PageableDefault Pageable pageable, @RequestParam(required = false) String genre) {
+        return themeService.findAllPreview(pageable, genre);
     }
 
     @GetMapping()
