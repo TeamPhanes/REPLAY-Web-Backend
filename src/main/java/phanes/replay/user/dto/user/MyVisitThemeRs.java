@@ -18,6 +18,8 @@ public class MyVisitThemeRs {
     private Long id;
     private String title;
     private String image;
+    private String spotName;
+    private String cafeName;
     private List<String> genres;
     private LocalDateTime visitDate;
     private Double score;
