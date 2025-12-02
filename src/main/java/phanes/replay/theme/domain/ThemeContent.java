@@ -19,10 +19,10 @@ public class ThemeContent {
     @OneToOne
     private Theme theme;
     @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String story;
-    @Column(length = 200)
+    @Column(length = 200, nullable = false)
     private String link;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String image;
 }

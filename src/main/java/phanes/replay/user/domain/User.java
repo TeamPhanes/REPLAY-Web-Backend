@@ -23,16 +23,18 @@ public class User extends BaseTimeEntity {
     private String nickname;
     @Column(length = 2)
     private String gender;
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String email;
     @Column(length = 200)
     private String profileComment;
     private String profileImage;
     @Column(length = 100)
     private String socialId;
-    @Column(length = 10)
     @Enumerated(EnumType.STRING)
+    @Column(length = 10, nullable = false)
     private SocialType socialType;
+    @Column(nullable = false)
     private Boolean genderMark;
+    @Column(nullable = false)
     private Boolean emailMark;
 }

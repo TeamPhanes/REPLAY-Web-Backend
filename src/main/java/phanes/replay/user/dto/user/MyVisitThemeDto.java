@@ -20,6 +20,7 @@ public class MyVisitThemeDto {
     private String spotName;
     private String cafeName;
     private LocalDateTime visitDate;
+    private Long reviewId;
     private Double score;
     private Eval themeReview;
     private Eval levelReview;
@@ -28,5 +29,4 @@ public class MyVisitThemeDto {
     private Integer numberOfPlayer;
     private Boolean isSuccess;
     private String content;
-    private String reviewImage;
 }

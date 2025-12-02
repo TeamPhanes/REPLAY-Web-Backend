@@ -26,22 +26,21 @@ public class Review extends CreateTimeEntity {
     private User user;
     @Column(nullable = false)
     private Double score;
-    @Column(length = 200)
+    @Column(length = 200, nullable = false)
     private String content;
-    private String image;
     @Column(nullable = false)
     private Boolean isSuccess;
     @Column(nullable = false)
     private Integer hint;
     @Column(nullable = false)
     private Integer numberOfPlayer;
-    @Column(length = 5)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Eval themeReview;
-    @Column(length = 5)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Eval levelReview;
-    @Column(length = 5)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Eval storyReview;
 }

@@ -30,5 +30,5 @@ public class MyVisitThemeRs {
     private Integer numberOfPlayer;
     private Boolean isSuccess;
     private String content;
-    private String reviewImage;
+    private List<String> reviewImages;
 }

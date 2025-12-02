@@ -1,4 +1,4 @@
-package phanes.replay.review.dto.response;
+package phanes.replay.review.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,14 +12,13 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewDetailRs {
+public class ReviewDto {
 
     private Long id;
     private String nickname;
     private String profileImage;
     private Double score;
     private String content;
-    private String image;
     private Boolean isSuccess;
     private Integer hint;
     private Integer numberOfPlayer;

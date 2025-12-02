@@ -3,10 +3,16 @@ package phanes.replay.review.repository;
 import lombok.RequiredArgsConstructor;
 import org.jooq.*;
 import org.jooq.impl.DSL;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import phanes.replay.review.domain.enums.Eval;
-import phanes.replay.review.dto.response.*;
+import phanes.replay.review.dto.ReviewDto;
+import phanes.replay.review.dto.response.Evaluation;
+import phanes.replay.review.dto.response.ReviewCountStat;
+import phanes.replay.review.dto.response.ReviewCountSummary;
+import phanes.replay.review.dto.response.UserEvaluation;
 
 import java.util.Comparator;
 import java.util.List;
@@ -35,10 +41,10 @@ public class ReviewJooqRepository {
     public Double aggregateByThemeId(Long themeId) {
         return Optional.ofNullable(
                 dsl.select(REVIEW.THEME_ID, DSL.avg(REVIEW.SCORE).as("avgScore"))
-                .from(REVIEW)
-                .where(REVIEW.THEME_ID.eq(themeId))
-                .groupBy(REVIEW.THEME_ID)
-                .fetchOne("avgScore", Double.class)
+                        .from(REVIEW)
+                        .where(REVIEW.THEME_ID.eq(themeId))
+                        .groupBy(REVIEW.THEME_ID)
+                        .fetchOne("avgScore", Double.class)
         ).orElse(0.0);
     }
 
@@ -51,7 +57,7 @@ public class ReviewJooqRepository {
                 .fetchMap(REVIEW.THEME_ID, avgScore);
     }
 
-    public List<ReviewDetailRs> findAllByThemeId(Long userId, Pageable pageable, Long themeId) {
+    public Page<ReviewDto> findAllByThemeId(Long userId, Pageable pageable, Long themeId) {
         Field<Object> likeCount = DSL.selectCount()
                 .from(REVIEW_LIKE)
                 .where(REVIEW_LIKE.REVIEW_ID.eq(REVIEW.ID))
@@ -62,7 +68,7 @@ public class ReviewJooqRepository {
                         .where(REVIEW_LIKE.REVIEW_ID.eq(REVIEW.ID)
                                 .and(REVIEW_LIKE.USER_ID.eq(userId))))
                 .as("isLiked");
-        return dsl.select(REVIEW.fields())
+        List<ReviewDto> contents = dsl.select(REVIEW.fields())
                 .select(USERS.NICKNAME, USERS.PROFILE_IMAGE)
                 .select(likeCount, isLiked)
                 .from(REVIEW)
@@ -70,7 +76,12 @@ public class ReviewJooqRepository {
                 .where(REVIEW.THEME_ID.eq(themeId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchInto(ReviewDetailRs.class);
+                .fetchInto(ReviewDto.class);
+        Long total = dsl.selectCount()
+                .from(REVIEW)
+                .where(REVIEW.THEME_ID.eq(themeId))
+                .fetchOneInto(Long.class);
+        return new PageImpl<>(contents, pageable, total == null ? 0 : total);
     }
 
     public UserEvaluation findEvaluationByThemeId(Long themeId) {

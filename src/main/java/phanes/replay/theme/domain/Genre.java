@@ -18,6 +18,6 @@ public class Genre {
     private Long id;
     @ManyToOne
     private Theme theme;
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String name;
 }
