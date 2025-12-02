@@ -22,8 +22,9 @@ public class Gathering extends BaseTimeEntity {
     private Long id;
     @ManyToOne
     private Theme theme;
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String name;
+    @Column(nullable = false)
     private Integer capacity;
     private LocalDateTime date;
     private LocalDateTime registrationStart;

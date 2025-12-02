@@ -20,18 +20,19 @@ public class Theme {
     private Long id;
     @ManyToOne
     private Spot spot;
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     private String title;
     @Column(nullable = false)
     private Integer playtime;
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Level level;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String image;
     @Column(nullable = false)
     private Integer minPlayer;
     @Column(nullable = false)
     private Integer maxPlayer;
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String note;
 }

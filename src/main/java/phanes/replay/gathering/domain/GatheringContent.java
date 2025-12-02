@@ -19,8 +19,10 @@ public class GatheringContent {
     @ManyToOne
     private Gathering gathering;
     @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+    @Column(nullable = false)
     private Long price;
+    @Column(nullable = false)
     private Boolean isIndividual;
 }

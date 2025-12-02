@@ -22,7 +22,9 @@ public class AchievementProgress {
     private User user;
     @ManyToOne
     private Achievement achievement;
+    @Column(nullable = false)
     private Integer progress;
-    private LocalDateTime completedAt;
+    @Column(nullable = false)
     private Boolean isRepresentative;
+    private LocalDateTime completedAt;
 }

@@ -22,6 +22,7 @@ public class GatheringComment extends BaseTimeEntity {
     private Gathering gathering;
     @ManyToOne
     private User user;
+    @Column(nullable = false)
     private String content;
     private Long parentId;
 }
