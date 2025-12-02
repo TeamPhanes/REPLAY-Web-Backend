@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import phanes.replay.gathering.repository.GatheringRepository;
 import phanes.replay.review.domain.Review;
 import phanes.replay.review.domain.ReviewLike;
-import phanes.replay.review.dto.ReviewDetailDto;
+import phanes.replay.review.dto.ReviewDto;
 import phanes.replay.review.dto.response.ReviewCountSummary;
-import phanes.replay.review.dto.response.ReviewDetailRs;
 import phanes.replay.review.dto.response.ReviewRs;
+import phanes.replay.review.dto.response.ReviewSummary;
 import phanes.replay.review.dto.response.UserEvaluation;
 import phanes.replay.review.mapper.ReviewMapper;
 import phanes.replay.review.repository.ReviewImageJooqRepository;
@@ -35,16 +35,20 @@ public class ReviewService {
     private final GatheringRepository gatheringRepository;
     private final ReviewMapper reviewMapper;
 
-    public ReviewRs findAllByThemeId(Long userId, Pageable pageable, Long themeId) {
-        Page<ReviewDetailDto> reviewDetailList = reviewJooqRepository.findAllByThemeId(userId, pageable, themeId);
-        List<Long> reviewIdList = reviewDetailList.stream().map(ReviewDetailDto::getId).toList();
-        Map<Long, List<String>> reviewImageListMap = reviewImageJooqRepository.findAllByReviewIdList(reviewIdList);
-        List<ReviewDetailRs> contents = reviewDetailList.stream().map(r -> reviewMapper.toReviewDetailRs(r, reviewImageListMap.getOrDefault(r.getId(), Collections.emptyList()))).toList();
+    public ReviewSummary findSummaryByThemeId(Long themeId) {
         Double avgScore = reviewJooqRepository.aggregateByThemeId(themeId);
         Long createdGatheringCount = gatheringRepository.countByThemeId(themeId);
         UserEvaluation userEvaluation = reviewJooqRepository.findEvaluationByThemeId(themeId);
         ReviewCountSummary reviewCountSummary = reviewJooqRepository.findScoreCountByThemeId(themeId);
-        return reviewMapper.toReviewRs(avgScore, createdGatheringCount, reviewCountSummary, userEvaluation, new PageImpl<>(contents, pageable, reviewDetailList.getTotalElements()));
+        return reviewMapper.toReviewSummary(avgScore, createdGatheringCount, reviewCountSummary, userEvaluation);
+    }
+
+    public Page<ReviewRs> findAllByThemeId(Long userId, Pageable pageable, Long themeId) {
+        Page<ReviewDto> reviewDetailList = reviewJooqRepository.findAllByThemeId(userId, pageable, themeId);
+        List<Long> reviewIdList = reviewDetailList.stream().map(ReviewDto::getId).toList();
+        Map<Long, List<String>> reviewImageListMap = reviewImageJooqRepository.findAllByReviewIdList(reviewIdList);
+        List<ReviewRs> contents = reviewDetailList.stream().map(r -> reviewMapper.toReviewRs(r, reviewImageListMap.getOrDefault(r.getId(), Collections.emptyList()))).toList();
+        return new PageImpl<>(contents, pageable, reviewDetailList.getTotalElements());
     }
 
     public void saveReviewLike(Long userId, Long reviewId) {

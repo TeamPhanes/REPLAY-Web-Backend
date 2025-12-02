@@ -13,7 +13,6 @@ import phanes.replay.utils.JooqRepositoryUtils;
 import java.util.List;
 
 import static phanes.replay.Tables.GATHERING;
-import static phanes.replay.Tables.REVIEW_IMAGE;
 import static phanes.replay.tables.Cafe.CAFE;
 import static phanes.replay.tables.GatheringMember.GATHERING_MEMBER;
 import static phanes.replay.tables.Review.REVIEW;
@@ -34,7 +33,6 @@ public class UserJooqRepository {
                 .select(REVIEW.ID.as("reviewId"), REVIEW.SCORE, REVIEW.THEME_REVIEW, REVIEW.STORY_REVIEW, REVIEW.LEVEL_REVIEW, REVIEW.HINT, REVIEW.NUMBER_OF_PLAYER, REVIEW.IS_SUCCESS, REVIEW.CONTENT)
                 .from(THEME_VISIT)
                 .join(REVIEW).on(THEME_VISIT.USER_ID.eq(REVIEW.USER_ID))
-                .join(REVIEW_IMAGE).on(REVIEW.ID.eq(REVIEW_IMAGE.REVIEW_ID))
                 .join(THEME).on(THEME_VISIT.THEME_ID.eq(THEME.ID))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .join(CAFE).on(SPOT.CAFE_ID.eq(CAFE.ID))
