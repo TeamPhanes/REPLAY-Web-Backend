@@ -20,7 +20,7 @@ public interface UserMapper {
     @Mapping(source = "myCommentDto.createdAt", target = "createdAt")
     MyCommentRs toMyCommentRs(User user, MyCommentDto myCommentDto);
 
-    MyVisitThemeRs toMyVisitThemeRs(MyVisitThemeDto myVisitThemeDto, List<String> genres);
+    MyVisitThemeRs toMyVisitThemeRs(MyVisitThemeDto myVisitThemeDto, List<String> genres, List<String> reviewImages);
 
     MyParticipantGatheringRs toMyParticipantGatheringRs(MyParticipantGatheringDto myParticipantGatheringDto, List<String> genres, List<Participant> participants);
 }

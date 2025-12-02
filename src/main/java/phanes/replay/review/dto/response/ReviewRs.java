@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 @Getter
 @Builder
@@ -17,5 +16,5 @@ public class ReviewRs {
     private Long createdGatheringCount;
     private ReviewCountSummary reviewCountSummary;
     private UserEvaluation userEvaluation;
-    private List<ReviewDetailRs> contents;
+    private Page<ReviewDetailRs> contents;
 }

@@ -10,6 +10,7 @@ import phanes.replay.gathering.dto.MyCommentDto;
 import phanes.replay.gathering.dto.response.Participant;
 import phanes.replay.gathering.repository.GatheringCommentJooqRepository;
 import phanes.replay.gathering.repository.GatheringMemberJooqRepository;
+import phanes.replay.review.repository.ReviewImageJooqRepository;
 import phanes.replay.theme.repository.GenreJooqRepository;
 import phanes.replay.theme.repository.ThemeVisitJooqRepository;
 import phanes.replay.user.domain.User;
@@ -33,6 +34,7 @@ public class UserService {
     private final AchievementJooqRepository achievementJooqRepository;
     private final UserJooqRepository userJooqRepository;
     private final GenreJooqRepository genreJooqRepository;
+    private final ReviewImageJooqRepository reviewImageJooqRepository;
     private final UserMapper userMapper;
 
     public UserRs findByUserId(Long userId) {
@@ -60,8 +62,14 @@ public class UserService {
     public Page<MyVisitThemeRs> findVisitThemeById(Long userId, Pageable pageable) {
         Page<MyVisitThemeDto> visitThemeList = userJooqRepository.findVisitThemeById(userId, pageable);
         List<Long> themeIdList = visitThemeList.stream().map(MyVisitThemeDto::getId).toList();
+        List<Long> reviewIdList = visitThemeList.stream().map(MyVisitThemeDto::getReviewId).toList();
         Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
-        List<MyVisitThemeRs> contents = visitThemeList.stream().map(t -> userMapper.toMyVisitThemeRs(t, genreListMap.getOrDefault(t.getId(), Collections.emptyList()))).toList();
+        Map<Long, List<String>> reviewImageListMap = reviewImageJooqRepository.findAllByReviewIdList(reviewIdList);
+        List<MyVisitThemeRs> contents = visitThemeList.stream()
+                .map(t -> userMapper.toMyVisitThemeRs(t,
+                        genreListMap.getOrDefault(t.getId(), Collections.emptyList()),
+                        reviewImageListMap.getOrDefault(t.getReviewId(), Collections.emptyList())
+                )).toList();
         return new PageImpl<>(contents, pageable, visitThemeList.getTotalElements());
     }
 

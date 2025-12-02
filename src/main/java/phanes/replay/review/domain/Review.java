@@ -28,7 +28,6 @@ public class Review extends CreateTimeEntity {
     private Double score;
     @Column(length = 200)
     private String content;
-    private String image;
     @Column(nullable = false)
     private Boolean isSuccess;
     @Column(nullable = false)
