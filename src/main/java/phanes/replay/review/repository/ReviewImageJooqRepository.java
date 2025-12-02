@@ -19,6 +19,7 @@ public class ReviewImageJooqRepository {
         return dsl.select(REVIEW_IMAGE.REVIEW_ID, REVIEW_IMAGE.IMAGE)
                 .from(REVIEW_IMAGE)
                 .where(REVIEW_IMAGE.REVIEW_ID.in(reviewIdList))
+                .orderBy(REVIEW_IMAGE.IS_REPRESENTATIVE.desc())
                 .fetchGroups(REVIEW_IMAGE.REVIEW_ID, REVIEW_IMAGE.IMAGE);
     }
 }
