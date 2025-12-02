@@ -29,10 +29,10 @@ public class UserJooqRepository {
 
     public Page<MyVisitThemeDto> findVisitThemeById(Long userId, Pageable pageable) {
         List<MyVisitThemeDto> contents = dsl.select(CAFE.NAME.as("cafeName"), SPOT.NAME.as("spotName"))
-                .select(THEME.ID, THEME.TITLE, THEME.IMAGE, THEME_VISIT.CREATED_AT.as("visitDate"))
+                .select(THEME.ID, THEME.TITLE, THEME.IMAGE, THEME_VISIT.VISIT_DATE)
                 .select(REVIEW.ID.as("reviewId"), REVIEW.SCORE, REVIEW.THEME_REVIEW, REVIEW.STORY_REVIEW, REVIEW.LEVEL_REVIEW, REVIEW.HINT, REVIEW.NUMBER_OF_PLAYER, REVIEW.IS_SUCCESS, REVIEW.CONTENT)
                 .from(THEME_VISIT)
-                .join(REVIEW).on(THEME_VISIT.USER_ID.eq(REVIEW.USER_ID))
+                .leftJoin(REVIEW).on(THEME_VISIT.THEME_ID.eq(REVIEW.THEME_ID).and(THEME_VISIT.USER_ID.eq(REVIEW.USER_ID)))
                 .join(THEME).on(THEME_VISIT.THEME_ID.eq(THEME.ID))
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .join(CAFE).on(SPOT.CAFE_ID.eq(CAFE.ID))
