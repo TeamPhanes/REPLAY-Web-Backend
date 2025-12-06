@@ -48,7 +48,8 @@ dependencies {
     jooqGenerator 'org.jooq:jooq-meta:3.19.27'
     jooqGenerator 'org.mariadb.jdbc:mariadb-java-client'
 
-    implementation 'org.opensearch.client:spring-data-opensearch-starter:2.0.2'
+    implementation 'org.apache.httpcomponents.client5:httpclient5:5.5.1'
+    implementation 'org.opensearch.client:opensearch-java:3.3.0'
 
     runtimeOnly 'com.h2database:h2'
 

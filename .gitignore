@@ -15,3 +15,4 @@ out/
 !**/src/test/**/out/
 
 keystore.p12
+truststore.jks
