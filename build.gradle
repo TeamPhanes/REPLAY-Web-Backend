@@ -64,6 +64,9 @@ dependencies {
     // S3
     implementation 'software.amazon.awssdk:s3:2.36.2'
 
+    // image validation
+    implementation 'org.apache.tika:tika-core:3.2.3'
+
     // random nickname creator
     implementation 'com.aventrix.jnanoid:jnanoid:2.0.0'
 

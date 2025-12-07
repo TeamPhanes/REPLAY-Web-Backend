@@ -1,12 +1,12 @@
 package phanes.replay.gathering.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.gathering.domain.Gathering;
 import phanes.replay.gathering.domain.GatheringContent;
 import phanes.replay.gathering.domain.GatheringLike;
