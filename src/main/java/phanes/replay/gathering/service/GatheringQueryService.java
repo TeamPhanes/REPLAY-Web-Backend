@@ -15,7 +15,7 @@ public class GatheringQueryService {
         return  gatheringRepository.findById(gatheringId).orElseThrow();
     }
 
-    public void save(Gathering gathering) {
-        gatheringRepository.save(gathering);
+    public Gathering save(Gathering gathering) {
+        return gatheringRepository.save(gathering);
     }
 }

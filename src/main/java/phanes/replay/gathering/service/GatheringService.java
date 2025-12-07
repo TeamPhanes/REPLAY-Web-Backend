@@ -2,6 +2,7 @@ package phanes.replay.gathering.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.GatheringCommentDto;
 import phanes.replay.gathering.dto.GatheringDetailDto;
 import phanes.replay.gathering.dto.GatheringDto;
+import phanes.replay.gathering.dto.event.GatheringCreatedEvent;
 import phanes.replay.gathering.dto.request.GatheringRq;
 import phanes.replay.gathering.dto.response.GatheringCommentRs;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
@@ -26,6 +28,7 @@ import phanes.replay.gathering.repository.GatheringLikeJooqRepository;
 import phanes.replay.gathering.repository.GatheringMemberJooqRepository;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.repository.GenreJooqRepository;
+import phanes.replay.theme.repository.ThemeJooqRepository;
 import phanes.replay.theme.service.ThemeQueryService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
@@ -51,6 +54,8 @@ public class GatheringService {
     private final GatheringLikeJooqRepository gatheringLikeJooqRepository;
     private final GenreJooqRepository genreJooqRepository;
     private final GatheringMapper gatheringMapper;
+    private final ApplicationEventPublisher eventPublisher;
+    private final ThemeJooqRepository themeJooqRepository;
 
     public Page<GatheringRs> findAll(Long userId, Long themeId, Pageable pageable, List<String> locations, List<String> genres) {
         Page<GatheringDto> gatheringDtoList = gatheringJooqRepository.findAll(userId, themeId, pageable, locations, genres);
@@ -125,7 +130,7 @@ public class GatheringService {
                 .registrationStart(gatheringRq.getRegistrationStart())
                 .registrationEnd(gatheringRq.getRegistrationEnd())
                 .build();
-        gatheringQueryService.save(gathering);
+        Gathering savedGathering = gatheringQueryService.save(gathering);
         GatheringMember gatheringMember = GatheringMember.builder()
                 .user(user)
                 .gathering(gathering)
@@ -139,5 +144,21 @@ public class GatheringService {
                 .price(gatheringRq.getPrice())
                 .build();
         gatheringContentQueryService.save(gatheringContent);
+
+        List<String> genres = genreJooqRepository.findByThemeId(theme.getId());
+        String address = themeJooqRepository.findAddressById(theme.getId());
+        GatheringCreatedEvent event = GatheringCreatedEvent.builder()
+                .id(savedGathering.getId())
+                .name(savedGathering.getName())
+                .date(savedGathering.getDate())
+                .themeId(theme.getId())
+                .title(theme.getTitle())
+                .image(theme.getImage())
+                .playtime(theme.getPlaytime())
+                .level(theme.getLevel())
+                .genres(genres)
+                .address(address)
+                .build();
+        eventPublisher.publishEvent(event);
     }
 }
