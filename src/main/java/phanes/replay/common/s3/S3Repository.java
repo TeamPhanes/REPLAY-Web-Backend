@@ -1,7 +1,7 @@
-package phanes.replay.image.service;
+package phanes.replay.common.s3;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.config.properties.S3Properties;
 import phanes.replay.exception.UploadFailException;
@@ -12,9 +12,9 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 
-@Service
+@Repository
 @RequiredArgsConstructor
-public class S3Service {
+public class S3Repository {
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
