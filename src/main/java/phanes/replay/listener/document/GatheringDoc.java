@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.gathering.dto.event.GatheringCreatedEvent;
 import phanes.replay.theme.domain.enums.Level;
+import phanes.replay.utils.TimeUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -18,7 +18,7 @@ public class GatheringDoc {
 
     private Long id;
     private String name;
-    private LocalDateTime date;
+    private String date;
     private GatheringTheme theme;
     private GatheringSpot spot;
 
@@ -49,7 +49,7 @@ public class GatheringDoc {
         return GatheringDoc.builder()
                 .id(event.getId())
                 .name(event.getName())
-                .date(event.getDate())
+                .date(TimeUtils.toTimeStringWithKST(event.getDate()))
                 .theme(GatheringTheme.builder()
                         .id(event.getThemeId())
                         .title(event.getTitle())

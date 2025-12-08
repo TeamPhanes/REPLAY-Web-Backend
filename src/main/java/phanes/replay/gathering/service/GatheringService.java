@@ -52,10 +52,10 @@ public class GatheringService {
     private final GatheringMemberJooqRepository gatheringMemberJooqRepository;
     private final GatheringCommentJooqRepository gatheringCommentJooqRepository;
     private final GatheringLikeJooqRepository gatheringLikeJooqRepository;
+    private final ThemeJooqRepository themeJooqRepository;
     private final GenreJooqRepository genreJooqRepository;
     private final GatheringMapper gatheringMapper;
     private final ApplicationEventPublisher eventPublisher;
-    private final ThemeJooqRepository themeJooqRepository;
 
     public Page<GatheringRs> findAll(Long userId, Long themeId, Pageable pageable, List<String> locations, List<String> genres) {
         Page<GatheringDto> gatheringDtoList = gatheringJooqRepository.findAll(userId, themeId, pageable, locations, genres);
