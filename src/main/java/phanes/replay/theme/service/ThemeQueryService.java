@@ -11,7 +11,7 @@ public class ThemeQueryService {
 
     private final ThemeRepository themeRepository;
 
-    public Theme findById(Long themeId) {
-        return themeRepository.findById(themeId).orElseThrow();
+    public Theme findById(Long id) {
+        return themeRepository.findById(id).orElseThrow();
     }
 }

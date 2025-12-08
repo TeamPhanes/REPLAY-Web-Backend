@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import phanes.replay.gathering.dto.request.GatheringRq;
 import phanes.replay.gathering.dto.response.GatheringCommentRs;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
@@ -52,6 +53,11 @@ public class GatheringController {
     @PostMapping("/like/{gatheringId}")
     public void likeGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringService.saveGatheringLike(userId, gatheringId);
+    }
+
+    @PostMapping
+    public void saveGathering(@AuthenticationPrincipal Long userId, @RequestBody GatheringRq gatheringRq) {
+        gatheringService.saveGathering(userId, gatheringRq);
     }
 
     @DeleteMapping("/like/{gatheringId}")

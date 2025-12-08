@@ -141,4 +141,12 @@ public class ThemeJooqRepository {
                 .where(THEME.ID.eq(themeId))
                 .fetchOneInto(ThemeDetailDto.class);
     }
+
+    public String findAddressById(Long id) {
+        return dsl.select(SPOT.ADDRESS)
+                .from(THEME)
+                .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
+                .where(THEME.ID.eq(id))
+                .fetchOneInto(String.class);
+    }
 }

@@ -1,7 +1,10 @@
-package phanes.replay.image.service;
+package phanes.replay.common.s3;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.config.properties.S3Properties;
 import phanes.replay.exception.UploadFailException;
@@ -12,9 +15,10 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 
-@Service
+@Slf4j
+@Repository
 @RequiredArgsConstructor
-public class S3Service {
+public class S3Repository {
 
     private final S3Client s3Client;
     private final S3Properties s3Properties;
@@ -32,7 +36,25 @@ public class S3Service {
         } catch (IOException e) {
             throw new UploadFailException("image upload failed", e);
         }
+        addCallbackWhenRollback(key);
         return String.format("%s/%s/%s", s3Properties.getEndpoint(), s3Properties.getBucket(), key);
+    }
+
+    private void addCallbackWhenRollback(String key) {
+        if(TransactionSynchronizationManager.isSynchronizationActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCompletion(int status) {
+                    if(status == STATUS_ROLLED_BACK) {
+                        try {
+                            deleteImage(key);
+                        } catch (Exception e) {
+                            log.error("롤백 중 이미지 삭제 실패. key={}", key, e);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     public void deleteImage(String key) {

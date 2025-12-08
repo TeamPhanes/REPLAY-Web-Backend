@@ -4,11 +4,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import phanes.replay.annotation.ValidateFileExtension;
+import phanes.replay.annotation.ValidateFileSize;
+import phanes.replay.annotation.ValidateImageFile;
+import phanes.replay.review.dto.request.ReviewRq;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.dto.response.ReviewSummary;
 import phanes.replay.review.service.ReviewService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +34,14 @@ public class ReviewController {
     public Page<ReviewRs> getThemeReview(@AuthenticationPrincipal Long userId, @PageableDefault Pageable pageable, @PathVariable Long themeId) {
         userId = userId == null ? 0L : userId;
         return reviewService.findAllByThemeId(userId, pageable, themeId);
+    }
+
+    @PostMapping(value = "/{themeId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void saveReview(@AuthenticationPrincipal Long userId,
+                           @PathVariable Long themeId,
+                           @RequestPart(value = "review") ReviewRq reviewRq,
+                           @RequestPart(required = false) @ValidateImageFile @ValidateFileSize @ValidateFileExtension List<MultipartFile> images) {
+        reviewService.save(userId, themeId, reviewRq, images);
     }
 
     @PostMapping("/like/{reviewId}")

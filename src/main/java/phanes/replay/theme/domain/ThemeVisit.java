@@ -27,4 +27,8 @@ public class ThemeVisit {
     @ManyToOne
     private User user;
     private LocalDateTime visitDate;
+
+    public void updateVisitDate(LocalDateTime visitDate) {
+        this.visitDate = visitDate;
+    }
 }

@@ -7,10 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import phanes.replay.common.dto.response.Cursor;
+import phanes.replay.common.dto.response.SearchPage;
 import phanes.replay.theme.dto.response.ThemeDetailRs;
 import phanes.replay.theme.dto.response.ThemePreviewRs;
 import phanes.replay.theme.dto.response.ThemeRs;
+import phanes.replay.theme.dto.response.ThemeSearchRs;
 import phanes.replay.theme.service.ThemeService;
+import phanes.replay.utils.CursorUtils;
 
 import java.util.List;
 
@@ -30,6 +34,15 @@ public class ThemeController {
     public Page<ThemeRs> getThemeList(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres) {
         userId = userId == null ? 0L : userId;
         return themeService.findAll(userId, pageable, locations, genres);
+    }
+
+    @GetMapping("/search")
+    public SearchPage<ThemeSearchRs> getThemeSearchList(@RequestParam Integer size, @RequestParam String keyword, @RequestParam(required = false) String cursor) {
+        Cursor decoded = null;
+        if (cursor != null) {
+            decoded = CursorUtils.decode(cursor);
+        }
+        return themeService.findAllSearchByKeyword(size, keyword, decoded);
     }
 
     @GetMapping("/{themeId}")

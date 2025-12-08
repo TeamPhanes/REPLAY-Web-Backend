@@ -14,4 +14,8 @@ public class GatheringQueryService {
     public Gathering findById(Long gatheringId) {
         return  gatheringRepository.findById(gatheringId).orElseThrow();
     }
+
+    public Gathering save(Gathering gathering) {
+        return gatheringRepository.save(gathering);
+    }
 }
