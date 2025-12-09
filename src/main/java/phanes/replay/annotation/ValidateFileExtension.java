@@ -1,6 +1,7 @@
 package phanes.replay.annotation;
 
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import phanes.replay.annotation.impl.FileExtensionValidator;
 
 import java.lang.annotation.*;
@@ -16,4 +17,8 @@ public @interface ValidateFileExtension {
     String[] allowedExtensions() default {
             "jpg", "jpeg", "png", "gif", "webp"
     };
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

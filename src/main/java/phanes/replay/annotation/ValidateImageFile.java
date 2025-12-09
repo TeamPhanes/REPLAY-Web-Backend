@@ -1,6 +1,7 @@
 package phanes.replay.annotation;
 
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import phanes.replay.annotation.impl.ImageMimeTypeValidator;
 
 import java.lang.annotation.ElementType;
@@ -22,4 +23,8 @@ public @interface ValidateImageFile {
             "image/gif",
             "image/webp"
     };
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

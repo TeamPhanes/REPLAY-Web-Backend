@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.sql.SQLSyntaxErrorException;
 
@@ -16,5 +17,16 @@ public class GlobalAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public void handleUnExpectedError(SQLSyntaxErrorException ex) {
         log.error("Unexpected error", ex);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void handle(HandlerMethodValidationException ex) {
+        ex.getParameterValidationResults().forEach(result -> {
+            log.error("Validation target: {}", result.getMethodParameter());
+            result.getResolvableErrors().forEach(error -> {
+                log.error("  - error: {}", error.getDefaultMessage());
+            });
+        });
     }
 }

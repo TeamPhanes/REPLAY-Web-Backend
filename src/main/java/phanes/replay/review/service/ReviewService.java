@@ -85,19 +85,21 @@ public class ReviewService {
         themeVisit.updateVisitDate(reviewRq.getDate());
         themeVisitQueryService.save(themeVisit);
 
-        List<ReviewImage> savedImages = new ArrayList<>();
-        for (int i = 0; i < images.size(); i++) {
-            MultipartFile image = images.get(i);
-            String extension = FileUtils.getExtension(Objects.requireNonNull(image.getOriginalFilename())).toLowerCase(Locale.KOREA);
-            String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);
-            savedImages.add(ReviewImage.builder()
-                    .user(user)
-                    .review(savedReview)
-                    .image(uploadImage)
-                    .isRepresentative(reviewRq.getRepresentativeImageCount() == i)
-                    .build());
+        if (images != null) {
+            List<ReviewImage> savedImages = new ArrayList<>();
+            for (int i = 0; i < images.size(); i++) {
+                MultipartFile image = images.get(i);
+                String extension = FileUtils.getExtension(image.getOriginalFilename());
+                String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);
+                savedImages.add(ReviewImage.builder()
+                        .user(user)
+                        .review(savedReview)
+                        .image(uploadImage)
+                        .isRepresentative(i == 0)
+                        .build());
+            }
+            reviewImageQueryService.saveAll(savedImages);
         }
-        reviewImageQueryService.saveAll(savedImages);
     }
 
     public void saveReviewLike(Long userId, Long reviewId) {
