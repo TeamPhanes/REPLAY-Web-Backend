@@ -1,6 +1,7 @@
 package phanes.replay.annotation;
 
 import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import phanes.replay.annotation.impl.FileSizeValidator;
 
 import java.lang.annotation.*;
@@ -16,4 +17,8 @@ public @interface ValidateFileSize {
     long min() default 0;
 
     long max() default 10 * 1024 * 1024;
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

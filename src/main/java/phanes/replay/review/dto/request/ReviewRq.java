@@ -22,6 +22,5 @@ public class ReviewRq {
     private Integer numberOfPlayer;
     private Integer hint;
     private String content;
-    private Integer representativeImageCount;
     private LocalDateTime date;
 }

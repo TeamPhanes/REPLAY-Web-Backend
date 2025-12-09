@@ -5,6 +5,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.annotation.ValidateFileExtension;
+import phanes.replay.utils.FileUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,8 +32,7 @@ public class FileExtensionValidator implements ConstraintValidator<ValidateFileE
             if (name == null || !name.contains(".")) {
                 return false;
             }
-
-            String extension = name.substring(name.lastIndexOf(".")).toLowerCase();
+            String extension = FileUtils.getExtension(name);
             if (!allowed.contains(extension)) {
                 return false;
             }
