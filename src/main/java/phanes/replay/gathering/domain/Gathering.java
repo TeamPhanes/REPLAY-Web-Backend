@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.common.domain.BaseTimeEntity;
+import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 import phanes.replay.theme.domain.Theme;
 
 import java.time.LocalDateTime;
@@ -29,4 +30,12 @@ public class Gathering extends BaseTimeEntity {
     private LocalDateTime date;
     private LocalDateTime registrationStart;
     private LocalDateTime registrationEnd;
+
+    public void update(GatheringUpdateRq gatheringUpdateRq) {
+        this.name = gatheringUpdateRq.getName();
+        this.capacity = gatheringUpdateRq.getCapacity();
+        this.date = gatheringUpdateRq.getDate();
+        this.registrationStart = gatheringUpdateRq.getRegistrationStart();
+        this.registrationEnd = gatheringUpdateRq.getRegistrationEnd();
+    }
 }

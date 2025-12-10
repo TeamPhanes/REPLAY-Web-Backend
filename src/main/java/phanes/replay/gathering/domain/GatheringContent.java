@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 
 @Entity
 @Getter
@@ -25,4 +26,10 @@ public class GatheringContent {
     private Long price;
     @Column(nullable = false)
     private Boolean isIndividual;
+
+    public void update(GatheringUpdateRq gatheringUpdateRq) {
+        this.content = gatheringUpdateRq.getContent();
+        this.price = gatheringUpdateRq.getPrice();
+        this.isIndividual = gatheringUpdateRq.getIsIndividual();
+    }
 }

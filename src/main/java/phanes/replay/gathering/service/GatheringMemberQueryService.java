@@ -14,4 +14,8 @@ public class GatheringMemberQueryService {
     public void save(GatheringMember gatheringMember) {
         gatheringMemberRepository.save(gatheringMember);
     }
+
+    public GatheringMember findByUserId(Long userId, Long gatheringId) {
+        return gatheringMemberRepository.findByUserIdAndGatheringId(userId, gatheringId).orElseThrow();
+    }
 }
