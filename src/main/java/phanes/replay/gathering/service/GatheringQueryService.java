@@ -18,4 +18,8 @@ public class GatheringQueryService {
     public Gathering save(Gathering gathering) {
         return gatheringRepository.save(gathering);
     }
+
+    public void delete(Gathering gathering) {
+        gatheringRepository.delete(gathering);
+    }
 }
