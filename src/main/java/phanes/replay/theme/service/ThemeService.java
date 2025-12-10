@@ -45,7 +45,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ThemeService {
 
-    private final UserQueryService  userQueryService;
+    private final UserQueryService userQueryService;
     private final ThemeQueryService themeQueryService;
     private final ThemeLikeQueryService themeLikeQueryService;
     private final ThemeVisitQueryService themeVisitQueryService;
@@ -134,11 +134,13 @@ public class ThemeService {
     public void deleteThemeVisit(Long userId, Long themeId) {
         ThemeVisit themeVisit = themeVisitQueryService.findByUserIdAndThemeId(userId, themeId);
         Review review = reviewQueryService.findByThemeVisitId(themeVisit.getId());
-        List<ReviewImage> reviewImageList = reviewImageQueryService.findAllByReviewId(review.getId());
-        List<ReviewLike> reviewLikeList = reviewLikeQueryService.findAllByReviewId(review.getId());
-        reviewLikeQueryService.deleteAll(reviewLikeList);
-        reviewImageQueryService.deleteAll(reviewImageList);
-        reviewQueryService.delete(review);
+        if (review != null) {
+            List<ReviewImage> reviewImageList = reviewImageQueryService.findAllByReviewId(review.getId());
+            List<ReviewLike> reviewLikeList = reviewLikeQueryService.findAllByReviewId(review.getId());
+            reviewLikeQueryService.deleteAll(reviewLikeList);
+            reviewImageQueryService.deleteAll(reviewImageList);
+            reviewQueryService.delete(review);
+        }
         themeVisitQueryService.delete(themeVisit);
     }
 
