@@ -7,12 +7,19 @@ import org.opensearch.client.opensearch.core.search.Hit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import phanes.replay.common.dto.response.Cursor;
 import phanes.replay.common.dto.response.SearchPage;
 import phanes.replay.common.dto.response.ThemeSearchDoc;
 import phanes.replay.common.opensearch.OpenSearchRepository;
+import phanes.replay.review.domain.Review;
+import phanes.replay.review.domain.ReviewImage;
+import phanes.replay.review.domain.ReviewLike;
 import phanes.replay.review.repository.ReviewJooqRepository;
+import phanes.replay.review.service.ReviewImageQueryService;
+import phanes.replay.review.service.ReviewLikeQueryService;
+import phanes.replay.review.service.ReviewQueryService;
 import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.domain.ThemeLike;
 import phanes.replay.theme.domain.ThemeVisit;
@@ -48,6 +55,9 @@ public class ThemeService {
     private final GenreJooqRepository genreJooqRepository;
     private final OpenSearchRepository openSearchRepository;
     private final ThemeMapper themeMapper;
+    private final ReviewQueryService reviewQueryService;
+    private final ReviewImageQueryService reviewImageQueryService;
+    private final ReviewLikeQueryService reviewLikeQueryService;
 
     public Page<ThemePreviewRs> findAllPreview(Pageable pageable, String genre) {
         Page<ThemePreviewDto> themePreviewList = themeJooqRepository.findAllPreview(pageable, genre);
@@ -120,8 +130,15 @@ public class ThemeService {
         themeLikeQueryService.delete(themeLike);
     }
 
+    @Transactional
     public void deleteThemeVisit(Long userId, Long themeId) {
         ThemeVisit themeVisit = themeVisitQueryService.findByUserIdAndThemeId(userId, themeId);
+        Review review = reviewQueryService.findByThemeVisitId(themeVisit.getId());
+        List<ReviewImage> reviewImageList = reviewImageQueryService.findAllByReviewId(review.getId());
+        List<ReviewLike> reviewLikeList = reviewLikeQueryService.findAllByReviewId(review.getId());
+        reviewLikeQueryService.deleteAll(reviewLikeList);
+        reviewImageQueryService.deleteAll(reviewImageList);
+        reviewQueryService.delete(review);
         themeVisitQueryService.delete(themeVisit);
     }
 
