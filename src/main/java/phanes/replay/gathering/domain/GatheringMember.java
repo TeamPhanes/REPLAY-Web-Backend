@@ -18,9 +18,9 @@ public class GatheringMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Gathering gathering;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

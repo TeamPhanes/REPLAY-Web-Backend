@@ -20,9 +20,9 @@ public class Review extends CreateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private ThemeVisit themeVisit;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
     @Column(nullable = false)
     private Double score;
