@@ -20,7 +20,7 @@ public class Gathering extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Theme theme;
     @Column(length = 20, nullable = false)
     private String name;

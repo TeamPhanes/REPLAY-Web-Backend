@@ -15,7 +15,15 @@ public class ReviewQueryService {
         return reviewRepository.findById(reviewId).orElseThrow();
     }
 
+    public Review findByThemeVisitId(Long themeVisitId) {
+        return reviewRepository.findByThemeVisitId(themeVisitId).orElseThrow();
+    }
+
     public Review save(Review review) {
         return reviewRepository.save(review);
+    }
+
+    public void delete(Review review) {
+        reviewRepository.delete(review);
     }
 }

@@ -19,7 +19,7 @@ public class Spot {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Cafe cafe;
     @Column(length = 20, nullable = false)
     private String name;

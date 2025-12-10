@@ -18,7 +18,7 @@ public class Theme {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Spot spot;
     @Column(length = 20, nullable = false)
     private String title;

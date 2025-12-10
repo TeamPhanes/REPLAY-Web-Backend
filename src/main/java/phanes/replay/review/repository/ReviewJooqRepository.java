@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static phanes.replay.tables.Review.REVIEW;
 import static phanes.replay.tables.ReviewLike.REVIEW_LIKE;
+import static phanes.replay.tables.ThemeVisit.THEME_VISIT;
 import static phanes.replay.tables.Users.USERS;
 
 @Repository
@@ -31,30 +32,33 @@ public class ReviewJooqRepository {
 
     public Map<Long, Long> countAllByThemeIdList(List<Long> themeIdList) {
         Field<Long> reviewCount = DSL.count().cast(Long.class).as("reviewCount");
-        return dsl.select(REVIEW.THEME_ID, reviewCount)
+        return dsl.select(THEME_VISIT.THEME_ID, reviewCount)
                 .from(REVIEW)
-                .where(REVIEW.THEME_ID.in(themeIdList))
-                .groupBy(REVIEW.THEME_ID)
-                .fetchMap(REVIEW.THEME_ID, reviewCount);
+                .join(THEME_VISIT).on(REVIEW.THEME_VISIT_ID.eq(THEME_VISIT.ID))
+                .where(THEME_VISIT.THEME_ID.in(themeIdList))
+                .groupBy(THEME_VISIT.THEME_ID)
+                .fetchMap(THEME_VISIT.THEME_ID, reviewCount);
     }
 
     public Double aggregateByThemeId(Long themeId) {
         return Optional.ofNullable(
-                dsl.select(REVIEW.THEME_ID, DSL.avg(REVIEW.SCORE).as("avgScore"))
+                dsl.select(THEME_VISIT.THEME_ID, DSL.avg(REVIEW.SCORE).as("avgScore"))
                         .from(REVIEW)
-                        .where(REVIEW.THEME_ID.eq(themeId))
-                        .groupBy(REVIEW.THEME_ID)
+                        .join(THEME_VISIT).on(REVIEW.THEME_VISIT_ID.eq(THEME_VISIT.ID))
+                        .where(THEME_VISIT.THEME_ID.eq(themeId))
+                        .groupBy(THEME_VISIT.THEME_ID)
                         .fetchOne("avgScore", Double.class)
         ).orElse(0.0);
     }
 
     public Map<Long, Double> aggregateAllByThemeIdList(List<Long> themeIdList) {
         Field<Double> avgScore = DSL.avg(REVIEW.SCORE).cast(Double.class).as("avgScore");
-        return dsl.select(REVIEW.THEME_ID, avgScore)
+        return dsl.select(THEME_VISIT.THEME_ID, avgScore)
                 .from(REVIEW)
-                .where(REVIEW.THEME_ID.in(themeIdList))
-                .groupBy(REVIEW.THEME_ID)
-                .fetchMap(REVIEW.THEME_ID, avgScore);
+                .join(THEME_VISIT).on(REVIEW.THEME_VISIT_ID.eq(THEME_VISIT.ID))
+                .where(THEME_VISIT.THEME_ID.in(themeIdList))
+                .groupBy(THEME_VISIT.THEME_ID)
+                .fetchMap(THEME_VISIT.THEME_ID, avgScore);
     }
 
     public Page<ReviewDto> findAllByThemeId(Long userId, Pageable pageable, Long themeId) {
@@ -73,13 +77,15 @@ public class ReviewJooqRepository {
                 .select(likeCount, isLiked)
                 .from(REVIEW)
                 .join(USERS).on(USERS.ID.eq(REVIEW.USER_ID))
-                .where(REVIEW.THEME_ID.eq(themeId))
+                .join(THEME_VISIT).on(REVIEW.THEME_VISIT_ID.eq(THEME_VISIT.ID))
+                .where(THEME_VISIT.THEME_ID.eq(themeId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchInto(ReviewDto.class);
         Long total = dsl.selectCount()
                 .from(REVIEW)
-                .where(REVIEW.THEME_ID.eq(themeId))
+                .join(THEME_VISIT).on(REVIEW.THEME_VISIT_ID.eq(THEME_VISIT.ID))
+                .where(THEME_VISIT.THEME_ID.eq(themeId))
                 .fetchOneInto(Long.class);
         return new PageImpl<>(contents, pageable, total == null ? 0 : total);
     }
@@ -96,7 +102,8 @@ public class ReviewJooqRepository {
         Result<Record2<String, Integer>> rows = dsl
                 .select(evalField.as("eval"), DSL.count().as("count"))
                 .from(REVIEW)
-                .where(REVIEW.THEME_ID.eq(themeId))
+                .join(THEME_VISIT).on(REVIEW.THEME_VISIT_ID.eq(THEME_VISIT.ID))
+                .where(THEME_VISIT.THEME_ID.eq(themeId))
                 .groupBy(evalField)
                 .fetch();
         if (rows.isEmpty()) {
@@ -134,7 +141,8 @@ public class ReviewJooqRepository {
                         DSL.count().as("cnt")
                 )
                 .from(REVIEW)
-                .where(REVIEW.THEME_ID.eq(themeId))
+                .join(THEME_VISIT).on(REVIEW.THEME_VISIT_ID.eq(THEME_VISIT.ID))
+                .where(THEME_VISIT.THEME_ID.eq(themeId))
                 .groupBy(DSL.round(REVIEW.SCORE))
                 .asTable("r");
         Field<Integer> S_SCORE = SCORES.field("score", Integer.class);
@@ -156,7 +164,8 @@ public class ReviewJooqRepository {
                 .toList();
         Long total = dsl.selectCount()
                 .from(REVIEW)
-                .where(REVIEW.THEME_ID.eq(themeId))
+                .join(THEME_VISIT).on(REVIEW.THEME_VISIT_ID.eq(THEME_VISIT.ID))
+                .where(THEME_VISIT.THEME_ID.eq(themeId))
                 .fetchOneInto(Long.class);
         return ReviewCountSummary.builder()
                 .total(total)

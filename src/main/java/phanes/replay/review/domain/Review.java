@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.common.domain.CreateTimeEntity;
 import phanes.replay.review.domain.enums.Eval;
-import phanes.replay.theme.domain.Theme;
+import phanes.replay.theme.domain.ThemeVisit;
 import phanes.replay.user.domain.User;
 
 @Entity
@@ -20,9 +20,9 @@ public class Review extends CreateTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private Theme theme;
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    private ThemeVisit themeVisit;
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
     @Column(nullable = false)
     private Double score;

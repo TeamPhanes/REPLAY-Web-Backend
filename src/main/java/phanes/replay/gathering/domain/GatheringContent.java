@@ -16,7 +16,7 @@ public class GatheringContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Gathering gathering;
     @Lob
     @Column(columnDefinition = "TEXT", nullable = false)

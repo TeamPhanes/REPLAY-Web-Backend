@@ -16,7 +16,7 @@ public class ThemeContent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Theme theme;
     @Lob
     @Column(columnDefinition = "TEXT", nullable = false)

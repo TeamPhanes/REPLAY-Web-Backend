@@ -19,8 +19,7 @@ public class ThemeVisitJooqRepository {
     public List<Boolean> findVisitByUserId(Long userId) {
         return dsl.select(DSL.coalesce(REVIEW.IS_SUCCESS, DSL.inline(false)))
                 .from(THEME_VISIT)
-                .leftJoin(REVIEW).on(THEME_VISIT.USER_ID.eq(REVIEW.USER_ID)
-                        .and(THEME_VISIT.THEME_ID.eq(REVIEW.THEME_ID)))
+                .leftJoin(REVIEW).on(THEME_VISIT.ID.eq(REVIEW.THEME_VISIT_ID))
                 .where(THEME_VISIT.USER_ID.eq(userId))
                 .fetchInto(Boolean.class);
     }

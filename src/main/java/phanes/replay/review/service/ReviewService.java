@@ -21,9 +21,7 @@ import phanes.replay.review.dto.response.UserEvaluation;
 import phanes.replay.review.mapper.ReviewMapper;
 import phanes.replay.review.repository.ReviewImageJooqRepository;
 import phanes.replay.review.repository.ReviewJooqRepository;
-import phanes.replay.theme.domain.Theme;
 import phanes.replay.theme.domain.ThemeVisit;
-import phanes.replay.theme.service.ThemeQueryService;
 import phanes.replay.theme.service.ThemeVisitQueryService;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
@@ -39,7 +37,6 @@ public class ReviewService {
     private final ReviewQueryService reviewQueryService;
     private final ReviewLikeQueryService reviewLikeQueryService;
     private final ReviewImageQueryService reviewImageQueryService;
-    private final ThemeQueryService themeQueryService;
     private final ThemeVisitQueryService themeVisitQueryService;
     private final ReviewJooqRepository reviewJooqRepository;
     private final ReviewImageJooqRepository reviewImageJooqRepository;
@@ -66,10 +63,10 @@ public class ReviewService {
     @Transactional
     public void save(Long userId, Long themeId, ReviewRq reviewRq, List<MultipartFile> images) {
         User user = userQueryService.findById(userId);
-        Theme theme = themeQueryService.findById(themeId);
+        ThemeVisit themeVisit = themeVisitQueryService.findByUserIdAndThemeId(user.getId(), themeId);
         Review review = Review.builder()
                 .user(user)
-                .theme(theme)
+                .themeVisit(themeVisit)
                 .score(reviewRq.getScore())
                 .themeReview(reviewRq.getThemeReview())
                 .levelReview(reviewRq.getLevelReview())
@@ -81,7 +78,6 @@ public class ReviewService {
                 .build();
         Review savedReview = reviewQueryService.save(review);
 
-        ThemeVisit themeVisit = themeVisitQueryService.findByUserIdAndThemeId(userId, themeId);
         themeVisit.updateVisitDate(reviewRq.getDate());
         themeVisitQueryService.save(themeVisit);
 
@@ -92,7 +88,6 @@ public class ReviewService {
                 String extension = FileUtils.getExtension(image.getOriginalFilename());
                 String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);
                 savedImages.add(ReviewImage.builder()
-                        .user(user)
                         .review(savedReview)
                         .image(uploadImage)
                         .isRepresentative(i == 0)
