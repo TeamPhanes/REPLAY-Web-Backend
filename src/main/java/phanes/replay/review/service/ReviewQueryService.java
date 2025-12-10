@@ -16,7 +16,7 @@ public class ReviewQueryService {
     }
 
     public Review findByThemeVisitId(Long themeVisitId) {
-        return reviewRepository.findByThemeVisitId(themeVisitId).orElseThrow();
+        return reviewRepository.findByThemeVisitId(themeVisitId).orElse(null);
     }
 
     public Review save(Review review) {
