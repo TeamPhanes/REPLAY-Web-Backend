@@ -66,6 +66,11 @@ public class GatheringController {
         gatheringService.updateGathering(userId, gatheringId, gatheringUpdateRq);
     }
 
+    @DeleteMapping("/{gatheringId}")
+    public void deleteGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
+        gatheringService.deleteGathering(userId, gatheringId);
+    }
+
     @DeleteMapping("/like/{gatheringId}")
     public void unLikeGathering(@AuthenticationPrincipal Long userId, @PathVariable Long gatheringId) {
         gatheringService.deleteGatheringLike(userId, gatheringId);

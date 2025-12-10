@@ -18,4 +18,8 @@ public class GatheringContentQueryService {
     public GatheringContent findByGatheringId(Long gatheringId) {
         return gatheringContentRepository.findByGatheringId(gatheringId).orElseThrow();
     }
+
+    public void delete(GatheringContent gatheringContent) {
+        gatheringContentRepository.delete(gatheringContent);
+    }
 }

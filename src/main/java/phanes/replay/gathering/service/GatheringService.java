@@ -7,10 +7,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import phanes.replay.gathering.domain.Gathering;
-import phanes.replay.gathering.domain.GatheringContent;
-import phanes.replay.gathering.domain.GatheringLike;
-import phanes.replay.gathering.domain.GatheringMember;
+import phanes.replay.gathering.domain.*;
 import phanes.replay.gathering.domain.enums.Role;
 import phanes.replay.gathering.dto.GatheringCommentDto;
 import phanes.replay.gathering.dto.GatheringDetailDto;
@@ -38,6 +35,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +48,7 @@ public class GatheringService {
     private final GatheringMemberQueryService gatheringMemberQueryService;
     private final GatheringContentQueryService gatheringContentQueryService;
     private final GatheringLikeQueryService gatheringLikeQueryService;
+    private final GatheringCommentQueryService gatheringCommentQueryService;
     private final GatheringJooqRepository gatheringJooqRepository;
     private final GatheringMemberJooqRepository gatheringMemberJooqRepository;
     private final GatheringCommentJooqRepository gatheringCommentJooqRepository;
@@ -188,5 +187,32 @@ public class GatheringService {
 
         GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gathering.getId());
         gatheringContent.update(gatheringUpdateRq);
+    }
+
+    @Transactional
+    public void deleteGathering(Long userId, Long gatheringId) {
+        Gathering gathering = gatheringQueryService.findById(gatheringId);
+        List<GatheringMember> gatheringMemberList = gatheringMemberQueryService.findAllByGatheringId(gathering.getId());
+        if(!isHost(userId, gatheringMemberList)) {
+            throw new IllegalArgumentException("모임 삭제는 Host만 가능합니다.");
+        }
+        GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gathering.getId());
+        List<GatheringLike> gatheringLikeList = gatheringLikeQueryService.findAllByGatheringId(gathering.getId());
+        List<GatheringComment> gatheringCommentList = gatheringCommentQueryService.findAllByGatheringId(gathering.getId());
+
+        gatheringCommentQueryService.deleteAll(gatheringCommentList);
+        gatheringLikeQueryService.deleteAll(gatheringLikeList);
+        gatheringMemberQueryService.deleteAll(gatheringMemberList);
+        gatheringContentQueryService.delete(gatheringContent);
+        gatheringQueryService.delete(gathering);
+    }
+
+    private Boolean isHost(Long userId, List<GatheringMember> gatheringMemberList) {
+        for (GatheringMember gm : gatheringMemberList) {
+            if (Objects.equals(gm.getUser().getId(), userId) && gm.getRole().equals(Role.HOST)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
