@@ -17,6 +17,7 @@ import phanes.replay.gathering.dto.GatheringDetailDto;
 import phanes.replay.gathering.dto.GatheringDto;
 import phanes.replay.gathering.dto.event.GatheringCreatedEvent;
 import phanes.replay.gathering.dto.request.GatheringRq;
+import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 import phanes.replay.gathering.dto.response.GatheringCommentRs;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
@@ -42,6 +43,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GatheringService {
 
+    public static final int MAX_CAPACITY = 6;
     private final UserQueryService userQueryService;
     private final ThemeQueryService themeQueryService;
     private final GatheringQueryService gatheringQueryService;
@@ -160,5 +162,31 @@ public class GatheringService {
                 .address(address)
                 .build();
         eventPublisher.publishEvent(event);
+    }
+
+    @Transactional
+    public void updateGathering(Long userId, Long gatheringId, GatheringUpdateRq gatheringUpdateRq) {
+        Gathering gathering = gatheringQueryService.findById(gatheringId);
+        GatheringMember member = gatheringMemberQueryService.findByUserId(userId, gatheringId);
+        if (!member.getRole().equals(Role.HOST)) {
+            throw new RuntimeException("모임은 Host만 수정할 수 있습니다.");
+        }
+        if (gatheringUpdateRq.getDate().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("날짜는 현재 시간보다 이전일 수 없습니다.");
+        }
+        if (gatheringUpdateRq.getRegistrationEnd().isAfter(gatheringUpdateRq.getDate())) {
+            throw new IllegalArgumentException("모집 마감일은 모집일보다 이후일 수 없습니다.");
+        }
+        if (gatheringUpdateRq.getRegistrationStart().isAfter(gatheringUpdateRq.getRegistrationEnd())) {
+            throw new IllegalArgumentException("모집 시작일은 모집 마감일보다 이후일 수 없습니다.");
+        }
+        if (gatheringUpdateRq.getCapacity() > MAX_CAPACITY) {
+            throw new IllegalArgumentException(String.format("모임 인원은 %d명을 초과할 수 없습니다.", MAX_CAPACITY));
+        }
+        gathering.update(gatheringUpdateRq);
+        gatheringQueryService.save(gathering);
+
+        GatheringContent gatheringContent = gatheringContentQueryService.findByGatheringId(gathering.getId());
+        gatheringContent.update(gatheringUpdateRq);
     }
 }
