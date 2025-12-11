@@ -37,7 +37,7 @@ public class S3Repository {
             throw new UploadFailException("image upload failed", e);
         }
         addCallbackWhenRollback(key);
-        return String.format("%s/%s/%s", s3Properties.getEndpoint(), s3Properties.getBucket(), key);
+        return String.format("%s/%s/%s", s3Properties.getUrl(), s3Properties.getBucket(), key);
     }
 
     private void addCallbackWhenRollback(String key) {
