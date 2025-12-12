@@ -24,4 +24,6 @@ public interface UserMapper {
     MyVisitThemeRs toMyVisitThemeRs(MyVisitThemeDto myVisitThemeDto, List<String> genres, List<ReviewImageDto> reviewImages);
 
     MyParticipantGatheringRs toMyParticipantGatheringRs(MyParticipantGatheringDto myParticipantGatheringDto, List<String> genres, List<Participant> participants);
+
+    MyScheduleRs toMyScheduleRs(MyScheduleDto myScheduleDto, List<String> genres);
 }

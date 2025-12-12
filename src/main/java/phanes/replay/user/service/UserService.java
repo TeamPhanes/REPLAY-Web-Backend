@@ -20,6 +20,7 @@ import phanes.replay.user.mapper.UserMapper;
 import phanes.replay.user.repository.AchievementJooqRepository;
 import phanes.replay.user.repository.UserJooqRepository;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -89,5 +90,12 @@ public class UserService {
                         )
                 ).toList();
         return new PageImpl<>(contents, pageable, participantGatheringList.getTotalElements());
+    }
+
+    public List<MyScheduleRs> findScheduleById(Long userId, String view, LocalDateTime date) {
+        List<MyScheduleDto> scheduleList = userJooqRepository.findScheduleById(userId, view, date);
+        List<Long> themeIdList = scheduleList.stream().map(MyScheduleDto::getThemeId).toList();
+        Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
+        return scheduleList.stream().map(s -> userMapper.toMyScheduleRs(s, genreListMap.getOrDefault(s.getThemeId(), Collections.emptyList()))).toList();
     }
 }
