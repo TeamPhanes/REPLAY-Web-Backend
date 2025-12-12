@@ -13,6 +13,7 @@ import phanes.replay.review.domain.Review;
 import phanes.replay.review.domain.ReviewImage;
 import phanes.replay.review.domain.ReviewLike;
 import phanes.replay.review.dto.ReviewDto;
+import phanes.replay.review.dto.ReviewImageDto;
 import phanes.replay.review.dto.request.ReviewRq;
 import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.review.dto.response.ReviewCountSummary;
@@ -56,7 +57,7 @@ public class ReviewService {
     public Page<ReviewRs> findAllByThemeId(Long userId, Pageable pageable, Long themeId) {
         Page<ReviewDto> reviewDetailList = reviewJooqRepository.findAllByThemeId(userId, pageable, themeId);
         List<Long> reviewIdList = reviewDetailList.stream().map(ReviewDto::getId).toList();
-        Map<Long, List<String>> reviewImageListMap = reviewImageJooqRepository.findAllByReviewIdList(reviewIdList);
+        Map<Long, List<ReviewImageDto>> reviewImageListMap = reviewImageJooqRepository.findAllByReviewIdList(reviewIdList);
         List<ReviewRs> contents = reviewDetailList.stream().map(r -> reviewMapper.toReviewRs(r, reviewImageListMap.getOrDefault(r.getId(), Collections.emptyList()))).toList();
         return new PageImpl<>(contents, pageable, reviewDetailList.getTotalElements());
     }

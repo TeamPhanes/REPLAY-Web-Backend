@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import phanes.replay.gathering.dto.MyCommentDto;
 import phanes.replay.gathering.dto.response.Participant;
+import phanes.replay.review.dto.ReviewImageDto;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.dto.user.*;
 
@@ -20,7 +21,7 @@ public interface UserMapper {
     @Mapping(source = "myCommentDto.createdAt", target = "createdAt")
     MyCommentRs toMyCommentRs(User user, MyCommentDto myCommentDto);
 
-    MyVisitThemeRs toMyVisitThemeRs(MyVisitThemeDto myVisitThemeDto, List<String> genres, List<String> reviewImages);
+    MyVisitThemeRs toMyVisitThemeRs(MyVisitThemeDto myVisitThemeDto, List<String> genres, List<ReviewImageDto> reviewImages);
 
     MyParticipantGatheringRs toMyParticipantGatheringRs(MyParticipantGatheringDto myParticipantGatheringDto, List<String> genres, List<Participant> participants);
 }
