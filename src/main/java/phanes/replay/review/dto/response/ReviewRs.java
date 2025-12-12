@@ -20,7 +20,7 @@ public class ReviewRs {
     private String profileImage;
     private Double score;
     private String content;
-    private List<String> images;
+    private List<ReviewImageRs> images;
     private Boolean isSuccess;
     private Integer hint;
     private Integer numberOfPlayer;

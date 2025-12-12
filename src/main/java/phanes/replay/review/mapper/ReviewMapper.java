@@ -2,6 +2,7 @@ package phanes.replay.review.mapper;
 
 import org.mapstruct.Mapper;
 import phanes.replay.review.dto.ReviewDto;
+import phanes.replay.review.dto.ReviewImageDto;
 import phanes.replay.review.dto.response.ReviewCountSummary;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.dto.response.ReviewSummary;
@@ -14,5 +15,5 @@ public interface ReviewMapper {
 
     ReviewSummary toReviewSummary(Double avgScore, Long createdGatheringCount, ReviewCountSummary reviewCountSummary, UserEvaluation userEvaluation);
 
-    ReviewRs toReviewRs(ReviewDto reviewDto, List<String> images);
+    ReviewRs toReviewRs(ReviewDto reviewDto, List<ReviewImageDto> images);
 }

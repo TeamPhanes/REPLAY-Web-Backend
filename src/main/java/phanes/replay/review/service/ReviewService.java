@@ -13,7 +13,9 @@ import phanes.replay.review.domain.Review;
 import phanes.replay.review.domain.ReviewImage;
 import phanes.replay.review.domain.ReviewLike;
 import phanes.replay.review.dto.ReviewDto;
+import phanes.replay.review.dto.ReviewImageDto;
 import phanes.replay.review.dto.request.ReviewRq;
+import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.review.dto.response.ReviewCountSummary;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.dto.response.ReviewSummary;
@@ -55,7 +57,7 @@ public class ReviewService {
     public Page<ReviewRs> findAllByThemeId(Long userId, Pageable pageable, Long themeId) {
         Page<ReviewDto> reviewDetailList = reviewJooqRepository.findAllByThemeId(userId, pageable, themeId);
         List<Long> reviewIdList = reviewDetailList.stream().map(ReviewDto::getId).toList();
-        Map<Long, List<String>> reviewImageListMap = reviewImageJooqRepository.findAllByReviewIdList(reviewIdList);
+        Map<Long, List<ReviewImageDto>> reviewImageListMap = reviewImageJooqRepository.findAllByReviewIdList(reviewIdList);
         List<ReviewRs> contents = reviewDetailList.stream().map(r -> reviewMapper.toReviewRs(r, reviewImageListMap.getOrDefault(r.getId(), Collections.emptyList()))).toList();
         return new PageImpl<>(contents, pageable, reviewDetailList.getTotalElements());
     }
@@ -107,8 +109,63 @@ public class ReviewService {
         reviewLikeQueryService.save(reviewLike);
     }
 
+    @Transactional
+    public void updateReview(Long userId, Long reviewId, ReviewUpdateRq reviewUpdateRq, Map<String, MultipartFile> images) {
+        Review review = reviewQueryService.findByIdAndUserId(reviewId, userId);
+        review.update(reviewUpdateRq);
+        reviewQueryService.save(review);
+
+        ThemeVisit themeVisit = review.getThemeVisit();
+        themeVisit.updateVisitDate(reviewUpdateRq.getDate());
+        themeVisitQueryService.save(themeVisit);
+
+        List<String> removeKeyList = new ArrayList<>();
+        for (String key : images.keySet()) {
+            MultipartFile image = images.get(key);
+            Long id = Long.parseLong(key);
+            ReviewImage reviewImage = reviewImageQueryService.findByIdAndReviewId(id, reviewId);
+            if (image == null) {
+                reviewImageQueryService.delete(reviewImage);
+            } else {
+                String extension = FileUtils.getExtension(image.getOriginalFilename());
+                String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);
+                reviewImage.updateImage(uploadImage, key.equals(reviewUpdateRq.getRepresentativeId()));
+                reviewImageQueryService.save(reviewImage);
+            }
+            removeKeyList.add(key);
+        }
+        removeKeyList.forEach(images::remove);
+        if (!images.isEmpty()) {
+            List<ReviewImage> savedImages = new ArrayList<>();
+            for (String key: images.keySet()) {
+                MultipartFile image = images.get(key);
+                String extension = FileUtils.getExtension(image.getOriginalFilename());
+                String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);
+                savedImages.add(ReviewImage.builder()
+                        .review(review)
+                        .image(uploadImage)
+                        .isRepresentative(key.equals(reviewUpdateRq.getRepresentativeId()))
+                        .build());
+            }
+            reviewImageQueryService.saveAll(savedImages);
+        }
+    }
+
     public void deleteReviewLike(Long userId, Long reviewId) {
         ReviewLike reviewLike = reviewLikeQueryService.findByUserIdAndReviewId(userId, reviewId);
         reviewLikeQueryService.delete(reviewLike);
+    }
+
+    @Transactional
+    public void deleteReview(Long userId, Long reviewId) {
+        Review review = reviewQueryService.findByIdAndUserId(reviewId, userId);
+        ThemeVisit themeVisit = review.getThemeVisit();
+        List<ReviewLike> reviewLikeList = reviewLikeQueryService.findAllByReviewId(reviewId);
+        List<ReviewImage> reviewImageList = reviewImageQueryService.findAllByReviewId(reviewId);
+        reviewLikeQueryService.deleteAll(reviewLikeList);
+        reviewImageQueryService.deleteAll(reviewImageList);
+        reviewQueryService.delete(review);
+        themeVisit.updateVisitDate(null);
+        themeVisitQueryService.save(themeVisit);
     }
 }

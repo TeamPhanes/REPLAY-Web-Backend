@@ -10,6 +10,7 @@ import phanes.replay.gathering.dto.MyCommentDto;
 import phanes.replay.gathering.dto.response.Participant;
 import phanes.replay.gathering.repository.GatheringCommentJooqRepository;
 import phanes.replay.gathering.repository.GatheringMemberJooqRepository;
+import phanes.replay.review.dto.ReviewImageDto;
 import phanes.replay.review.repository.ReviewImageJooqRepository;
 import phanes.replay.theme.repository.GenreJooqRepository;
 import phanes.replay.theme.repository.ThemeVisitJooqRepository;
@@ -64,7 +65,7 @@ public class UserService {
         List<Long> themeIdList = visitThemeList.stream().map(MyVisitThemeDto::getId).toList();
         List<Long> reviewIdList = visitThemeList.stream().map(MyVisitThemeDto::getReviewId).toList();
         Map<Long, List<String>> genreListMap = genreJooqRepository.findAllByThemeIdList(themeIdList);
-        Map<Long, List<String>> reviewImageListMap = reviewImageJooqRepository.findAllByReviewIdList(reviewIdList);
+        Map<Long, List<ReviewImageDto>> reviewImageListMap = reviewImageJooqRepository.findAllByReviewIdList(reviewIdList);
         List<MyVisitThemeRs> contents = visitThemeList.stream()
                 .map(t -> userMapper.toMyVisitThemeRs(t,
                         genreListMap.getOrDefault(t.getId(), Collections.emptyList()),

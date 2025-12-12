@@ -22,4 +22,9 @@ public class ReviewImage {
     private String image;
     @Column(nullable = false)
     private Boolean isRepresentative;
+
+    public void updateImage(String image, Boolean isRepresentative) {
+        this.image = image;
+        this.isRepresentative = isRepresentative;
+    }
 }

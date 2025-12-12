@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.review.domain.enums.Eval;
+import phanes.replay.review.dto.response.ReviewImageRs;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,5 +31,5 @@ public class MyVisitThemeRs {
     private Integer numberOfPlayer;
     private Boolean isSuccess;
     private String content;
-    private List<String> reviewImages;
+    private List<ReviewImageRs> reviewImages;
 }
