@@ -19,6 +19,10 @@ public class ReviewQueryService {
         return reviewRepository.findByThemeVisitId(themeVisitId).orElse(null);
     }
 
+    public Review findByIdAndUserId(Long id, Long userId) {
+        return reviewRepository.findByIdAndUserId(id, userId).orElseThrow();
+    }
+
     public Review save(Review review) {
         return reviewRepository.save(review);
     }

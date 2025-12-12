@@ -12,11 +12,13 @@ import phanes.replay.annotation.ValidateFileExtension;
 import phanes.replay.annotation.ValidateFileSize;
 import phanes.replay.annotation.ValidateImageFile;
 import phanes.replay.review.dto.request.ReviewRq;
+import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.dto.response.ReviewSummary;
 import phanes.replay.review.service.ReviewService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/summary/{themeId}")
-    public ReviewSummary getThemeReviewSummary(@PathVariable("themeId") Long themeId) {
+    public ReviewSummary getThemeReviewSummary(@PathVariable Long themeId) {
         return reviewService.findSummaryByThemeId(themeId);
     }
 
@@ -47,6 +49,16 @@ public class ReviewController {
     @PostMapping("/like/{reviewId}")
     public void likeReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
         reviewService.saveReviewLike(userId, reviewId);
+    }
+
+    @PutMapping(value = "/{reviewId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void updateReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @RequestBody ReviewUpdateRq reviewUpdateRq, @RequestParam Map<String, MultipartFile> images) {
+        reviewService.updateReview(userId, reviewId, reviewUpdateRq, images);
+    }
+
+    @DeleteMapping("/{reviewId}")
+    public void deleteReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId) {
+        reviewService.deleteReview(userId, reviewId);
     }
 
     @DeleteMapping("/like/{reviewId}")

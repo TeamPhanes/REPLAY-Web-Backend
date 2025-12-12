@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.common.domain.CreateTimeEntity;
 import phanes.replay.review.domain.enums.Eval;
+import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.theme.domain.ThemeVisit;
 import phanes.replay.user.domain.User;
 
@@ -43,4 +44,15 @@ public class Review extends CreateTimeEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Eval storyReview;
+
+    public void update(ReviewUpdateRq reviewUpdateRq) {
+        this.score = reviewUpdateRq.getScore();
+        this.content = reviewUpdateRq.getContent();
+        this.isSuccess = reviewUpdateRq.getIsSuccess();
+        this.hint = reviewUpdateRq.getHint();
+        this.numberOfPlayer = reviewUpdateRq.getNumberOfPlayer();
+        this.themeReview = reviewUpdateRq.getThemeReview();
+        this.levelReview = reviewUpdateRq.getLevelReview();
+        this.storyReview = reviewUpdateRq.getStoryReview();
+    }
 }
