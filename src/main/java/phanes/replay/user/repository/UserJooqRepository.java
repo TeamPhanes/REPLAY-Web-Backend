@@ -1,15 +1,22 @@
 package phanes.replay.user.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import phanes.replay.tables.Gathering;
 import phanes.replay.user.dto.user.MyParticipantGatheringDto;
+import phanes.replay.user.dto.user.MyScheduleDto;
 import phanes.replay.user.dto.user.MyVisitThemeDto;
 import phanes.replay.utils.JooqRepositoryUtils;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 import static phanes.replay.Tables.GATHERING;
@@ -65,5 +72,32 @@ public class UserJooqRepository {
                 .where(GATHERING_MEMBER.USER_ID.eq(userId))
                 .fetchOneInto(Long.class);
         return new PageImpl<>(contents, pageable, totalCount == null ? 0 : totalCount);
+    }
+
+    public List<MyScheduleDto> findScheduleById(Long userId, String view, LocalDateTime date) {
+        Condition where = DSL.trueCondition();
+        if (view.equals("weekly")) {
+            LocalDateTime monday = date.toLocalDate().with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).atStartOfDay();
+            LocalDateTime sunday = monday.plusWeeks(1);
+            where = where.and(GATHERING.DATE.gt(monday).and(GATHERING.DATE.lt(sunday)));
+        } else if (view.equals("monthly")) {
+            LocalDateTime firstDay = date.toLocalDate().withDayOfMonth(1).atStartOfDay();
+            LocalDateTime nextFirstDay = firstDay.plusMonths(1);
+            where = where.and(GATHERING.DATE.gt(firstDay).and(GATHERING.DATE.lt(nextFirstDay)));
+        } else {
+            throw new IllegalArgumentException("보기 설정이 올바르지 않습니다.");
+        }
+
+        return dsl.select(Gathering.GATHERING.ID, Gathering.GATHERING.THEME_ID, Gathering.GATHERING.NAME, Gathering.GATHERING.DATE, Gathering.GATHERING.CAPACITY)
+                .select(THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE, SPOT.ADDRESS)
+                .select(utils.isLikedGathering(userId), DSL.count(GATHERING_MEMBER.USER_ID).as("participantCount"))
+                .from(Gathering.GATHERING)
+                .join(GATHERING_MEMBER).on(Gathering.GATHERING.ID.eq(GATHERING_MEMBER.GATHERING_ID))
+                .join(THEME).on(Gathering.GATHERING.THEME_ID.eq(THEME.ID))
+                .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
+                .where(GATHERING_MEMBER.USER_ID.eq(userId).and(where))
+                .groupBy(Gathering.GATHERING.ID, Gathering.GATHERING.THEME_ID, Gathering.GATHERING.NAME, Gathering.GATHERING.DATE, Gathering.GATHERING.CAPACITY, THEME.TITLE, THEME.PLAYTIME, THEME.LEVEL, THEME.IMAGE, SPOT.ADDRESS)
+                .orderBy(GATHERING.DATE.asc())
+                .fetchInto(MyScheduleDto.class);
     }
 }

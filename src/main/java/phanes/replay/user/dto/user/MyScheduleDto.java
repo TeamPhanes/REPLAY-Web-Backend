@@ -1,0 +1,29 @@
+package phanes.replay.user.dto.user;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import phanes.replay.theme.domain.enums.Level;
+
+import java.time.LocalDateTime;
+
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class MyScheduleDto {
+
+    private Long id;
+    private Long themeId;
+    private String name;
+    private String image;
+    private LocalDateTime date;
+    private Integer participantCount;
+    private Integer capacity;
+    private String title;
+    private String address;
+    private Integer playtime;
+    private Level level;
+    private Boolean isLiked;
+}
