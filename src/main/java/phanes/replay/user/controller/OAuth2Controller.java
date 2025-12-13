@@ -35,7 +35,7 @@ public class OAuth2Controller {
 
     @ValidateSocialType
     @GetMapping("/{socialType}")
-    public void getSocialLoginProviderUrl(@PathVariable("socialType") String socialType, HttpServletResponse response) throws IOException {
+    public void getSocialLoginProviderUrl(@PathVariable String socialType, HttpServletResponse response) throws IOException {
         String state = UUID.randomUUID().toString();
         redisTemplate.opsForValue().set(state, true, Duration.ofMinutes(5));
         SocialType socialTypeEnum = SocialType.valueOf(socialType.toUpperCase(Locale.KOREA));
@@ -46,7 +46,7 @@ public class OAuth2Controller {
 
     @ValidateSocialType
     @GetMapping(value = "/{socialType}/callback", produces = MediaType.TEXT_HTML_VALUE)
-    public String socialLoginCallback(@PathVariable("socialType") String socialType, @RequestParam("code") String code, @RequestParam("state") String state, HttpServletResponse response) throws IOException {
+    public String socialLoginCallback(@PathVariable String socialType, @RequestParam("code") String code, @RequestParam("state") String state, HttpServletResponse response) throws IOException {
         Boolean isValid = redisTemplate.opsForValue().getAndDelete(state);
         if (Boolean.FALSE.equals(isValid)) {
             throw new InvalidOAuth2StateException("state not found");

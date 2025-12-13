@@ -20,6 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
+    private final UserQueryService userQueryService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final RedisTemplate<String, Long> redisTemplate;
     private final JwtProperties jwtProperties;
@@ -27,12 +28,13 @@ public class RefreshTokenService {
 
     @Transactional
     public String createRefreshToken(Long userId) {
+        User user = userQueryService.findById(userId);
         String token = UUID.randomUUID().toString();
         Instant expireTime = Instant.now().plusMillis(jwtProperties.getRefreshToken().getExpireTime().toMillis());
         Optional<RefreshToken> userRefreshToken = refreshTokenRepository.findByUserId(userId);
         RefreshToken refreshToken = userRefreshToken.isPresent() ? userRefreshToken.get().updateToken(token, expireTime) : RefreshToken.builder()
                 .token(token)
-                .user(User.builder().id(userId).build())
+                .user(user)
                 .expireDate(expireTime)
                 .build();
         refreshTokenRepository.save(refreshToken);
@@ -46,7 +48,7 @@ public class RefreshTokenService {
             refreshTokenRepository.delete(existedToken);
             throw new TokenExpiredException("Refresh token expired");
         }
-        String accessToken = jwtProvider.generateAccessToken(existedToken.getId());
+        String accessToken = jwtProvider.generateAccessToken(existedToken.getId(), existedToken.getUser().getRole());
         redisTemplate.opsForValue().set(accessToken, existedToken.getUser().getId());
         return accessToken;
     }
