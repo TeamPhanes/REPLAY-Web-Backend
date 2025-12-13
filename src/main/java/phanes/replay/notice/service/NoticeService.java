@@ -10,7 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.common.s3.S3Repository;
 import phanes.replay.notice.domain.Notice;
 import phanes.replay.notice.domain.NoticeContent;
-import phanes.replay.notice.dto.NoticeRs;
+import phanes.replay.notice.dto.response.NoticeContentRs;
+import phanes.replay.notice.dto.response.NoticeRs;
 import phanes.replay.notice.mapper.NoticeMapper;
 import phanes.replay.utils.FileUtils;
 
@@ -43,5 +44,10 @@ public class NoticeService {
         NoticeContent noticeContent = noticeContentQueryService.findByNoticeId(id);
         noticeContentQueryService.delete(noticeContent);
         noticeQueryService.delete(notice);
+    }
+
+    public NoticeContentRs findByNoticeId(Long id) {
+        NoticeContent noticeContent = noticeContentQueryService.findByNoticeId(id);
+        return noticeMapper.toNoticeContentRs(noticeContent);
     }
 }

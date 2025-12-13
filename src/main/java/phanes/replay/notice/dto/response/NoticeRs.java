@@ -1,4 +1,4 @@
-package phanes.replay.notice.dto;
+package phanes.replay.notice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
