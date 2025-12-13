@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import phanes.replay.common.domain.BaseTimeEntity;
+import phanes.replay.user.domain.enums.Role;
 import phanes.replay.user.domain.enums.SocialType;
 
 @Entity
@@ -33,6 +34,9 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)
     private SocialType socialType;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10, nullable = false)
+    private Role role;
     @Column(nullable = false)
     private Boolean genderMark;
     @Column(nullable = false)

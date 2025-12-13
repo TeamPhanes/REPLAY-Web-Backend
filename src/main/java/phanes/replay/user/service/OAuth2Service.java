@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import phanes.replay.security.JwtProvider;
 import phanes.replay.user.domain.User;
+import phanes.replay.user.domain.enums.Role;
 import phanes.replay.user.domain.enums.SocialType;
 import phanes.replay.user.dto.oauth.SecurityToken;
 import phanes.replay.user.dto.oauth.SocialProfile;
@@ -51,13 +52,14 @@ public class OAuth2Service {
                 .socialId(profile.getSocialId())
                 .profileImage(profile.getProfileImage())
                 .socialType(socialType)
+                .role(Role.USER)
                 .email(profile.getEmail())
                 .genderMark(false)
                 .emailMark(false)
                 .profileComment("")
                 .build()));
         String refreshToken = refreshTokenService.createRefreshToken(user.getId());
-        String accessToken = jwtProvider.generateAccessToken(user.getId());
+        String accessToken = jwtProvider.generateAccessToken(user.getId(), user.getRole());
         redisTemplate.opsForValue().set(accessToken, user.getId());
         return SecurityToken.builder()
                 .accessToken(accessToken)
