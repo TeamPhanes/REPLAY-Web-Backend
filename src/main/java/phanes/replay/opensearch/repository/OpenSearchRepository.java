@@ -27,7 +27,8 @@ import java.util.List;
 public class OpenSearchRepository {
 
     private final OpenSearchClient client;
-    private static final String INDEX_PATTERN = "replay-theme-write";
+    private static final String THEME_INDEX_PATTERN = "replay-theme-write";
+    private static final String GATHERING_INDEX_PATTERN = "replay-gathering-write";
 
     public SearchResponse<ThemeSuggestDoc> findSuggestByKeyword(Integer size, String keyword, Cursor cursor) {
         Query query = Query.of(q -> q.multiMatch(
@@ -40,7 +41,7 @@ public class OpenSearchRepository {
                 SortOptions.of(s -> s.field(f -> f.field("id").order(SortOrder.Asc)))
         );
         SearchRequest.Builder builder = new SearchRequest.Builder()
-                .index(INDEX_PATTERN)
+                .index(THEME_INDEX_PATTERN)
                 .size(size)
                 .source(src -> src.filter(f -> f.includes(List.of("id", "title", "spot.name"))))
                 .sort(sort)
@@ -57,7 +58,7 @@ public class OpenSearchRepository {
     }
 
     public SearchResponse<ThemeDoc> findAllByLocationAndGenreAndKeyword(Integer size, Cursor cursor, List<String> locations, List<String> genres, String keyword) {
-        Query keywordQ = keywordQuery(keyword);
+        Query keywordQ = themeTitleKeywordQuery(keyword);
         List<Query> filters = new ArrayList<>();
         Query locQ = locationPairFilter(locations);
         if (locQ != null) {
@@ -84,7 +85,7 @@ public class OpenSearchRepository {
         );
 
         SearchRequest.Builder builder = new SearchRequest.Builder()
-                .index(INDEX_PATTERN)
+                .index(THEME_INDEX_PATTERN)
                 .size(size)
                 .sort(sort)
                 .query(finalQ);
@@ -94,6 +95,48 @@ public class OpenSearchRepository {
         SearchRequest request = builder.build();
         try {
             return client.search(request, ThemeDoc.class);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to search themes by keyword" + keyword, e);
+        }
+    }
+
+    public SearchResponse<GatheringDoc> findAllGatheringByLocationAndGenreAndKeyword(Integer size, Cursor cursor, List<String> locations, List<String> genres, String keyword) {
+        Query keywordQ = gatheringKeywordQuery(keyword);
+        List<Query> filters = new ArrayList<>();
+        Query locQ = locationPairFilter(locations);
+        if (locQ != null) {
+            filters.add(locQ);
+        }
+        Query genreQ = genreFilter(genres);
+        if (genreQ != null) {
+            filters.add(genreQ);
+        }
+        Query finalQ = new Query.Builder()
+                .bool(b -> {
+                    b.must(keywordQ);
+                    if (!filters.isEmpty()) {
+                        b.filter(filters);
+                    }
+                    return b;
+                })
+                .build();
+        List<SortOptions> sort = StringUtils.isEmpty(keyword)
+                ? List.of(SortOptions.of(s -> s.field(f -> f.field("id").order(SortOrder.Asc))))
+                : List.of(
+                SortOptions.of(s -> s.score(sc -> sc.order(SortOrder.Desc))),
+                SortOptions.of(s -> s.field(f -> f.field("id").order(SortOrder.Asc)))
+        );
+        SearchRequest.Builder builder = new SearchRequest.Builder()
+                .index(GATHERING_INDEX_PATTERN)
+                .size(size)
+                .sort(sort)
+                .query(finalQ);
+        if (cursor != null) {
+            builder.searchAfter(List.of(FieldValue.of(cursor.getScore()), FieldValue.of(cursor.getId())));
+        }
+        SearchRequest request = builder.build();
+        try {
+            return client.search(request, GatheringDoc.class);
         } catch (IOException e) {
             throw new RuntimeException("Failed to search themes by keyword" + keyword, e);
         }
@@ -150,8 +193,8 @@ public class OpenSearchRepository {
                 .build();
     }
 
-    private Query keywordQuery(String keyword) {
-        if (keyword == null || keyword.isBlank()) {
+    private Query themeTitleKeywordQuery(String keyword) {
+        if (StringUtils.isEmpty(keyword)) {
             return new Query.Builder().matchAll(m -> m).build();
         }
         Query exactBoost = new Query.Builder()
@@ -167,6 +210,47 @@ public class OpenSearchRepository {
                 .build();
         return new Query.Builder()
                 .bool(b -> b.should(exactBoost).should(multi).minimumShouldMatch("1"))
+                .build();
+    }
+
+    private Query gatheringKeywordQuery(String keyword) {
+        if (StringUtils.isEmpty(keyword)) {
+            return new Query.Builder().matchAll(m -> m).build();
+        }
+        Query exactName = new Query.Builder()
+                .term(t -> t.field("name.keyword").value(FieldValue.of(keyword)).boost(12.0f))
+                .build();
+        Query nameMulti = new Query.Builder()
+                .multiMatch(mm -> mm
+                        .query(keyword)
+                        .fields(
+                                "name^4.0",
+                                "name.prefix^3.0",
+                                "name.ngram^2.0"
+                        )
+                        .operator(Operator.And)
+                        .type(TextQueryType.MostFields)
+                )
+                .build();
+        Query themeMulti = new Query.Builder()
+                .multiMatch(mm -> mm
+                        .query(keyword)
+                        .fields(
+                                "theme.title^1.0",
+                                "theme.title.prefix^0.7",
+                                "theme.title.ngram^0.5"
+                        )
+                        .operator(Operator.And)
+                        .type(TextQueryType.MostFields)
+                )
+                .build();
+        return new Query.Builder()
+                .bool(b -> b
+                        .should(exactName)
+                        .should(nameMulti)
+                        .should(themeMulti)
+                        .minimumShouldMatch("1")
+                )
                 .build();
     }
 }
