@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import phanes.replay.common.dto.response.Cursor;
-import phanes.replay.common.dto.response.SearchPage;
+import phanes.replay.opensearch.dto.response.Cursor;
+import phanes.replay.opensearch.dto.response.SearchPage;
 import phanes.replay.theme.dto.response.*;
 import phanes.replay.theme.service.ThemeService;
 import phanes.replay.utils.CursorUtils;
@@ -40,6 +40,15 @@ public class ThemeController {
             decoded = CursorUtils.decode(cursor);
         }
         return themeService.findAllSuggestByKeyword(size, keyword, decoded);
+    }
+
+    @GetMapping("/search")
+    public SearchPage<ThemeSearchRs> getThemeSearchList(@AuthenticationPrincipal Long userId, @RequestParam Integer size, @RequestParam(required = false) String cursor, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres, @RequestParam String keyword) {
+        Cursor decoded = null;
+        if (cursor != null) {
+            decoded = CursorUtils.decode(cursor);
+        }
+        return themeService.findAllByLocationAndGenreAndKeyword(userId, size, decoded, locations, genres, keyword);
     }
 
     @GetMapping("/{themeId}")

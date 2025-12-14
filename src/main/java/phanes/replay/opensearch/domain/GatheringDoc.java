@@ -1,4 +1,4 @@
-package phanes.replay.listener.document;
+package phanes.replay.opensearch.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

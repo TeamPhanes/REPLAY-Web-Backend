@@ -2,14 +2,12 @@ package phanes.replay.theme.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import phanes.replay.common.dto.response.ThemeSuggestDoc;
+import phanes.replay.opensearch.domain.ThemeDoc;
+import phanes.replay.opensearch.domain.ThemeSuggestDoc;
 import phanes.replay.theme.dto.ThemeDetailDto;
 import phanes.replay.theme.dto.ThemeDto;
 import phanes.replay.theme.dto.ThemePreviewDto;
-import phanes.replay.theme.dto.response.ThemeDetailRs;
-import phanes.replay.theme.dto.response.ThemePreviewRs;
-import phanes.replay.theme.dto.response.ThemeRs;
-import phanes.replay.theme.dto.response.ThemeSuggestRs;
+import phanes.replay.theme.dto.response.*;
 
 import java.util.List;
 
@@ -24,4 +22,14 @@ public interface ThemeMapper {
 
     @Mapping(source = "spot.name", target = "spotName")
     ThemeSuggestRs toThemeSuggestRs(ThemeSuggestDoc themeSuggestDoc);
+
+    @Mapping(source = "themeDoc.id", target = "id")
+    @Mapping(source = "themeDoc.title", target = "title")
+    @Mapping(source = "themeDoc.playtime", target = "playtime")
+    @Mapping(source = "themeDoc.level", target = "level")
+    @Mapping(source = "themeDoc.spot.name", target = "spotName")
+    @Mapping(source = "themeDoc.cafe.name", target = "cafeName")
+    @Mapping(source = "themeDoc.spot.address", target = "address")
+    @Mapping(source = "themeDoc.genres", target = "genres")
+    ThemeSearchRs toThemeSearchRs(ThemeDoc themeDoc, ThemeDto themeDto, Long reviewCount, Double avgScore);
 }

@@ -11,7 +11,11 @@ import phanes.replay.gathering.dto.request.GatheringUpdateRq;
 import phanes.replay.gathering.dto.response.GatheringCommentRs;
 import phanes.replay.gathering.dto.response.GatheringDetailRs;
 import phanes.replay.gathering.dto.response.GatheringRs;
+import phanes.replay.gathering.dto.response.GatheringSearchRs;
 import phanes.replay.gathering.service.GatheringService;
+import phanes.replay.opensearch.dto.response.Cursor;
+import phanes.replay.opensearch.dto.response.SearchPage;
+import phanes.replay.utils.CursorUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +31,15 @@ public class GatheringController {
     public Page<GatheringRs> getGatheringList(@AuthenticationPrincipal Long userId, @PageableDefault(size = 12) Pageable pageable, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres, @RequestParam(required = false) Long themeId) {
         userId = userId == null ? 0L : userId;
         return gatheringService.findAll(userId, themeId, pageable, locations, genres);
+    }
+
+    @GetMapping("/search")
+    public SearchPage<GatheringSearchRs> getGatheringSearchList(@AuthenticationPrincipal Long userId, @RequestParam Integer size, @RequestParam(required = false) String cursor, @RequestParam(required = false) List<String> locations, @RequestParam(required = false) List<String> genres, @RequestParam String keyword) {
+        Cursor decoded = null;
+        if (cursor != null) {
+            decoded = CursorUtils.decode(cursor);
+        }
+        return gatheringService.findAllByLocationAndGenreAndKeyword(userId, size, decoded, locations, genres, keyword);
     }
 
     @GetMapping("/{gatheringId}")

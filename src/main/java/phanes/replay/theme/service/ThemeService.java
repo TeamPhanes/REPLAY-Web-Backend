@@ -1,7 +1,6 @@
 package phanes.replay.theme.service;
 
 import lombok.RequiredArgsConstructor;
-import org.opensearch.client.opensearch._types.FieldValue;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
 import org.springframework.data.domain.Page;
@@ -9,10 +8,11 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
-import phanes.replay.common.dto.response.Cursor;
-import phanes.replay.common.dto.response.SearchPage;
-import phanes.replay.common.dto.response.ThemeSuggestDoc;
-import phanes.replay.common.opensearch.OpenSearchRepository;
+import phanes.replay.opensearch.domain.ThemeDoc;
+import phanes.replay.opensearch.domain.ThemeSuggestDoc;
+import phanes.replay.opensearch.dto.response.Cursor;
+import phanes.replay.opensearch.dto.response.SearchPage;
+import phanes.replay.opensearch.repository.OpenSearchRepository;
 import phanes.replay.review.domain.Review;
 import phanes.replay.review.domain.ReviewImage;
 import phanes.replay.review.domain.ReviewLike;
@@ -26,20 +26,19 @@ import phanes.replay.theme.domain.ThemeVisit;
 import phanes.replay.theme.dto.ThemeDetailDto;
 import phanes.replay.theme.dto.ThemeDto;
 import phanes.replay.theme.dto.ThemePreviewDto;
-import phanes.replay.theme.dto.response.ThemeDetailRs;
-import phanes.replay.theme.dto.response.ThemePreviewRs;
-import phanes.replay.theme.dto.response.ThemeRs;
-import phanes.replay.theme.dto.response.ThemeSuggestRs;
+import phanes.replay.theme.dto.response.*;
 import phanes.replay.theme.mapper.ThemeMapper;
 import phanes.replay.theme.repository.GenreJooqRepository;
 import phanes.replay.theme.repository.ThemeJooqRepository;
 import phanes.replay.theme.repository.ThemeLikeJooqRepository;
 import phanes.replay.user.domain.User;
 import phanes.replay.user.service.UserQueryService;
+import phanes.replay.utils.CursorUtils;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -80,6 +79,33 @@ public class ThemeService {
                                 genreListMap.getOrDefault(t.getId(), Collections.emptyList())))
                 .toList();
         return new PageImpl<>(content, pageable, themeDtoPage.getTotalElements());
+    }
+
+    public SearchPage<ThemeSuggestRs> findAllSuggestByKeyword(Integer size, String keyword, Cursor cursor) {
+        SearchResponse<ThemeSuggestDoc> response = openSearchRepository.findSuggestByKeyword(size, keyword, cursor);
+        List<Hit<ThemeSuggestDoc>> hits = response.hits().hits();
+        List<ThemeSuggestRs> contents = hits.stream().map(h -> themeMapper.toThemeSuggestRs(h.source())).toList();
+        Cursor nextCursor = CursorUtils.getNextCursor(hits, size);
+        return new SearchPage<>(contents, nextCursor);
+    }
+
+    public SearchPage<ThemeSearchRs> findAllByLocationAndGenreAndKeyword(Long userId, Integer size, Cursor cursor, List<String> locations, List<String> genres, String keyword) {
+        SearchResponse<ThemeDoc> response = openSearchRepository.findAllByLocationAndGenreAndKeyword(size, cursor, locations, genres, keyword);
+        List<Hit<ThemeDoc>> hits = response.hits().hits();
+        List<Long> themeIdList = hits.stream().map(t -> Objects.requireNonNull(t.source()).getId()).toList();
+        Map<Long, ThemeDto> themeMap = themeJooqRepository.findByIdList(userId, themeIdList);
+        Map<Long, Long> reviewCountMap = reviewJooqRepository.countAllByThemeIdList(themeIdList);
+        Map<Long, Double> scoreMap = reviewJooqRepository.aggregateAllByThemeIdList(themeIdList);
+        List<ThemeSearchRs> contents = hits.stream().map(Hit::source)
+                .map(t ->
+                        themeMapper.toThemeSearchRs(
+                                t,
+                                themeMap.getOrDefault(Objects.requireNonNull(t).getId(), null),
+                                reviewCountMap.getOrDefault(t.getId(), 0L),
+                                scoreMap.getOrDefault(t.getId(), 0.0)
+                        )).toList();
+        Cursor nextCursor = CursorUtils.getNextCursor(hits, size);
+        return new SearchPage<>(contents, nextCursor);
     }
 
     public ThemeDetailRs findById(Long userId, Long themeId) {
@@ -142,24 +168,5 @@ public class ThemeService {
             reviewQueryService.delete(review);
         }
         themeVisitQueryService.delete(themeVisit);
-    }
-
-    public SearchPage<ThemeSuggestRs> findAllSuggestByKeyword(Integer size, String keyword, Cursor cursor) {
-        SearchResponse<ThemeSuggestDoc> response = openSearchRepository.findSuggestByKeyword(size, keyword, cursor);
-        List<Hit<ThemeSuggestDoc>> hits = response.hits().hits();
-        List<ThemeSuggestRs> contents = hits.stream().map(h -> themeMapper.toThemeSuggestRs(h.source())).toList();
-        Cursor nextCursor = null;
-        if (!hits.isEmpty() && hits.size() == size) {
-            Hit<ThemeSuggestDoc> lastHit = hits.getLast();
-            List<FieldValue> sortValues = lastHit.sort();
-            if (sortValues.size() == 2) {
-                FieldValue scoreValue = sortValues.get(0);
-                Double score = scoreValue.doubleValue();
-                FieldValue idValue = sortValues.get(1);
-                String id = idValue.stringValue();
-                nextCursor = new Cursor(id, score);
-            }
-        }
-        return new SearchPage<>(contents, nextCursor);
     }
 }

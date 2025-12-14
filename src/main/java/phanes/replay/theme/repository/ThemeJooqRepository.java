@@ -149,4 +149,12 @@ public class ThemeJooqRepository {
                 .where(THEME.ID.eq(id))
                 .fetchOneInto(String.class);
     }
+
+    public Map<Long, ThemeDto> findByIdList(Long userId, List<Long> themeIdList) {
+        return dsl.select(THEME.ID, THEME.IMAGE, THEME.MIN_PLAYER, THEME.MAX_PLAYER, THEME.NOTE)
+                .select(utils.isLikedTheme(userId), utils.isVisitedTheme(userId))
+                .from(THEME)
+                .where(THEME.ID.in(themeIdList))
+                .fetchMap(THEME.ID, r -> r.into(ThemeDto.class));
+    }
 }

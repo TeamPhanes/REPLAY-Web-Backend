@@ -7,12 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import phanes.replay.common.s3.S3Repository;
 import phanes.replay.notice.domain.Notice;
 import phanes.replay.notice.domain.NoticeContent;
 import phanes.replay.notice.dto.response.NoticeContentRs;
 import phanes.replay.notice.dto.response.NoticeRs;
 import phanes.replay.notice.mapper.NoticeMapper;
+import phanes.replay.s3.repository.S3Repository;
 import phanes.replay.utils.FileUtils;
 
 import java.util.List;

@@ -17,6 +17,7 @@ import phanes.replay.utils.JooqRepositoryUtils;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static phanes.replay.tables.Gathering.GATHERING;
@@ -123,5 +124,13 @@ public class GatheringJooqRepository {
                 .where(where)
                 .fetchOne(0, Long.class);
         return new PageImpl<>(contents, pageable, total == null ? 0L : total);
+    }
+
+    public Map<Long, GatheringDto> findByIdList(Long userId, List<Long> gatheringIdList) {
+        return dsl.select(GATHERING.ID, GATHERING.CAPACITY)
+                .select(utils.isLikedGathering(userId), DSL.count(GATHERING_MEMBER.USER_ID).as("participantCount"))
+                .from(GATHERING)
+                .where(GATHERING.ID.in(gatheringIdList))
+                .fetchMap(GATHERING.ID, r -> r.into(GatheringDto.class));
     }
 }

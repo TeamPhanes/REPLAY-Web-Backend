@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import phanes.replay.gathering.dto.event.GatheringCreatedEvent;
-import phanes.replay.listener.document.GatheringDoc;
+import phanes.replay.opensearch.domain.GatheringDoc;
 
 import java.io.IOException;
 
