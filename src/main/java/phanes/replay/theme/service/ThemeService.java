@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import phanes.replay.common.dto.response.Cursor;
 import phanes.replay.common.dto.response.SearchPage;
-import phanes.replay.common.dto.response.ThemeSearchDoc;
+import phanes.replay.common.dto.response.ThemeSuggestDoc;
 import phanes.replay.common.opensearch.OpenSearchRepository;
 import phanes.replay.review.domain.Review;
 import phanes.replay.review.domain.ReviewImage;
@@ -29,7 +29,7 @@ import phanes.replay.theme.dto.ThemePreviewDto;
 import phanes.replay.theme.dto.response.ThemeDetailRs;
 import phanes.replay.theme.dto.response.ThemePreviewRs;
 import phanes.replay.theme.dto.response.ThemeRs;
-import phanes.replay.theme.dto.response.ThemeSearchRs;
+import phanes.replay.theme.dto.response.ThemeSuggestRs;
 import phanes.replay.theme.mapper.ThemeMapper;
 import phanes.replay.theme.repository.GenreJooqRepository;
 import phanes.replay.theme.repository.ThemeJooqRepository;
@@ -144,13 +144,13 @@ public class ThemeService {
         themeVisitQueryService.delete(themeVisit);
     }
 
-    public SearchPage<ThemeSearchRs> findAllSearchByKeyword(Integer size, String keyword, Cursor cursor) {
-        SearchResponse<ThemeSearchDoc> response = openSearchRepository.findSearchByKeyword(size, keyword, cursor);
-        List<Hit<ThemeSearchDoc>> hits = response.hits().hits();
-        List<ThemeSearchRs> contents = hits.stream().map(h -> themeMapper.toThemeSearchRs(h.source())).toList();
+    public SearchPage<ThemeSuggestRs> findAllSuggestByKeyword(Integer size, String keyword, Cursor cursor) {
+        SearchResponse<ThemeSuggestDoc> response = openSearchRepository.findSuggestByKeyword(size, keyword, cursor);
+        List<Hit<ThemeSuggestDoc>> hits = response.hits().hits();
+        List<ThemeSuggestRs> contents = hits.stream().map(h -> themeMapper.toThemeSuggestRs(h.source())).toList();
         Cursor nextCursor = null;
         if (!hits.isEmpty() && hits.size() == size) {
-            Hit<ThemeSearchDoc> lastHit = hits.getLast();
+            Hit<ThemeSuggestDoc> lastHit = hits.getLast();
             List<FieldValue> sortValues = lastHit.sort();
             if (sortValues.size() == 2) {
                 FieldValue scoreValue = sortValues.get(0);

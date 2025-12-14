@@ -9,10 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import phanes.replay.common.dto.response.Cursor;
 import phanes.replay.common.dto.response.SearchPage;
-import phanes.replay.theme.dto.response.ThemeDetailRs;
-import phanes.replay.theme.dto.response.ThemePreviewRs;
-import phanes.replay.theme.dto.response.ThemeRs;
-import phanes.replay.theme.dto.response.ThemeSearchRs;
+import phanes.replay.theme.dto.response.*;
 import phanes.replay.theme.service.ThemeService;
 import phanes.replay.utils.CursorUtils;
 
@@ -36,13 +33,13 @@ public class ThemeController {
         return themeService.findAll(userId, pageable, locations, genres);
     }
 
-    @GetMapping("/search")
-    public SearchPage<ThemeSearchRs> getThemeSearchList(@RequestParam Integer size, @RequestParam String keyword, @RequestParam(required = false) String cursor) {
+    @GetMapping("/suggest")
+    public SearchPage<ThemeSuggestRs> getThemeSuggestList(@RequestParam Integer size, @RequestParam String keyword, @RequestParam(required = false) String cursor) {
         Cursor decoded = null;
         if (cursor != null) {
             decoded = CursorUtils.decode(cursor);
         }
-        return themeService.findAllSearchByKeyword(size, keyword, decoded);
+        return themeService.findAllSuggestByKeyword(size, keyword, decoded);
     }
 
     @GetMapping("/{themeId}")
