@@ -1,4 +1,4 @@
-package phanes.replay.common.dto.response;
+package phanes.replay.opensearch.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SpotDoc {
+public class ThemeSuggestDoc {
 
-    private String name;
+    private Long id;
+    private String title;
+    private SpotDoc spot;
 }

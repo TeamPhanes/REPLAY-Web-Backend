@@ -1,18 +1,16 @@
-package phanes.replay.common.dto.response;
+package phanes.replay.opensearch.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchPage<T> {
+public class Cursor {
 
-    private List<T> contents;
-    private Cursor cursor;
+    private String id;
+    private Double score;
 }

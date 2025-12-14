@@ -1,4 +1,4 @@
-package phanes.replay.common.s3;
+package phanes.replay.s3.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
