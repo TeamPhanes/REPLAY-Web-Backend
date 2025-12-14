@@ -12,7 +12,7 @@ import org.opensearch.client.opensearch.core.SearchRequest;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.springframework.stereotype.Repository;
 import phanes.replay.common.dto.response.Cursor;
-import phanes.replay.common.dto.response.ThemeSearchDoc;
+import phanes.replay.common.dto.response.ThemeSuggestDoc;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +24,7 @@ public class OpenSearchRepository {
     private final OpenSearchClient client;
     private static final String INDEX_PATTERN = "replay-theme-write";
 
-    public SearchResponse<ThemeSearchDoc> findSearchByKeyword(Integer size, String keyword, Cursor cursor) {
+    public SearchResponse<ThemeSuggestDoc> findSuggestByKeyword(Integer size, String keyword, Cursor cursor) {
         Query query = Query.of(q -> q.multiMatch(
                 MultiMatchQuery.of(m -> m.query(keyword)
                         .fields("title^5", "title.prefix^2")
@@ -45,7 +45,7 @@ public class OpenSearchRepository {
         }
         SearchRequest request = builder.build();
         try {
-            return client.search(request, ThemeSearchDoc.class);
+            return client.search(request, ThemeSuggestDoc.class);
         } catch (IOException e) {
             throw new RuntimeException("Failed to search themes by keyword" + keyword, e);
         }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ThemeSearchRs {
+public class ThemeSuggestRs {
 
     private Long id;
     private String title;
