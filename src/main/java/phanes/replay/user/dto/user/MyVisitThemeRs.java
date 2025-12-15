@@ -23,6 +23,7 @@ public class MyVisitThemeRs {
     private String cafeName;
     private List<String> genres;
     private LocalDateTime visitDate;
+    private Long reviewId;
     private Double score;
     private Eval themeReview;
     private Eval levelReview;
