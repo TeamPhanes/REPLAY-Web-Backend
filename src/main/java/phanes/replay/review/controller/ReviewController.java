@@ -8,16 +8,12 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import phanes.replay.annotation.ValidateFileExtension;
-import phanes.replay.annotation.ValidateFileSize;
-import phanes.replay.annotation.ValidateImageFile;
 import phanes.replay.review.dto.request.ReviewRq;
 import phanes.replay.review.dto.request.ReviewUpdateRq;
 import phanes.replay.review.dto.response.ReviewRs;
 import phanes.replay.review.dto.response.ReviewSummary;
 import phanes.replay.review.service.ReviewService;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -42,7 +38,7 @@ public class ReviewController {
     public void saveReview(@AuthenticationPrincipal Long userId,
                            @PathVariable Long themeId,
                            @RequestPart(value = "review") ReviewRq reviewRq,
-                           @RequestPart(required = false) @ValidateImageFile @ValidateFileSize @ValidateFileExtension List<MultipartFile> images) {
+                           @RequestParam(required = false) Map<String, MultipartFile> images) {
         reviewService.save(userId, themeId, reviewRq, images);
     }
 
@@ -52,7 +48,7 @@ public class ReviewController {
     }
 
     @PutMapping(value = "/{reviewId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void updateReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @RequestBody ReviewUpdateRq reviewUpdateRq, @RequestParam Map<String, MultipartFile> images) {
+    public void updateReview(@AuthenticationPrincipal Long userId, @PathVariable Long reviewId, @RequestPart(value = "review") ReviewUpdateRq reviewUpdateRq, @RequestParam Map<String, MultipartFile> images) {
         reviewService.updateReview(userId, reviewId, reviewUpdateRq, images);
     }
 

@@ -63,7 +63,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public void save(Long userId, Long themeId, ReviewRq reviewRq, List<MultipartFile> images) {
+    public void save(Long userId, Long themeId, ReviewRq reviewRq, Map<String, MultipartFile> images) {
         User user = userQueryService.findById(userId);
         ThemeVisit themeVisit = themeVisitQueryService.findByUserIdAndThemeId(user.getId(), themeId);
         Review review = Review.builder()
@@ -83,16 +83,17 @@ public class ReviewService {
         themeVisit.updateVisitDate(reviewRq.getDate());
         themeVisitQueryService.save(themeVisit);
 
-        if (images != null) {
+        images.remove("review");
+        if (!images.isEmpty()) {
             List<ReviewImage> savedImages = new ArrayList<>();
-            for (int i = 0; i < images.size(); i++) {
-                MultipartFile image = images.get(i);
+            for (String key: images.keySet()) {
+                MultipartFile image = images.get(key);
                 String extension = FileUtils.getExtension(image.getOriginalFilename());
                 String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);
                 savedImages.add(ReviewImage.builder()
                         .review(savedReview)
                         .image(uploadImage)
-                        .isRepresentative(i == 0)
+                        .isRepresentative(key.equals(reviewRq.getRepresentativeId()))
                         .build());
             }
             reviewImageQueryService.saveAll(savedImages);
@@ -119,13 +120,21 @@ public class ReviewService {
         themeVisit.updateVisitDate(reviewUpdateRq.getDate());
         themeVisitQueryService.save(themeVisit);
 
+        images.remove("review");
         List<String> removeKeyList = new ArrayList<>();
         for (String key : images.keySet()) {
             MultipartFile image = images.get(key);
-            Long id = Long.parseLong(key);
+            Long id = null;
+            try{
+                id = Long.parseLong(key);
+            } catch (NumberFormatException e) {
+                continue;
+            }
             ReviewImage reviewImage = reviewImageQueryService.findByIdAndReviewId(id, reviewId);
             if (image == null) {
                 reviewImageQueryService.delete(reviewImage);
+                String fileName = s3Repository.extractPathAfterBucket(reviewImage.getImage());
+                s3Repository.deleteImage(fileName);
             } else {
                 String extension = FileUtils.getExtension(image.getOriginalFilename());
                 String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);

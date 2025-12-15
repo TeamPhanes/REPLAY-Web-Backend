@@ -23,4 +23,5 @@ public class ReviewRq {
     private Integer hint;
     private String content;
     private LocalDateTime date;
+    private String representativeId;
 }
