@@ -130,6 +130,7 @@ public class GatheringJooqRepository {
         return dsl.select(GATHERING.ID, GATHERING.CAPACITY)
                 .select(utils.isLikedGathering(userId), DSL.count(GATHERING_MEMBER.USER_ID).as("participantCount"))
                 .from(GATHERING)
+                .join(GATHERING_MEMBER).on(GATHERING.ID.eq(GATHERING_MEMBER.GATHERING_ID))
                 .where(GATHERING.ID.in(gatheringIdList))
                 .fetchMap(GATHERING.ID, r -> r.into(GatheringDto.class));
     }

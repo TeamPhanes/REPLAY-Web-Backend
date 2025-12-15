@@ -44,6 +44,7 @@ public class UserJooqRepository {
                 .join(SPOT).on(THEME.SPOT_ID.eq(SPOT.ID))
                 .join(CAFE).on(SPOT.CAFE_ID.eq(CAFE.ID))
                 .where(THEME_VISIT.USER_ID.eq(userId))
+                .orderBy(THEME_VISIT.ID.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchInto(MyVisitThemeDto.class);

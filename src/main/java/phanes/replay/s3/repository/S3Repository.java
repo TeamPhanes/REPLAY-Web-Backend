@@ -2,6 +2,7 @@ package phanes.replay.s3.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jooq.tools.StringUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -59,5 +60,17 @@ public class S3Repository {
 
     public void deleteImage(String key) {
         s3Client.deleteObject(DeleteObjectRequest.builder().bucket(s3Properties.getBucket()).key(key).build());
+    }
+
+    public String extractPathAfterBucket(String fullPath) {
+        if (StringUtils.isEmpty(fullPath)) {
+            return null;
+        }
+        String marker = "/" + s3Properties.getBucket() + "/";
+        int idx = fullPath.indexOf(marker);
+        if (idx == -1) {
+            return null;
+        }
+        return fullPath.substring(idx + marker.length());
     }
 }

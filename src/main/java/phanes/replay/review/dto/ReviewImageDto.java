@@ -13,4 +13,5 @@ public class ReviewImageDto {
 
     private Long id;
     private String image;
+    private Boolean isRepresentative;
 }
