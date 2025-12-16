@@ -123,6 +123,10 @@ public class ReviewService {
         if (!reviewUpdateRq.getDeleteImageIds().isEmpty()) {
             List<ReviewImage> deleteReviewImageList = reviewImageQueryService.findAll(reviewUpdateRq.getDeleteImageIds());
             reviewImageQueryService.deleteAll(deleteReviewImageList);
+            for (ReviewImage reviewImage : deleteReviewImageList) {
+                String fileName = s3Repository.extractPathAfterBucket(reviewImage.getImage());
+                s3Repository.deleteImage(fileName);
+            }
         }
 
         List<ReviewImage> reviewImageList = reviewImageQueryService.findAllByReviewId(reviewId);
