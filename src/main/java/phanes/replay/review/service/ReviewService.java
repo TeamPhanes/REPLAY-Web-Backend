@@ -86,7 +86,7 @@ public class ReviewService {
         images.remove("review");
         if (!images.isEmpty()) {
             List<ReviewImage> savedImages = new ArrayList<>();
-            for (String key: images.keySet()) {
+            for (String key : images.keySet()) {
                 MultipartFile image = images.get(key);
                 String extension = FileUtils.getExtension(image.getOriginalFilename());
                 String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);
@@ -120,33 +120,23 @@ public class ReviewService {
         themeVisit.updateVisitDate(reviewUpdateRq.getDate());
         themeVisitQueryService.save(themeVisit);
 
-        images.remove("review");
-        List<String> removeKeyList = new ArrayList<>();
-        for (String key : images.keySet()) {
-            MultipartFile image = images.get(key);
-            Long id = null;
-            try{
-                id = Long.parseLong(key);
-            } catch (NumberFormatException e) {
-                continue;
-            }
-            ReviewImage reviewImage = reviewImageQueryService.findByIdAndReviewId(id, reviewId);
-            if (image == null) {
-                reviewImageQueryService.delete(reviewImage);
-                String fileName = s3Repository.extractPathAfterBucket(reviewImage.getImage());
-                s3Repository.deleteImage(fileName);
-            } else {
-                String extension = FileUtils.getExtension(image.getOriginalFilename());
-                String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);
-                reviewImage.updateImage(uploadImage, key.equals(reviewUpdateRq.getRepresentativeId()));
+        if (!reviewUpdateRq.getDeleteImageIds().isEmpty()) {
+            List<ReviewImage> deleteReviewImageList = reviewImageQueryService.findAll(reviewUpdateRq.getDeleteImageIds());
+            reviewImageQueryService.deleteAll(deleteReviewImageList);
+        }
+
+        List<ReviewImage> reviewImageList = reviewImageQueryService.findAllByReviewId(reviewId);
+        for (ReviewImage reviewImage : reviewImageList) {
+            if (String.valueOf(reviewImage.getId()).equals(reviewUpdateRq.getRepresentativeId())) {
+                reviewImage.updateRepresentative(true);
                 reviewImageQueryService.save(reviewImage);
             }
-            removeKeyList.add(key);
         }
-        removeKeyList.forEach(images::remove);
+
+        images.remove("review");
         if (!images.isEmpty()) {
             List<ReviewImage> savedImages = new ArrayList<>();
-            for (String key: images.keySet()) {
+            for (String key : images.keySet()) {
                 MultipartFile image = images.get(key);
                 String extension = FileUtils.getExtension(image.getOriginalFilename());
                 String uploadImage = s3Repository.uploadImage("review/" + UUID.randomUUID() + "." + extension, image);

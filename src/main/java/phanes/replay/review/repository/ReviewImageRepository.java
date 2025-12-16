@@ -6,7 +6,7 @@ import phanes.replay.review.domain.ReviewImage;
 import java.util.List;
 import java.util.Optional;
 
-public interface ReviewImageRepository extends JpaRepository<ReviewImage, Integer> {
+public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> {
 
     List<ReviewImage> findAllByReviewId(Long reviewId);
 

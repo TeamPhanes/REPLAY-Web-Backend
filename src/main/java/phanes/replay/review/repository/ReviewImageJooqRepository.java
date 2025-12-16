@@ -17,7 +17,7 @@ public class ReviewImageJooqRepository {
     private final DSLContext dsl;
 
     public Map<Long, List<ReviewImageDto>> findAllByReviewIdList(List<Long> reviewIdList) {
-        return dsl.select(REVIEW_IMAGE.REVIEW_ID, REVIEW_IMAGE.ID, REVIEW_IMAGE.IMAGE)
+        return dsl.select(REVIEW_IMAGE.REVIEW_ID, REVIEW_IMAGE.ID, REVIEW_IMAGE.IMAGE, REVIEW_IMAGE.IS_REPRESENTATIVE)
                 .from(REVIEW_IMAGE)
                 .where(REVIEW_IMAGE.REVIEW_ID.in(reviewIdList))
                 .orderBy(REVIEW_IMAGE.IS_REPRESENTATIVE.desc(), REVIEW_IMAGE.ID.asc())
