@@ -27,4 +27,8 @@ public class ReviewImage {
         this.image = image;
         this.isRepresentative = isRepresentative;
     }
+
+    public void updateRepresentative(Boolean isRepresentative) {
+        this.isRepresentative = isRepresentative;
+    }
 }

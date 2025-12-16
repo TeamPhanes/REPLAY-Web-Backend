@@ -13,5 +13,4 @@ public class ReviewImageRs {
 
     private Long id;
     private String image;
-    private Boolean isRepresentative;
 }

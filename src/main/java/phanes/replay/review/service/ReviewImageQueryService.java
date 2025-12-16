@@ -21,6 +21,10 @@ public class ReviewImageQueryService {
         return reviewImageRepository.findAllByReviewId(reviewId);
     }
 
+    public List<ReviewImage> findAll(List<Long> deleteImageIds) {
+        return reviewImageRepository.findAllById(deleteImageIds);
+    }
+
     public void save(ReviewImage reviewImage) {
         reviewImageRepository.save(reviewImage);
     }

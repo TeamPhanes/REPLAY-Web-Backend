@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import phanes.replay.review.domain.enums.Eval;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -23,5 +24,6 @@ public class ReviewUpdateRq {
     private Integer hint;
     private String content;
     private String representativeId;
+    private List<Long> deleteImageIds;
     private LocalDateTime date;
 }
