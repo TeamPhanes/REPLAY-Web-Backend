@@ -18,4 +18,9 @@ public class NoticeContent {
     private Long id;
     @OneToOne
     private Notice notice;
+    private String content;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
