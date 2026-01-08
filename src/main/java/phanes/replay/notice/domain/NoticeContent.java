@@ -18,4 +18,5 @@ public class NoticeContent {
     private Long id;
     @OneToOne
     private Notice notice;
+    private String content;
 }
