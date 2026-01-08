@@ -32,7 +32,8 @@ public class SecurityConfig {
                                 "/review/**",
                                 "/comment/**",
                                 "/gathering/**",
-                                "/theme/**"
+                                "/theme/**",
+                                "/notice/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

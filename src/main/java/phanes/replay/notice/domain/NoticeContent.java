@@ -19,4 +19,8 @@ public class NoticeContent {
     @OneToOne
     private Notice notice;
     private String content;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

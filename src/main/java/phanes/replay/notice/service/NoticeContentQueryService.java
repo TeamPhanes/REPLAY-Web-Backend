@@ -18,4 +18,8 @@ public class NoticeContentQueryService {
     public void delete(NoticeContent noticeContent) {
         noticeContentRepository.delete(noticeContent);
     }
+
+    public void save(NoticeContent noticeContent) {
+        noticeContentRepository.save(noticeContent);
+    }
 }

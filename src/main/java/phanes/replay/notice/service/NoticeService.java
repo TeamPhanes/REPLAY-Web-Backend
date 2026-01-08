@@ -9,9 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import phanes.replay.notice.domain.Notice;
 import phanes.replay.notice.domain.NoticeContent;
-import phanes.replay.notice.dto.response.NoticeContentRs;
+import phanes.replay.notice.dto.request.NoticeRq;
+import phanes.replay.notice.dto.response.NoticeDetailRs;
 import phanes.replay.notice.dto.response.NoticeRs;
 import phanes.replay.notice.mapper.NoticeMapper;
+import phanes.replay.notice.repository.NoticeJooqRepository;
 import phanes.replay.s3.repository.S3Repository;
 import phanes.replay.utils.FileUtils;
 
@@ -24,6 +26,7 @@ public class NoticeService {
 
     private final NoticeQueryService noticeQueryService;
     private final NoticeContentQueryService noticeContentQueryService;
+    private final NoticeJooqRepository noticeJooqRepository;
     private final NoticeMapper noticeMapper;
     private final S3Repository s3Repository;
 
@@ -33,21 +36,39 @@ public class NoticeService {
         return new PageImpl<>(contents, pageable, noticeList.getTotalElements());
     }
 
+    public NoticeDetailRs findByNoticeId(Long id) {
+        return noticeMapper.toNoticeDetailRs(noticeJooqRepository.findByIdWithPrevNextNotice(id));
+    }
+
     public String saveTempImage(MultipartFile image) {
         String extension = FileUtils.getExtension(image.getOriginalFilename());
         return s3Repository.uploadImage("tmp/" + UUID.randomUUID() + "." + extension, image);
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void saveNotice(Long userId, NoticeRq noticeRq) {
+        Notice notice = Notice.builder()
+                .title(noticeRq.getTitle())
+                .build();
+        Notice savedNotice = noticeQueryService.save(notice);
+        NoticeContent noticeContent = NoticeContent.builder()
+                .notice(savedNotice)
+                .content(noticeRq.getContent())
+                .build();
+        noticeContentQueryService.save(noticeContent);
+    }
+
+    public void updateNotice(Long userId, Long id, String content) {
+        NoticeContent noticeContent = noticeContentQueryService.findByNoticeId(id);
+        noticeContent.updateContent(content);
+        noticeContentQueryService.save(noticeContent);
+    }
+
+    @Transactional
+    public void delete(Long userId, Long id) {
         Notice notice = noticeQueryService.findById(id);
         NoticeContent noticeContent = noticeContentQueryService.findByNoticeId(id);
         noticeContentQueryService.delete(noticeContent);
         noticeQueryService.delete(notice);
-    }
-
-    public NoticeContentRs findByNoticeId(Long id) {
-        NoticeContent noticeContent = noticeContentQueryService.findByNoticeId(id);
-        return noticeMapper.toNoticeContentRs(noticeContent);
     }
 }

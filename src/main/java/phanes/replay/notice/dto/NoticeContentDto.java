@@ -1,4 +1,4 @@
-package phanes.replay.notice.dto.response;
+package phanes.replay.notice.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NoticeContentRs {
+public class NoticeContentDto {
 
     private Long id;
     private String title;

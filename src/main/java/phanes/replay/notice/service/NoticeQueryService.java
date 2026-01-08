@@ -24,4 +24,8 @@ public class NoticeQueryService {
     public void delete(Notice notice) {
         noticeRepository.delete(notice);
     }
+
+    public Notice save(Notice notice) {
+        return noticeRepository.save(notice);
+    }
 }
