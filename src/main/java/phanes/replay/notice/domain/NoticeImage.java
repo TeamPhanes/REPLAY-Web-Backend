@@ -5,24 +5,23 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import phanes.replay.notice.domain.enums.Status;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NoticeContent {
+public class NoticeImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
-    private Notice notice;
-    @Lob
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String content;
+    private String s3Key;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
-    public void updateContent(String content) {
-        this.content = content;
+    public void updateStatus() {
+        this.status = Status.SAVE;
     }
 }
