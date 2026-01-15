@@ -54,8 +54,9 @@ public class NoticeService {
 
     public String saveTempImage(MultipartFile image) {
         String extension = FileUtils.getExtension(image.getOriginalFilename());
-        String key = UUID.randomUUID().toString();
-        String imageUrl = s3Repository.uploadImage("notice/" + key + "." + extension, image);
+        String fileName = UUID.randomUUID().toString();
+        String key = "notice/" + fileName + "." + extension;
+        String imageUrl = s3Repository.uploadImage(key, image);
         NoticeImage noticeImage = NoticeImage.builder()
                 .s3Key(key)
                 .status(Status.PENDING)
@@ -87,7 +88,7 @@ public class NoticeService {
         while (urlMatcher.find()) {
             String url = urlMatcher.group(1);
             if (url.contains(s3Properties.getUrl())) {
-                Pattern keyPattern = Pattern.compile(s3Properties.getUrl() + "/([^\"']+)");
+                Pattern keyPattern = Pattern.compile(s3Properties.getUrl() + "/" + s3Properties.getBucket() + "/([^\"']+)");
                 Matcher keyMatcher = keyPattern.matcher(url);
                 while (keyMatcher.find()) {
                     String key = keyMatcher.group(1);
